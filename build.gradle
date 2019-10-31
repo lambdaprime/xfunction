@@ -1,0 +1,38 @@
+// gradle clean build
+
+plugins {
+    id 'java'
+}
+
+apply plugin : 'eclipse'
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = '1.9'
+targetCompatibility = '1.9'
+
+version = "1.0"
+
+compileJava {
+    doFirst {
+        options.compilerArgs = [
+            '--module-path', classpath.asPath,
+        ]
+        classpath = files()
+    }
+}
+
+task createRelease(type: Copy) {
+    def out = 'release'
+    from jar.archiveFile
+    into out
+}
+
+task cleanRelease(type: Delete) {
+    delete "$projectDir/release"
+}
+
+assemble.dependsOn createRelease
+clean.dependsOn cleanRelease
