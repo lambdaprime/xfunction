@@ -41,14 +41,14 @@ package id.xfunction;
  * You can use this class:<br/>
  * 
  * <pre>
- * Unchecked.run(this::m);
+ * runUnchecked(this::m);
  * 
  * </pre>
  * 
  */
 public class Unchecked {
 
-    public static <R, E extends Exception> R run(ThrowingSupplier<R, E> s) {
+    public static <R, E extends Exception> R runUnchecked(ThrowingSupplier<R, E> s) {
         try {
             return s.run();
         } catch (Exception ex) {
@@ -56,7 +56,7 @@ public class Unchecked {
         }
     }
 
-    public static <E extends Exception> void run(ThrowingRunnable<E> s) {
+    public static <E extends Exception> void runUnchecked(ThrowingRunnable<E> s) {
         try {
             s.run();
         } catch (Exception ex) {

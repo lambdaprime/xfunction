@@ -9,7 +9,7 @@ public class Tests {
     }
 
     public void testSafe() {
-        Unchecked.run(this::m);
+        Unchecked.runUnchecked(this::m);
     }
 
     public static void main(String[] args) {
