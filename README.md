@@ -1,4 +1,4 @@
-xfunction - Java module which provides set of extensions for java.function package
+xfunction - Java module which provides set of extensions for java.util.function package
 
 lambdaprime <id.blackmesa@gmail.com>
 
