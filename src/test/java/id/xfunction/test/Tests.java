@@ -1,6 +1,7 @@
 package id.xfunction.test;
 
 import id.xfunction.Unchecked;
+import id.xfunction.XUtils;
 
 public class Tests {
 
@@ -14,5 +15,8 @@ public class Tests {
 
     public static void main(String[] args) {
         new Tests().testSafe();
+        XUtils.infiniteRandomStream(10)
+            .limit(5)
+            .forEach(System.out::println);
     }
 }
