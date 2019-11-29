@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Random;
+import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Stream;
 
 /**
@@ -35,5 +36,27 @@ public class XUtils {
             }
         };
         return new BufferedReader(new InputStreamReader(in)).lines();
+    }
+
+    /**
+     * Launches background thread which prints JVM memory consumption
+     * after given period of time.
+     * @param delayMillis
+     */
+    public static void printMemoryConsumption(long delayMillis) {
+        ForkJoinPool.commonPool().submit(() -> {
+            long max = 0;
+            while (true) {
+                long used = (Runtime.getRuntime().totalMemory()
+                        - Runtime.getRuntime().freeMemory()) / 1_000_000;
+                max = Math.max(used, max);
+                System.out.format("Memory used (MB) %s, max peak value: %s\n", used, max);
+                try {
+                    Thread.sleep(delayMillis);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

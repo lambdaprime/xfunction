@@ -14,6 +14,7 @@ public class Tests {
     }
 
     public static void main(String[] args) {
+        XUtils.printMemoryConsumption(100);
         new Tests().testSafe();
         XUtils.infiniteRandomStream(10)
             .limit(5)
