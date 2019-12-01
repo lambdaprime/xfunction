@@ -21,8 +21,6 @@ dependencies {
 sourceCompatibility = '11'
 targetCompatibility = '11'
 
-version = "1.0"
-
 compileTestJava {
     doFirst {
         options.compilerArgs = [
