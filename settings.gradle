@@ -1,0 +1,2 @@
+include 'xfunction'
+include 'xfunction.tests'

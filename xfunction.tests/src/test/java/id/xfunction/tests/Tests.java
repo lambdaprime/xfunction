@@ -1,4 +1,4 @@
-package id.xfunction.test;
+package id.xfunction.tests;
 
 import id.xfunction.Unchecked;
 import id.xfunction.XUtils;
