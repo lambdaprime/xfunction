@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.security.MessageDigest;
 import java.util.Random;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Stream;
@@ -58,5 +59,22 @@ public class XUtils {
                 }
             }
         });
+    }
+
+    /**
+     * Calculates md5 sum for input string
+     * @return md5 sum
+     * @throws Exception
+     */
+    public static String md5Sum(String string) throws Exception {
+        byte[] bytesOfMessage = string.getBytes();
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        byte[] digest = md.digest(bytesOfMessage);
+        StringBuilder buf = new StringBuilder();
+        for (byte b: digest) {
+            if (Byte.toUnsignedInt(b) <= 16) buf.append('0');
+            buf.append(Integer.toUnsignedString(Byte.toUnsignedInt(b), 16));
+        }
+        return buf.toString();
     }
 }
