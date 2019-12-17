@@ -17,9 +17,9 @@ package id.xfunction;
 
 /**
  * This class allows you to execute functions which throw checked exceptions in a way if they were
- * throwing unchecked RuntimeException.<br/>
+ * throwing unchecked RuntimeException.<br>
  * 
- * For example given method which throws checked Exception:<br/>
+ * For example given method which throws checked Exception:<br>
  * 
  * <pre>
  * int m() throws Exception {
@@ -28,14 +28,14 @@ package id.xfunction;
  * 
  * </pre>
  * 
- * Instead of writing:<br/>
+ * Instead of writing:<br>
  * 
  * <pre>
  * try { m(); } catch (Exception e) { throw new RuntimeException(e); }
  * 
  * </pre>
  * 
- * You can use this class:<br/>
+ * You can use this class:<br>
  * 
  * <pre>
  * runUnchecked(this::m);

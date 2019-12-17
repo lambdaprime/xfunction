@@ -22,6 +22,12 @@ compileJava {
     }
 }
 
+task packageJavadoc(type: Zip) {
+    archiveFileName = "xfunction-javadoc.zip"
+    destinationDirectory = file("$projectDir/release")
+    from file("$projectDir/build/docs")
+}
+
 task createRelease(type: Copy) {
     def out = 'release'
     from jar.archiveFile
@@ -33,4 +39,5 @@ task cleanRelease(type: Delete) {
 }
 
 assemble.dependsOn createRelease
+createRelease.dependsOn javadoc,packageJavadoc
 clean.dependsOn cleanRelease
