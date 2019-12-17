@@ -15,4 +15,5 @@
  */
 module xfunction {
     exports id.xfunction;
+    requires java.xml;
 }
