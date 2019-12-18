@@ -4,6 +4,8 @@ import static java.util.stream.Collectors.toSet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 
 import id.xfunction.Unchecked;
@@ -22,10 +24,10 @@ public class XUtilsTests {
 
     @Test
     public void test_infiniteRandomStream() {
-        var s1 = XUtils.infiniteRandomStream(10)
+        Set s1 = XUtils.infiniteRandomStream(10)
                 .limit(5)
                 .collect(toSet());
-        var s2 = XUtils.infiniteRandomStream(10)
+        Set s2 = XUtils.infiniteRandomStream(10)
                 .limit(5)
                 .collect(toSet());
         assertNotEquals(s1, s2);

@@ -18,17 +18,8 @@ dependencies {
     testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.2')
 }
 
-sourceCompatibility = '11'
-targetCompatibility = '11'
-
-compileTestJava {
-    doFirst {
-        options.compilerArgs = [
-            '--module-path', classpath.asPath,
-        ]
-        classpath = files()
-    }
-}
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
 
 test {
     useJUnitPlatform()

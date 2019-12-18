@@ -10,15 +10,16 @@ repositories {
     mavenCentral()
 }
 
-sourceCompatibility = '1.9'
-targetCompatibility = '1.9'
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
 
 compileJava {
-    doFirst {
-        options.compilerArgs = [
-            '--module-path', classpath.asPath,
-        ]
-        classpath = files()
+    options.compilerArgs.addAll(['--release', '8'])
+}
+
+jar { 
+    manifest { 
+        attributes  'Automatic-Module-Name': 'id.xfunction'
     }
 }
 

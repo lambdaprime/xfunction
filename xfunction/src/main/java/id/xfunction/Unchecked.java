@@ -15,6 +15,8 @@
  */
 package id.xfunction;
 
+import java.util.function.Supplier;
+
 /**
  * This class allows you to execute functions which throw checked exceptions in a way if they were
  * throwing unchecked RuntimeException.<br>
@@ -59,6 +61,14 @@ public class Unchecked {
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    /**
+     * Accepts ThrowingSupplier which throws checked exception and converts it to
+     * Supplier which throws unchecked one
+     */
+    public static <R, E extends Exception> Supplier<R> wrap(ThrowingSupplier<R, E> s) {
+        return () -> runUnchecked(s);
     }
 }
 

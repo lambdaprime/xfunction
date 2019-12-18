@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.Arrays;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.util.stream.Stream;
 
@@ -83,7 +84,7 @@ public class Exec {
             BufferedReader ein = new BufferedReader(
                 new InputStreamReader(p.getErrorStream()));
             Result result = new Result(in.lines(), ein.lines());
-            result.code = p.onExit().thenApply(proc -> proc.exitValue());
+            result.code = CompletableFuture.supplyAsync(Unchecked.wrap(p::waitFor));
             return result;
             
         } catch (Exception e) {

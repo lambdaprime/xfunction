@@ -11,27 +11,27 @@ public class TemplateMatcherTests {
 
     @Test
     public void test_empty_template() {
-        var matcher = new TemplateMatcher("");
+        TemplateMatcher matcher = new TemplateMatcher("");
         assertTrue(matcher.matches(""));
         assertFalse(matcher.matches("ffff"));
     }
 
     @Test
     public void test_empty_string() {
-        var matcher = new TemplateMatcher("lol");
+        TemplateMatcher matcher = new TemplateMatcher("lol");
         assertFalse(matcher.matches(""));
         assertFalse(matcher.matches("ffff"));
     }
 
     @Test
     public void test_matches_no_wildcard() {
-        var matcher = new TemplateMatcher("lol");
+        TemplateMatcher matcher = new TemplateMatcher("lol");
         assertTrue(matcher.matches("lol"));
     }
 
     @Test
     public void test_matches_wildcard() {
-        var matcher = new TemplateMatcher("lol*lol");
+        TemplateMatcher matcher = new TemplateMatcher("lol*lol");
         assertTrue(matcher.matches("lolasdlol"));
         assertTrue(matcher.matches("lolasdloalol"));
         assertTrue(matcher.matches("lollol"));
@@ -46,7 +46,7 @@ public class TemplateMatcherTests {
 
     @Test
     public void test_matches_wildcards() {
-        var matcher = new TemplateMatcher("abc*fun*kot");
+        TemplateMatcher matcher = new TemplateMatcher("abc*fun*kot");
         assertTrue(matcher.matches("abcccccfunkot"));
         assertTrue(matcher.matches("abcccccfunnnkot"));
         assertTrue(matcher.matches("abcccccfunfunkot"));
@@ -56,13 +56,13 @@ public class TemplateMatcherTests {
 
     @Test
     public void test_matches_everything() {
-        var matcher = new TemplateMatcher("*");
+        TemplateMatcher matcher = new TemplateMatcher("*");
         assertTrue(matcher.matches("abcccccfunkot"));
     }
 
     @Test
     public void test_matches_wildcard_start() {
-        var matcher = new TemplateMatcher("*fun");
+        TemplateMatcher matcher = new TemplateMatcher("*fun");
         assertTrue(matcher.matches("abcccccfun"));
         
         matcher = new TemplateMatcher("*fun*");

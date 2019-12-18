@@ -32,9 +32,8 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import javax.xml.xpath.XPathEvaluationResult;
+import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
-import javax.xml.xpath.XPathNodes;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -80,7 +79,7 @@ public class Xml {
         try {
             Consumer<Node> visitor = replaceVisitor(value);
             String str = asString(xpath_(new InputSource(new FileInputStream(xml.toFile())), xpath, visitor));
-            Files.writeString(xml, str, StandardOpenOption.TRUNCATE_EXISTING);
+            Files.write(xml, str.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -105,6 +104,7 @@ public class Xml {
                 parseNodeList(n.getChildNodes(), visitor);
                 break;
             }
+            case Node.ATTRIBUTE_NODE:
             case Node.TEXT_NODE: {
                 String value = n.getNodeValue();
                 if (value.trim().isEmpty()) continue;
@@ -141,21 +141,10 @@ public class Xml {
     private static Document xpath_(InputSource src, String xpath, Consumer<Node> visitor) {
         try {
             Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(src);
-            XPathEvaluationResult<?> result = XPathFactory.newInstance().newXPath()
-                    .evaluateExpression(xpath, doc);
-            switch (result.type()) {
-            case NODE: {
-                Node n = (Node)result.value();
-                visitor.accept(n);
-                break;
-            }
-            case NODESET: {
-                XPathNodes l = (XPathNodes) result.value();
-                l.forEach(n -> {
-                    parseNodeList(n.getChildNodes(), visitor);
-                });
-                break;
-            }}
+            NodeList l = (NodeList) XPathFactory.newInstance().newXPath()
+                  .evaluate(xpath, doc, XPathConstants.NODESET);
+            parseNodeList(l, visitor);
+
             return doc;
         } catch (Exception e) {
             throw new RuntimeException(e);
