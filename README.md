@@ -4,7 +4,7 @@ lambdaprime <id.blackmesa@gmail.com>
 
 # Requirements
 
-Java 9
+Java 8
 
 # Download
 

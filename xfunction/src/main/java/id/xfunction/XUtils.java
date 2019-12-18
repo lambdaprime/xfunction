@@ -92,4 +92,12 @@ public class XUtils {
         }
         return buf.toString();
     }
+
+    /**
+     * Terminate application with error code
+     */
+    public static void error(String msg) {
+        System.err.println(msg);
+        System.exit(1);
+    }
 }
