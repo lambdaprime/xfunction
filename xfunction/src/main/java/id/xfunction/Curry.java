@@ -20,9 +20,27 @@ package id.xfunction;
  */
 public class Curry {
 
+    /**
+     * Curry argument for Consumer
+     */
     public static <T, E extends Exception> ThrowingRunnable<E> curry(
             ThrowingConsumer<T, E> consumer, T v) {
         return () -> consumer.accept(v);
     }
 
+    /**
+     * Curry 1st argument for a BiFunction
+     */
+    public static <T1, T2, R, E extends Exception> ThrowingFunction<T2, R, E> curry1st(
+            ThrowingBiFunction<T1, T2, R, E> function, T1 t1) {
+        return t2 -> function.apply(t1, t2);
+    }
+
+    /**
+     * Curry 2nd argument for a BiFunction
+     */
+    public static <T1, T2, R, E extends Exception> ThrowingFunction<T1, R, E> curry2nd(
+            ThrowingBiFunction<T1, T2, R, E> function, T2 t2) {
+        return t1 -> function.apply(t1, t2);
+    }
 }
