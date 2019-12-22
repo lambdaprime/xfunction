@@ -15,6 +15,7 @@
  */
 package id.xfunction;
 
+import java.util.function.Function;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
@@ -88,6 +89,27 @@ public class Unchecked {
     }
 
     /**
+     * Executes given function with a given argument and catch all checked exceptions.
+     * If checked exception is thrown it is wrapped into unchecked RuntimeException and is
+     * thrown further. 
+     */
+    public static <A, R, E extends Exception> R runUnchecked(ThrowingFunction<A, R, E> s, A a) {
+        try {
+            return s.apply(a);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    /**
+     * Accepts ThrowingRunnable which throws checked exception and converts it to
+     * runnable which throws unchecked one
+     */
+    public static <E extends Exception> Runnable wrapRun(ThrowingRunnable<E> r) {
+        return () -> runUnchecked(r);
+    }
+
+    /**
      * Accepts ThrowingSupplier which throws checked exception and converts it to
      * Supplier which throws unchecked one
      */
@@ -103,5 +125,12 @@ public class Unchecked {
         return () -> runUnchecked(s);
     }
 
+    /**
+     * Accepts ThrowingFunction which throws checked exception and converts it to
+     * Function which throws unchecked one
+     */
+    public static <A, R, E extends Exception> Function<A, R> wrapApply(ThrowingFunction<A, R, E> f) {
+        return (A a) -> runUnchecked(f, a);
+    }
 }
 
