@@ -15,6 +15,7 @@
  */
 package id.xfunction;
 
+import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
 /**
@@ -47,6 +48,11 @@ import java.util.function.Supplier;
  */
 public class Unchecked {
 
+    /**
+     * Executes given supplier and catch all checked exceptions.
+     * If checked exception is thrown it is wrapped into unchecked RuntimeException and is
+     * thrown further. 
+     */
     public static <R, E extends Exception> R runUnchecked(ThrowingSupplier<R, E> s) {
         try {
             return s.run();
@@ -55,6 +61,24 @@ public class Unchecked {
         }
     }
 
+    /**
+     * Executes given int supplier and catch all checked exceptions.
+     * If checked exception is thrown it is wrapped into unchecked RuntimeException and is
+     * thrown further. 
+     */
+    public static <E extends Exception> int runUnchecked(ThrowingIntSupplier<E> s) {
+        try {
+            return s.run();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    /**
+     * Executes given runnable and catch all checked exceptions.
+     * If checked exception is thrown it is wrapped into unchecked RuntimeException and is
+     * thrown further. 
+     */
     public static <E extends Exception> void runUnchecked(ThrowingRunnable<E> s) {
         try {
             s.run();
@@ -67,8 +91,17 @@ public class Unchecked {
      * Accepts ThrowingSupplier which throws checked exception and converts it to
      * Supplier which throws unchecked one
      */
-    public static <R, E extends Exception> Supplier<R> wrap(ThrowingSupplier<R, E> s) {
+    public static <R, E extends Exception> Supplier<R> wrapGet(ThrowingSupplier<R, E> s) {
         return () -> runUnchecked(s);
     }
+
+    /**
+     * Accepts ThrowingIntSupplier which throws checked exception and converts it to
+     * IntSupplier which throws unchecked one
+     */
+    public static <E extends Exception> IntSupplier wrapGetInt(ThrowingIntSupplier<E> s) {
+        return () -> runUnchecked(s);
+    }
+
 }
 

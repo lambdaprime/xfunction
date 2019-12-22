@@ -84,7 +84,7 @@ public class Exec {
             BufferedReader ein = new BufferedReader(
                 new InputStreamReader(p.getErrorStream()));
             Result result = new Result(in.lines(), ein.lines());
-            result.code = CompletableFuture.supplyAsync(Unchecked.wrap(p::waitFor));
+            result.code = CompletableFuture.supplyAsync(Unchecked.wrapGet(p::waitFor));
             return result;
             
         } catch (Exception e) {
