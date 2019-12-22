@@ -37,7 +37,7 @@ public class CommandLineInterface {
      * Print user message to press Enter and wait
      */
     public static void askPressEnter() {
-        System.out.print("Press any key to continue...");
+        System.out.print("Press Enter to continue...");
         waitPressEnter();
     }
 
