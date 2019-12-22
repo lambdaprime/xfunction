@@ -1,4 +1,9 @@
-xfunction - Java module which provides set of extensions for standard Java APIs.
+xfunction - Java module which provides set of extensions for standard Java APIs:
+
+- ThrowingRunnable, ThrowingSupplier, ThrowingFunction and others
+- functions to convert lambdas which throw checked exceptions to unchecked ones
+- currying for lambdas
+- XML query/update utilities using XPath
 
 lambdaprime <id.blackmesa@gmail.com>
 
