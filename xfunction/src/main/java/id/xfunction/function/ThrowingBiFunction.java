@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package id.xfunction;
+package id.xfunction.function;
 
 @FunctionalInterface
-public interface ThrowingConsumer<T, E extends Exception> {
-    void accept(T t) throws E;
+public interface ThrowingBiFunction<A1, A2, R, E extends Exception> {
+    R apply(A1 a1, A2 a2) throws E;
 }

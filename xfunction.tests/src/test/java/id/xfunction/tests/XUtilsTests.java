@@ -8,8 +8,8 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import id.xfunction.Unchecked;
 import id.xfunction.XUtils;
+import id.xfunction.function.Unchecked;
 
 public class XUtilsTests {
 

@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package id.xfunction;
+package id.xfunction.function;
 
 @FunctionalInterface
-public interface ThrowingSupplier<R, E extends Exception> {
-    R run() throws E;
+public interface ThrowingFunction<A, R, E extends Exception> {
+    R apply(A a) throws E;
 }

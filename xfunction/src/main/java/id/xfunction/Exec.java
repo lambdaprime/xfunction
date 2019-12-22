@@ -24,6 +24,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.util.stream.Stream;
 
+import id.xfunction.function.Unchecked;
+
 /**
  * Run shell command and obtain its output as a stream of lines.
  */
