@@ -15,6 +15,8 @@
  */
 package id.xfunction;
 
+import static java.util.stream.Collectors.joining;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -42,7 +44,25 @@ public class Exec {
         public Stream<String> stdout;
         public Stream<String> stderr;
         public Future<Integer> code;
-        Result(Stream<String> stdout, Stream<String> stderr) { this.stdout = stdout; this.stderr = stderr; }
+
+        public Result(Stream<String> stdout, Stream<String> stderr) {
+            this.stdout = stdout; this.stderr = stderr;
+        }
+
+        /**
+         * @return Standard output as a string
+         */
+        public String stdoutAsString() {
+            return stdout.collect(joining("\n"));
+        }
+
+        /**
+         * @return Standard error output as a string
+         */
+        public String stderrAsString() {
+            return stderr.collect(joining("\n"));
+        }
+
     }
 
     /**

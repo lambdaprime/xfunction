@@ -35,4 +35,10 @@ public class ExecTests {
         assertTrue(err.get(0).toUpperCase().contains("NO SUCH FILE"));
     }
 
+    @Test
+    public void test_stdoutAsString() {
+        Result result = new Exec("echo", "hello").run();
+        String out = result.stdoutAsString();
+        assertEquals("hello", out);
+    }
 }
