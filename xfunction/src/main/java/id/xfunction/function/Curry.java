@@ -16,34 +16,32 @@
 package id.xfunction.function;
 
 /**
- * Set of functions for implementing currying in Java.<br>
+ * Set of functions for implementing currying in Java.
  * 
- * For example imagine you have a bifunction like:<br>
+ * For example imagine you have a bifunction like:
  * 
- * <pre>
+ * <pre>{@code
  * String m(String s, Integer i)
- * 
- * </pre>
+ * }</pre>
  * 
  * And you want to create a function from it which will be calling m with
- * specific second argument (ex. 5).<br>
+ * specific second argument (ex. 5).
  * 
- * Instead of writing:<br>
+ * Instead of writing:
  * 
- * <pre>
+ * <pre>{@code
  * list.stream()
- *     .map(s -&gt; m(s, 5))
+ *     .map(s -> m(s, 5))
  *     .collect(toList());
- * 
- * </pre>
+ * }</pre>
  * 
  * You can do:
  * 
- * <pre>
+ * <pre>{@code
  * list.stream()
  *     .map(curry2nd(this.m, 5))
  *     .collect(toList());
- * </pre>
+ * }</pre>
  */
 public class Curry {
 

@@ -22,30 +22,27 @@ import java.util.function.Supplier;
 
 /**
  * This class allows you to execute functions which throw checked exceptions in a way if they were
- * throwing unchecked RuntimeException.<br>
+ * throwing unchecked RuntimeException.
  * 
- * For example given method which throws checked Exception:<br>
+ * For example given method which throws checked Exception:
  * 
- * <pre>
+ * <pre>{@code
  * int m() throws Exception {
  *     return 0;
  * }
+ * }</pre>
  * 
- * </pre>
+ * Instead of writing:
  * 
- * Instead of writing:<br>
- * 
- * <pre>
+ * <pre>{@code
  * try { m(); } catch (Exception e) { throw new RuntimeException(e); }
+ * }</pre>
  * 
- * </pre>
+ * You can use this class:
  * 
- * You can use this class:<br>
- * 
- * <pre>
+ * <pre>{@code
  * runUnchecked(this::m);
- * 
- * </pre>
+ * }</pre>
  * 
  */
 public class Unchecked {
