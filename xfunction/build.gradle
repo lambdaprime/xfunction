@@ -18,6 +18,28 @@ sourceSets {
     }
 }
 
+task java11doc(type: Javadoc) {
+  source = files('src/main/java11')
+  destinationDir = new File(destinationDir.getParent(), "java11doc")
+}
+
+import java.nio.file.*;
+// Copies all files under java11 javadoc over files in original javadoc
+java11doc.doLast {
+    def dstDir = destinationDir.toPath()
+    Files.walk(dstDir, 1)
+        .skip(1)
+        .filter {it.toFile().isDirectory()}
+        .filter {!it.endsWith('jquery')}
+        .filter {!it.endsWith('resources')}
+        .flatMap{p -> Files.walk(p, Integer.MAX_VALUE)}
+        .filter {!it.toFile().isDirectory()}
+        .filter {!it.endsWith('package-summary.html')}
+        .filter {!it.endsWith('package-tree.html')}
+        .each{ Path p -> Files.copy(p, javadoc.destinationDir.toPath().resolve(dstDir.relativize(p)), StandardCopyOption.REPLACE_EXISTING) }
+    destinationDir.deleteDir()
+}
+
 compileJava {
     sourceCompatibility = '1.8'
     targetCompatibility = '1.8'
@@ -38,10 +60,9 @@ jar {
     }
 }
 
-task packageJavadoc(type: Zip) {
-    archiveFileName = "xfunction-javadoc.zip"
-    destinationDirectory = file("$projectDir/release")
+task packageJavadoc(type: Copy) {
     from file("$projectDir/build/docs")
+    into file("${project.rootDir}/docs")
 }
 
 task createRelease(type: Copy) {
@@ -55,5 +76,6 @@ task cleanRelease(type: Delete) {
 }
 
 assemble.dependsOn createRelease
-createRelease.dependsOn javadoc,packageJavadoc
+createRelease.dependsOn java11doc,javadoc,packageJavadoc
+java11doc.dependsOn javadoc
 clean.dependsOn cleanRelease

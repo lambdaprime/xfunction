@@ -26,9 +26,9 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 /**
- * Provides additional features for HttpClient.Builder
+ * Provides additional features for HttpClient.Builder.
  * 
- * Requires Java 11 or higher
+ * Requires Java 11 or higher.
  */
 // Implementing HttpClient.Builder may require to recompile each time 
 // when new method would be added
@@ -59,7 +59,7 @@ public class HttpClientBuilder {
     /**
      * Makes HttpClient to ignore SSL certificates validation
      */
-    public HttpClientBuilder supportInsecureConnections() {
+    public HttpClientBuilder insecure() {
         TrustManager[] trustAllCerts = new TrustManager[] { 
             TRUST_MANAGER
         }; 
@@ -76,7 +76,7 @@ public class HttpClientBuilder {
     /**
      * Adds to HttpClient TLS1.0 support
      */
-    public HttpClientBuilder supportTLSv1() {
+    public HttpClientBuilder tlsv1() {
         var p = new SSLParameters();
         p.setProtocols(new String[] { "TLSv1", "TLSv1.3", "TLSv1.2" });
         builder.sslParameters(p);

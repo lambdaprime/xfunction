@@ -15,6 +15,11 @@
  */
 package id.xfunction.net;
 
+/**
+ * Provides additional features for HttpClient.Builder
+ * 
+ * Requires Java 11 or higher
+ */
 public class HttpClientBuilder {
 
     // Requires Java 11
