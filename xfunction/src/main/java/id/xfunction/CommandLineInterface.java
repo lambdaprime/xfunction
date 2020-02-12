@@ -18,6 +18,7 @@ package id.xfunction;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.Objects;
 import java.util.Scanner;
 
 /**
@@ -72,4 +73,13 @@ public class CommandLineInterface {
         return new String(System.console().readPassword(msg));
     }
 
+    /**
+     * Print user message and ask to confirm it entering either "yes" or "no"
+     * @return whether user confirmed or not
+     */
+    public boolean askConfirm(String message) {
+        out.println(message);
+        String answer = read(String.format("Please confirm [yes/no]: "));
+        return Objects.equals("yes", answer);
+    }
 }
