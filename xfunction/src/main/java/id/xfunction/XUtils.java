@@ -15,6 +15,8 @@
  */
 package id.xfunction;
 
+import static java.util.stream.Collectors.joining;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -99,5 +101,25 @@ public class XUtils {
     public static void error(String msg) {
         System.err.println(msg);
         System.exit(1);
+    }
+
+    /**
+     * Reads given resource file and returns it as a stream
+     */
+    public static Stream<String> readResourceAsStream(String file) {
+        try {
+            return new BufferedReader(new InputStreamReader(
+                XUtils.class.getResource(file).openStream())).lines();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Reads given resource file and returns it as a string
+     */
+    public static String readResource(String file) {
+        return readResourceAsStream(file)
+                .collect(joining("\n"));
     }
 }

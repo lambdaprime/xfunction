@@ -1,9 +1,11 @@
 package id.xfunction.tests;
 
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -22,6 +24,7 @@ public class XUtilsTests {
         Unchecked.runUnchecked(this::m);
     }
 
+    @SuppressWarnings("rawtypes")
     @Test
     public void test_infiniteRandomStream() {
         Set s1 = XUtils.infiniteRandomStream(10)
@@ -43,9 +46,23 @@ public class XUtilsTests {
             XUtils.md5Sum("until the sky falls down").toUpperCase());
     }
 
+    @Test
+    public void test_readResourceAsStream() {
+        List<String> actual = XUtils.readResourceAsStream("/testFile")
+            .collect(toList());
+        assertEquals("[line 1, line 2]",
+            actual.toString());
+    }
+
+    @Test
+    public void test_readResource() {
+        String actual = XUtils.readResource("/testFile");
+        assertEquals("line 1\nline 2",
+            actual.toString());
+    }
+
     public static void main(String[] args) {
         XUtils.printMemoryConsumption(100);
         new XUtilsTests().testSafe();
-        
     }
 }

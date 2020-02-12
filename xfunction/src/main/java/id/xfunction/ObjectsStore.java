@@ -84,14 +84,15 @@ public class ObjectsStore<T extends Serializable> {
 	/**
 	 * Loads an ObjectsStore from a given file
 	 */
-	public static <T extends Serializable> ObjectsStore<T> load(Path store) {
+	@SuppressWarnings("unchecked")
+    public static <T extends Serializable> ObjectsStore<T> load(Path store) {
 		File file = store.toFile();
 		if (!file.exists())
 			return new ObjectsStore<T>(store, new HashSet<>());
 		try (FileInputStream fi = new FileInputStream(store.toFile());
 				ObjectInputStream oi = new ObjectInputStream(fi);) {
 			Set<T> entities = (Set<T>) oi.readObject();
-			return new ObjectsStore(store, entities);
+			return new ObjectsStore<>(store, entities);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
