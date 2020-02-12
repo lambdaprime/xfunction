@@ -18,9 +18,14 @@ sourceSets {
     }
 }
 
+javadoc {
+    options.noTimestamp = true;
+}
+
 task java11doc(type: Javadoc) {
-  source = files('src/main/java11')
-  destinationDir = new File(destinationDir.getParent(), "java11doc")
+    source = files('src/main/java11')
+    destinationDir = new File(destinationDir.getParent(), "java11doc")
+    options.noTimestamp = true;
 }
 
 import java.nio.file.*;
