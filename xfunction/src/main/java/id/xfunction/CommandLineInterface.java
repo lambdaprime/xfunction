@@ -15,6 +15,9 @@
  */
 package id.xfunction;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.Scanner;
 
 /**
@@ -22,12 +25,24 @@ import java.util.Scanner;
  */
 public class CommandLineInterface {
 
+    private PrintStream out;
+    private InputStream in;
+
+    public CommandLineInterface() {
+        this(System.in, System.out);
+    }
+
+    public CommandLineInterface(InputStream in, OutputStream out) {
+        this.in = in;
+        this.out = new PrintStream(out);
+    }
+
     /**
      * Wait user to press enter
      */
-    public static void waitPressEnter() {
+    public void waitPressEnter() {
         try {
-            System.in.read();
+            in.read();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -36,23 +51,25 @@ public class CommandLineInterface {
     /**
      * Print user message to press Enter and wait
      */
-    public static void askPressEnter() {
-        System.out.print("Press Enter to continue...");
+    public void askPressEnter() {
+        out.print("Press Enter to continue...");
         waitPressEnter();
     }
 
     /**
      * Show message to the user and return what he enters
      */
-    public static String read(String msg) {
-        System.out.print(msg);
-        return new Scanner(System.in).next();
+    @SuppressWarnings("resource")
+    public String read(String msg) {
+        out.print(msg);
+        return new Scanner(in).next();
     }
 
     /**
      * Read password safely from the user
      */
-    public static String readPassword(String msg) {
+    public String readPassword(String msg) {
         return new String(System.console().readPassword(msg));
     }
+
 }
