@@ -28,6 +28,7 @@ public class CommandLineInterface {
 
     private PrintStream out;
     private InputStream in;
+    private Scanner scanner;
 
     /**
      * Default ctor which binds to System.in, System.out
@@ -39,6 +40,7 @@ public class CommandLineInterface {
     public CommandLineInterface(InputStream in, OutputStream out) {
         this.in = in;
         this.out = new PrintStream(out);
+        this.scanner = new Scanner(in);
     }
 
     /**
@@ -71,7 +73,21 @@ public class CommandLineInterface {
     @SuppressWarnings("resource")
     public String read(String msg) {
         out.print(msg);
-        return new Scanner(in).next();
+        return read();
+    }
+
+    /**
+     * Reads a line and returns it
+     */
+    public String read() {
+        return scanner.next();
+    }
+
+    /**
+     * Reads an integer and returns it
+     */
+    public int readInt() {
+        return scanner.nextInt();
     }
 
     /**
@@ -90,4 +106,5 @@ public class CommandLineInterface {
         String answer = read(String.format("Please confirm [yes/no]: "));
         return Objects.equals("yes", answer);
     }
+
 }
