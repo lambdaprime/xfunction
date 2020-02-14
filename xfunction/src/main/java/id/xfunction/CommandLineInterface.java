@@ -29,6 +29,9 @@ public class CommandLineInterface {
     private PrintStream out;
     private InputStream in;
 
+    /**
+     * Default ctor which binds to System.in, System.out
+     */
     public CommandLineInterface() {
         this(System.in, System.out);
     }
@@ -37,6 +40,11 @@ public class CommandLineInterface {
         this.in = in;
         this.out = new PrintStream(out);
     }
+
+    /**
+     * Bounded to System.in, System.out
+     */
+    public static CommandLineInterface cli = new CommandLineInterface();
 
     /**
      * Wait user to press enter
