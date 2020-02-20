@@ -16,6 +16,7 @@
 package id.xfunction.tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
@@ -38,4 +39,14 @@ public class CommandLineInterfaceTest {
         assertEquals(msg + "\nPlease confirm [yes/no]: ", baos.toString());
     }
 
+    @Test
+    public void test_askConfirm_wrong_answer() {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ByteArrayInputStream bais = new ByteArrayInputStream("ye\nnoo\nno".getBytes());
+        CommandLineInterface cli = new CommandLineInterface(bais, baos);
+        String msg = "test?";
+        boolean actual = cli.askConfirm(msg);
+        assertFalse(actual);
+        assertEquals(msg + "\nPlease confirm [yes/no]: Please confirm [yes/no]: Please confirm [yes/no]: ", baos.toString());
+    }
 }

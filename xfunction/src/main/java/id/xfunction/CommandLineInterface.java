@@ -18,7 +18,6 @@ package id.xfunction;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.Objects;
 import java.util.Scanner;
 
 /**
@@ -103,8 +102,13 @@ public class CommandLineInterface {
      */
     public boolean askConfirm(String message) {
         out.println(message);
-        String answer = read(String.format("Please confirm [yes/no]: "));
-        return Objects.equals("yes", answer);
+        while (true) {
+            switch (read(String.format("Please confirm [yes/no]: "))) {
+            case "yes": return true;
+            case "no": return false;
+            default: continue;
+            }
+        }
     }
 
 }
