@@ -52,6 +52,16 @@ import java.util.function.Function;
  * args.parse(new String[] {"-k" , "value", "-v", "-e", "expr"});
  * }</pre>
  * 
+ * You can use key-value arguments with positional arguments as well. To do this
+ * you just gather all values of default handler:
+ * 
+ * <pre>{@code
+ * List<String> positionalArgs = new ArrayList<>();
+ * new SmartArgs(handlers, arg -> positionalArgs.add(arg))
+ *     .parse(new String[] {"-k" , "value", "arg1", "arg2", "arg3"});
+ * // all positional arguments now available in positionalArgs
+ * }</pre>
+ * 
  */
 public class SmartArgs {
 
