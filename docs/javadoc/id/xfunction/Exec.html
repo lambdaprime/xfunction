@@ -120,10 +120,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
-<li>java.lang.Object</li>
+<li>Object</li>
 <li>
 <ul class="inheritance">
-<li>id.xfunction.Exec</li>
+<li>Exec</li>
 </ul>
 </li>
 </ul>
@@ -132,7 +132,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <hr>
 <pre>public class <span class="typeNameLabel">Exec</span>
-extends java.lang.Object</pre>
+extends Object</pre>
 <div class="block">Run shell command and obtain its output as a stream of lines.</div>
 </li>
 </ul>
@@ -179,13 +179,13 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String)">Exec</a></span>&#8203;(java.lang.String&nbsp;cmd)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String)">Exec</a></span>&#8203;(String&nbsp;cmd)</code></th>
 <td class="colLast">
 <div class="block">Constructor which accepts the full command line to run</div>
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String...)">Exec</a></span>&#8203;(java.lang.String...&nbsp;cmd)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String...)">Exec</a></span>&#8203;(String...&nbsp;cmd)</code></th>
 <td class="colLast">
 <div class="block">Constructor which accepts the command to run.</div>
 </td>
@@ -217,17 +217,17 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="Exec.html" title="class in id.xfunction">Exec</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withInput(java.util.stream.Stream)">withInput</a></span>&#8203;(java.util.stream.Stream&lt;java.lang.String&gt;&nbsp;input)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withInput(java.util.stream.Stream)">withInput</a></span>&#8203;(Stream&lt;String&gt;&nbsp;input)</code></th>
 <td class="colLast">
 <div class="block">Given input will be sent to command's stdin.</div>
 </td>
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
+<li class="blockList"><a id="methods.inherited.from.class.Object">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<h3>Methods inherited from class&nbsp;Object</h3>
 <code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
 </ul>
 </li>
@@ -252,7 +252,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>Exec</h4>
-<pre>public&nbsp;Exec&#8203;(java.lang.String...&nbsp;cmd)</pre>
+<pre>public&nbsp;Exec&#8203;(String...&nbsp;cmd)</pre>
 <div class="block">Constructor which accepts the command to run.
  First item of the array should be the command itself and the
  rest items are arguments of it.</div>
@@ -264,7 +264,7 @@ extends java.lang.Object</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Exec</h4>
-<pre>public&nbsp;Exec&#8203;(java.lang.String&nbsp;cmd)</pre>
+<pre>public&nbsp;Exec&#8203;(String&nbsp;cmd)</pre>
 <div class="block">Constructor which accepts the full command line to run</div>
 </li>
 </ul>
@@ -284,7 +284,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>withInput</h4>
-<pre class="methodSignature">public&nbsp;<a href="Exec.html" title="class in id.xfunction">Exec</a>&nbsp;withInput&#8203;(java.util.stream.Stream&lt;java.lang.String&gt;&nbsp;input)</pre>
+<pre class="methodSignature">public&nbsp;<a href="Exec.html" title="class in id.xfunction">Exec</a>&nbsp;withInput&#8203;(Stream&lt;String&gt;&nbsp;input)</pre>
 <div class="block">Given input will be sent to command's stdin.</div>
 </li>
 </ul>

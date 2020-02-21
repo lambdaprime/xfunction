@@ -120,10 +120,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
-<li>java.lang.Object</li>
+<li>Object</li>
 <li>
 <ul class="inheritance">
-<li>id.xfunction.CommandLineInterface</li>
+<li>CommandLineInterface</li>
 </ul>
 </li>
 </ul>
@@ -132,7 +132,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <hr>
 <pre>public class <span class="typeNameLabel">CommandLineInterface</span>
-extends java.lang.Object</pre>
+extends Object</pre>
 <div class="block">Set of functions to work with command line interface</div>
 </li>
 </ul>
@@ -185,8 +185,8 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.io.InputStream,java.io.OutputStream)">CommandLineInterface</a></span>&#8203;(java.io.InputStream&nbsp;in,
-                    java.io.OutputStream&nbsp;out)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.io.InputStream,java.io.OutputStream)">CommandLineInterface</a></span>&#8203;(InputStream&nbsp;in,
+                    OutputStream&nbsp;out)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -209,7 +209,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#askConfirm(java.lang.String)">askConfirm</a></span>&#8203;(java.lang.String&nbsp;message)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#askConfirm(java.lang.String)">askConfirm</a></span>&#8203;(String&nbsp;message)</code></th>
 <td class="colLast">
 <div class="block">Print user message and ask to confirm it entering either "yes" or "no"</div>
 </td>
@@ -222,15 +222,15 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colFirst"><code>String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read()">read</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Reads a line and returns it</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>java.lang.String</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(java.lang.String)">read</a></span>&#8203;(java.lang.String&nbsp;msg)</code></th>
+<td class="colFirst"><code>String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(java.lang.String)">read</a></span>&#8203;(String&nbsp;msg)</code></th>
 <td class="colLast">
 <div class="block">Show message to the user and return what he enters</div>
 </td>
@@ -243,8 +243,8 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code>java.lang.String</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readPassword(java.lang.String)">readPassword</a></span>&#8203;(java.lang.String&nbsp;msg)</code></th>
+<td class="colFirst"><code>String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readPassword(java.lang.String)">readPassword</a></span>&#8203;(String&nbsp;msg)</code></th>
 <td class="colLast">
 <div class="block">Read password safely from the user</div>
 </td>
@@ -258,10 +258,10 @@ extends java.lang.Object</pre>
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
+<li class="blockList"><a id="methods.inherited.from.class.Object">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<h3>Methods inherited from class&nbsp;Object</h3>
 <code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
 </ul>
 </li>
@@ -316,8 +316,8 @@ extends java.lang.Object</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>CommandLineInterface</h4>
-<pre>public&nbsp;CommandLineInterface&#8203;(java.io.InputStream&nbsp;in,
-                            java.io.OutputStream&nbsp;out)</pre>
+<pre>public&nbsp;CommandLineInterface&#8203;(InputStream&nbsp;in,
+                            OutputStream&nbsp;out)</pre>
 </li>
 </ul>
 </li>
@@ -356,7 +356,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>read</h4>
-<pre class="methodSignature">public&nbsp;java.lang.String&nbsp;read&#8203;(java.lang.String&nbsp;msg)</pre>
+<pre class="methodSignature">public&nbsp;String&nbsp;read&#8203;(String&nbsp;msg)</pre>
 <div class="block">Show message to the user and return what he enters</div>
 </li>
 </ul>
@@ -366,7 +366,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>read</h4>
-<pre class="methodSignature">public&nbsp;java.lang.String&nbsp;read()</pre>
+<pre class="methodSignature">public&nbsp;String&nbsp;read()</pre>
 <div class="block">Reads a line and returns it</div>
 </li>
 </ul>
@@ -386,7 +386,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>readPassword</h4>
-<pre class="methodSignature">public&nbsp;java.lang.String&nbsp;readPassword&#8203;(java.lang.String&nbsp;msg)</pre>
+<pre class="methodSignature">public&nbsp;String&nbsp;readPassword&#8203;(String&nbsp;msg)</pre>
 <div class="block">Read password safely from the user</div>
 </li>
 </ul>
@@ -396,7 +396,7 @@ extends java.lang.Object</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>askConfirm</h4>
-<pre class="methodSignature">public&nbsp;boolean&nbsp;askConfirm&#8203;(java.lang.String&nbsp;message)</pre>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;askConfirm&#8203;(String&nbsp;message)</pre>
 <div class="block">Print user message and ask to confirm it entering either "yes" or "no"</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

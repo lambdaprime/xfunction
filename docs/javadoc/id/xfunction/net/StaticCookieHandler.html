@@ -120,13 +120,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
-<li>java.lang.Object</li>
+<li>Object</li>
 <li>
 <ul class="inheritance">
-<li>java.net.CookieHandler</li>
+<li>CookieHandler</li>
 <li>
 <ul class="inheritance">
-<li>id.xfunction.net.StaticCookieHandler</li>
+<li>StaticCookieHandler</li>
 </ul>
 </li>
 </ul>
@@ -137,7 +137,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <hr>
 <pre>public class <span class="typeNameLabel">StaticCookieHandler</span>
-extends java.net.CookieHandler</pre>
+extends CookieHandler</pre>
 <div class="block">Static cookie handler with predefined set of cookies
  which cannot be changed. Requests to add new cookies
  are ignored.</div>
@@ -161,13 +161,13 @@ extends java.net.CookieHandler</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String)">StaticCookieHandler</a></span>&#8203;(java.lang.String&nbsp;cookies)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String)">StaticCookieHandler</a></span>&#8203;(String&nbsp;cookies)</code></th>
 <td class="colLast">
 <div class="block">Creates cookie manager with given cookies.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.List)">StaticCookieHandler</a></span>&#8203;(java.util.List&lt;java.lang.String&gt;&nbsp;cookies)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.List)">StaticCookieHandler</a></span>&#8203;(List&lt;String&gt;&nbsp;cookies)</code></th>
 <td class="colLast">
 <div class="block">Creates cookie manager with given list of cookies.</div>
 </td>
@@ -191,30 +191,30 @@ extends java.net.CookieHandler</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>java.util.Map&lt;java.lang.String,&#8203;java.util.List&lt;java.lang.String&gt;&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#get(java.net.URI,java.util.Map)">get</a></span>&#8203;(java.net.URI&nbsp;uri,
-   java.util.Map&lt;java.lang.String,&#8203;java.util.List&lt;java.lang.String&gt;&gt;&nbsp;requestHeaders)</code></th>
+<td class="colFirst"><code>Map&lt;String,&#8203;List&lt;String&gt;&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#get(java.net.URI,java.util.Map)">get</a></span>&#8203;(URI&nbsp;uri,
+   Map&lt;String,&#8203;List&lt;String&gt;&gt;&nbsp;requestHeaders)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(java.net.URI,java.util.Map)">put</a></span>&#8203;(java.net.URI&nbsp;uri,
-   java.util.Map&lt;java.lang.String,&#8203;java.util.List&lt;java.lang.String&gt;&gt;&nbsp;responseHeaders)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(java.net.URI,java.util.Map)">put</a></span>&#8203;(URI&nbsp;uri,
+   Map&lt;String,&#8203;List&lt;String&gt;&gt;&nbsp;responseHeaders)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a id="methods.inherited.from.class.java.net.CookieHandler">
+<li class="blockList"><a id="methods.inherited.from.class.CookieHandler">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;java.net.CookieHandler</h3>
+<h3>Methods inherited from class&nbsp;CookieHandler</h3>
 <code>getDefault, setDefault</code></li>
 </ul>
 <ul class="blockList">
-<li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
+<li class="blockList"><a id="methods.inherited.from.class.Object">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<h3>Methods inherited from class&nbsp;Object</h3>
 <code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
 </ul>
 </li>
@@ -239,7 +239,7 @@ extends java.net.CookieHandler</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>StaticCookieHandler</h4>
-<pre>public&nbsp;StaticCookieHandler&#8203;(java.lang.String&nbsp;cookies)</pre>
+<pre>public&nbsp;StaticCookieHandler&#8203;(String&nbsp;cookies)</pre>
 <div class="block">Creates cookie manager with given cookies.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -253,7 +253,7 @@ extends java.net.CookieHandler</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>StaticCookieHandler</h4>
-<pre>public&nbsp;StaticCookieHandler&#8203;(java.util.List&lt;java.lang.String&gt;&nbsp;cookies)</pre>
+<pre>public&nbsp;StaticCookieHandler&#8203;(List&lt;String&gt;&nbsp;cookies)</pre>
 <div class="block">Creates cookie manager with given list of cookies.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -277,14 +277,14 @@ extends java.net.CookieHandler</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre class="methodSignature">public&nbsp;java.util.Map&lt;java.lang.String,&#8203;java.util.List&lt;java.lang.String&gt;&gt;&nbsp;get&#8203;(java.net.URI&nbsp;uri,
-                                                                                  java.util.Map&lt;java.lang.String,&#8203;java.util.List&lt;java.lang.String&gt;&gt;&nbsp;requestHeaders)
-                                                                           throws java.io.IOException</pre>
+<pre class="methodSignature">public&nbsp;Map&lt;String,&#8203;List&lt;String&gt;&gt;&nbsp;get&#8203;(URI&nbsp;uri,
+                                          Map&lt;String,&#8203;List&lt;String&gt;&gt;&nbsp;requestHeaders)
+                                   throws IOException</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>get</code>&nbsp;in class&nbsp;<code>java.net.CookieHandler</code></dd>
+<dd><code>get</code>&nbsp;in class&nbsp;<code>CookieHandler</code></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.io.IOException</code></dd>
+<dd><code>IOException</code></dd>
 </dl>
 </li>
 </ul>
@@ -294,14 +294,14 @@ extends java.net.CookieHandler</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>put</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;put&#8203;(java.net.URI&nbsp;uri,
-                java.util.Map&lt;java.lang.String,&#8203;java.util.List&lt;java.lang.String&gt;&gt;&nbsp;responseHeaders)
-         throws java.io.IOException</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;put&#8203;(URI&nbsp;uri,
+                Map&lt;String,&#8203;List&lt;String&gt;&gt;&nbsp;responseHeaders)
+         throws IOException</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>put</code>&nbsp;in class&nbsp;<code>java.net.CookieHandler</code></dd>
+<dd><code>put</code>&nbsp;in class&nbsp;<code>CookieHandler</code></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.io.IOException</code></dd>
+<dd><code>IOException</code></dd>
 </dl>
 </li>
 </ul>
