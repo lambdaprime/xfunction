@@ -104,7 +104,7 @@ public class XUtils {
     }
 
     /**
-     * Reads given resource file and returns it as a stream
+     * Reads given resource file and returns its content as a stream of lines
      */
     public static Stream<String> readResourceAsStream(String file) {
         try {
@@ -116,7 +116,7 @@ public class XUtils {
     }
 
     /**
-     * Reads given resource file and returns it as a string
+     * Reads given resource file and returns its content as a string
      */
     public static String readResource(String file) {
         return readResourceAsStream(file)

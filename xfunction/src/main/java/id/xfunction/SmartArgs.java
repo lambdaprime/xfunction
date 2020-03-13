@@ -73,6 +73,10 @@ public class SmartArgs {
         this.defaultHandler = defaultHandler;
     }
 
+    /**
+     * Parse the args invoking corresponding handlers.
+     * @throws Exception if value is not given for some key-value argument 
+     */
     public void parse(String[] args) throws Exception {
         for (int i = 0; i < args.length; i++) {
             boolean expectValue = handlers.containsKey(args[i]);
