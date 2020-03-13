@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -206,14 +206,30 @@ extends Object</pre>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static String</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readResource(java.lang.String)">readResource</a></span>&#8203;(String&nbsp;file)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readResource(java.lang.Class,java.lang.String)">readResource</a></span>&#8203;(Class&lt;?&gt;&nbsp;clazz,
+            String&nbsp;name)</code></th>
 <td class="colLast">
 <div class="block">Reads given resource file and returns its content as a string</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code>static String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readResource(java.lang.String)">readResource</a></span>&#8203;(String&nbsp;absolutePath)</code></th>
+<td class="colLast">
+<div class="block">Reads given resource file and returns its content as a string</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static Stream&lt;String&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readResourceAsStream(java.lang.String)">readResourceAsStream</a></span>&#8203;(String&nbsp;file)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readResourceAsStream(java.lang.Class,java.lang.String)">readResourceAsStream</a></span>&#8203;(Class&lt;?&gt;&nbsp;clazz,
+                    String&nbsp;name)</code></th>
+<td class="colLast">
+<div class="block">Reads given resource file and returns its content as a stream of lines</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>static Stream&lt;String&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readResourceAsStream(java.lang.String)">readResourceAsStream</a></span>&#8203;(String&nbsp;absolutePath)</code></th>
 <td class="colLast">
 <div class="block">Reads given resource file and returns its content as a stream of lines</div>
 </td>
@@ -325,18 +341,58 @@ extends Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>readResourceAsStream</h4>
-<pre class="methodSignature">public static&nbsp;Stream&lt;String&gt;&nbsp;readResourceAsStream&#8203;(String&nbsp;file)</pre>
+<pre class="methodSignature">public static&nbsp;Stream&lt;String&gt;&nbsp;readResourceAsStream&#8203;(String&nbsp;absolutePath)</pre>
 <div class="block">Reads given resource file and returns its content as a stream of lines</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>absolutePath</code> - absolute path to the resource in form "xxx/xxx/.../resource"</dd>
+</dl>
+</li>
+</ul>
+<a id="readResourceAsStream(java.lang.Class,java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readResourceAsStream</h4>
+<pre class="methodSignature">public static&nbsp;Stream&lt;String&gt;&nbsp;readResourceAsStream&#8203;(Class&lt;?&gt;&nbsp;clazz,
+                                                  String&nbsp;name)</pre>
+<div class="block">Reads given resource file and returns its content as a stream of lines</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>clazz</code> - class in which package resource is located</dd>
+<dd><code>name</code> - resource name</dd>
+</dl>
 </li>
 </ul>
 <a id="readResource(java.lang.String)">
 <!--   -->
 </a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readResource</h4>
+<pre class="methodSignature">public static&nbsp;String&nbsp;readResource&#8203;(String&nbsp;absolutePath)</pre>
+<div class="block">Reads given resource file and returns its content as a string</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>absolutePath</code> - absolute path to the resource in form "xxx/xxx/.../resource"</dd>
+</dl>
+</li>
+</ul>
+<a id="readResource(java.lang.Class,java.lang.String)">
+<!--   -->
+</a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>readResource</h4>
-<pre class="methodSignature">public static&nbsp;String&nbsp;readResource&#8203;(String&nbsp;file)</pre>
+<pre class="methodSignature">public static&nbsp;String&nbsp;readResource&#8203;(Class&lt;?&gt;&nbsp;clazz,
+                                  String&nbsp;name)</pre>
 <div class="block">Reads given resource file and returns its content as a string</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>clazz</code> - class in which package resource is located</dd>
+<dd><code>name</code> - resource name</dd>
+</dl>
 </li>
 </ul>
 </li>

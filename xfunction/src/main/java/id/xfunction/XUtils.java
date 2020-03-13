@@ -105,11 +105,26 @@ public class XUtils {
 
     /**
      * Reads given resource file and returns its content as a stream of lines
+     * @param absolutePath absolute path to the resource in form "xxx/xxx/.../resource"
      */
-    public static Stream<String> readResourceAsStream(String file) {
+    public static Stream<String> readResourceAsStream(String absolutePath) {
         try {
             return new BufferedReader(new InputStreamReader(
-                XUtils.class.getResource(file).openStream())).lines();
+                ClassLoader.getSystemResourceAsStream(absolutePath))).lines();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Reads given resource file and returns its content as a stream of lines
+     * @param clazz class in which package resource is located
+     * @param name resource name
+     */
+    public static Stream<String> readResourceAsStream(Class<?> clazz, String name) {
+        try {
+            return new BufferedReader(new InputStreamReader(
+                clazz.getResourceAsStream(name))).lines();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -117,9 +132,20 @@ public class XUtils {
 
     /**
      * Reads given resource file and returns its content as a string
+     * @param absolutePath absolute path to the resource in form "xxx/xxx/.../resource"
      */
-    public static String readResource(String file) {
-        return readResourceAsStream(file)
+    public static String readResource(String absolutePath) {
+        return readResourceAsStream(absolutePath)
+                .collect(joining("\n"));
+    }
+
+    /**
+     * Reads given resource file and returns its content as a string
+     * @param clazz class in which package resource is located
+     * @param name resource name
+     */
+    public static String readResource(Class<?> clazz, String name) {
+        return readResourceAsStream(clazz, name)
                 .collect(joining("\n"));
     }
 }

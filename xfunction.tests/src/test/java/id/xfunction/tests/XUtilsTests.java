@@ -48,7 +48,15 @@ public class XUtilsTests {
 
     @Test
     public void test_readResourceAsStream() {
-        List<String> actual = XUtils.readResourceAsStream("/testFile")
+        List<String> actual = XUtils.readResourceAsStream("testFile")
+            .collect(toList());
+        assertEquals("[line 1, line 2]",
+            actual.toString());
+    }
+
+    @Test
+    public void test_readResourceAsStream_with_class() {
+        List<String> actual = XUtils.readResourceAsStream(this.getClass(), "testFile2")
             .collect(toList());
         assertEquals("[line 1, line 2]",
             actual.toString());
@@ -56,7 +64,14 @@ public class XUtilsTests {
 
     @Test
     public void test_readResource() {
-        String actual = XUtils.readResource("/testFile");
+        String actual = XUtils.readResource("testFile");
+        assertEquals("line 1\nline 2",
+            actual.toString());
+    }
+
+    @Test
+    public void test_readResource_with_class() {
+        String actual = XUtils.readResource(this.getClass(), "testFile2");
         assertEquals("line 1\nline 2",
             actual.toString());
     }
