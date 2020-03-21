@@ -32,8 +32,7 @@ import id.xfunction.function.Unchecked;
 public class XLogger {
 
     static {
-        final InputStream inputStream = ClassLoader.getSystemResourceAsStream("logging.properties");
-        Unchecked.runUnchecked(() -> LogManager.getLogManager().readConfiguration(inputStream));
+        load("logging.properties");
     }
 
     /**
@@ -41,5 +40,11 @@ public class XLogger {
      */
     public static Logger getLogger(Class<?> cls) {
         return Logger.getLogger(cls.getName());
+    }
+
+    static void load(String resource) {
+        final InputStream inputStream = ClassLoader.getSystemResourceAsStream(resource);
+        if (inputStream == null) return;
+        Unchecked.runUnchecked(() -> LogManager.getLogManager().readConfiguration(inputStream));
     }
 }

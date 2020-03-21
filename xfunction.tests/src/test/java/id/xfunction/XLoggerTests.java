@@ -41,4 +41,8 @@ public class XLoggerTests {
             LogManager.getLogManager().getProperty("handlers"));
     }
 
+    @Test
+    public void test_config_not_found() {
+        XLogger.load("ggg");
+    }
 }
