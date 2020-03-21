@@ -1,4 +1,4 @@
-package id.xfunction.tests;
+package id.xfunction;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package id.xfunction.tests;
+package id.xfunction;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

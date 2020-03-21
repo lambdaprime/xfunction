@@ -1,4 +1,4 @@
-package id.xfunction.tests;
+package id.xfunction;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
