@@ -14,7 +14,7 @@ public class ObjectsStorageTests {
 
     @Test
     public void test_happy() throws Exception {
-        Path store = Paths.get("/tmp/store");
+        Path store = Paths.get("/tmp/store" + System.currentTimeMillis());
         ObjectsStore<String> pm = ObjectsStore.load(store);
         pm.add("enity1");
         pm.add("enity2");

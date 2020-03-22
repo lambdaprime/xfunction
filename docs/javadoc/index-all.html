@@ -141,7 +141,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Bounded to System.in, System.out</div>
 </dd>
-<dt><span class="memberNameLink"><a href="id/xfunction/Exec.Result.html#code">code</a></span> - Variable in class <a href="id/xfunction/Exec.Result.html" title="class in id.xfunction">Exec.Result</a></dt>
+<dt><span class="memberNameLink"><a href="id/xfunction/XProcess.html#code()">code()</a></span> - Method in class <a href="id/xfunction/XProcess.html" title="class in id.xfunction">XProcess</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="id/xfunction/CommandLineInterface.html" title="class in id.xfunction"><span class="typeNameLink">CommandLineInterface</span></a> - Class in <a href="id/xfunction/package-summary.html">id.xfunction</a></dt>
 <dd>
@@ -180,22 +180,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="id/xfunction/XUtils.html#error(java.lang.String)">error(String)</a></span> - Static method in class <a href="id/xfunction/XUtils.html" title="class in id.xfunction">XUtils</a></dt>
 <dd>
 <div class="block">Terminate application with error code</div>
-</dd>
-<dt><a href="id/xfunction/Exec.html" title="class in id.xfunction"><span class="typeNameLink">Exec</span></a> - Class in <a href="id/xfunction/package-summary.html">id.xfunction</a></dt>
-<dd>
-<div class="block">Run shell command and obtain its output as a stream of lines.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="id/xfunction/Exec.html#%3Cinit%3E(java.lang.String)">Exec(String)</a></span> - Constructor for class <a href="id/xfunction/Exec.html" title="class in id.xfunction">Exec</a></dt>
-<dd>
-<div class="block">Constructor which accepts the full command line to run</div>
-</dd>
-<dt><span class="memberNameLink"><a href="id/xfunction/Exec.html#%3Cinit%3E(java.lang.String...)">Exec(String...)</a></span> - Constructor for class <a href="id/xfunction/Exec.html" title="class in id.xfunction">Exec</a></dt>
-<dd>
-<div class="block">Constructor which accepts the command to run.</div>
-</dd>
-<dt><a href="id/xfunction/Exec.Result.html" title="class in id.xfunction"><span class="typeNameLink">Exec.Result</span></a> - Class in <a href="id/xfunction/package-summary.html">id.xfunction</a></dt>
-<dd>
-<div class="block">Holds result of command execution</div>
 </dd>
 </dl>
 <a id="I:F">
@@ -296,6 +280,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Launches background thread which prints JVM memory consumption
  after given period of time.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="id/xfunction/XProcess.html#process()">process()</a></span> - Method in class <a href="id/xfunction/XProcess.html" title="class in id.xfunction">XProcess</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="id/xfunction/net/StaticCookieHandler.html#put(java.net.URI,java.util.Map)">put(URI, Map&lt;String, List&lt;String&gt;&gt;)</a></span> - Method in class <a href="id/xfunction/net/StaticCookieHandler.html" title="class in id.xfunction.net">StaticCookieHandler</a></dt>
 <dd>&nbsp;</dd>
 </dl>
@@ -358,18 +344,16 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Replace all elements which satisfy given XPath expression.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="id/xfunction/Exec.Result.html#%3Cinit%3E(java.util.stream.Stream,java.util.stream.Stream)">Result(Stream&lt;String&gt;, Stream&lt;String&gt;)</a></span> - Constructor for class <a href="id/xfunction/Exec.Result.html" title="class in id.xfunction">Exec.Result</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="id/xfunction/Exec.html#run()">run()</a></span> - Method in class <a href="id/xfunction/Exec.html" title="class in id.xfunction">Exec</a></dt>
-<dd>
-<div class="block">Run the command and send it the input if any</div>
-</dd>
 <dt><span class="memberNameLink"><a href="id/xfunction/function/ThrowingIntSupplier.html#run()">run()</a></span> - Method in interface <a href="id/xfunction/function/ThrowingIntSupplier.html" title="interface in id.xfunction.function">ThrowingIntSupplier</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="id/xfunction/function/ThrowingRunnable.html#run()">run()</a></span> - Method in interface <a href="id/xfunction/function/ThrowingRunnable.html" title="interface in id.xfunction.function">ThrowingRunnable</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="id/xfunction/function/ThrowingSupplier.html#run()">run()</a></span> - Method in interface <a href="id/xfunction/function/ThrowingSupplier.html" title="interface in id.xfunction.function">ThrowingSupplier</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="id/xfunction/XExec.html#run()">run()</a></span> - Method in class <a href="id/xfunction/XExec.html" title="class in id.xfunction">XExec</a></dt>
+<dd>
+<div class="block">Run the command with given input if any</div>
+</dd>
 <dt><span class="memberNameLink"><a href="id/xfunction/function/Unchecked.html#runUnchecked(id.xfunction.function.ThrowingConsumer,T)">runUnchecked(ThrowingConsumer&lt;T, E&gt;, T)</a></span> - Static method in class <a href="id/xfunction/function/Unchecked.html" title="class in id.xfunction.function">Unchecked</a></dt>
 <dd>
 <div class="block">Executes given consumer with a given argument and catch all checked exceptions.</div>
@@ -419,13 +403,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Creates cookie manager with given list of cookies.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="id/xfunction/Exec.Result.html#stderr">stderr</a></span> - Variable in class <a href="id/xfunction/Exec.Result.html" title="class in id.xfunction">Exec.Result</a></dt>
+<dt><span class="memberNameLink"><a href="id/xfunction/XProcess.html#stderr()">stderr()</a></span> - Method in class <a href="id/xfunction/XProcess.html" title="class in id.xfunction">XProcess</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="id/xfunction/Exec.Result.html#stderrAsString()">stderrAsString()</a></span> - Method in class <a href="id/xfunction/Exec.Result.html" title="class in id.xfunction">Exec.Result</a></dt>
+<dt><span class="memberNameLink"><a href="id/xfunction/XProcess.html#stderrAsString()">stderrAsString()</a></span> - Method in class <a href="id/xfunction/XProcess.html" title="class in id.xfunction">XProcess</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="id/xfunction/Exec.Result.html#stdout">stdout</a></span> - Variable in class <a href="id/xfunction/Exec.Result.html" title="class in id.xfunction">Exec.Result</a></dt>
+<dt><span class="memberNameLink"><a href="id/xfunction/XProcess.html#stdout()">stdout()</a></span> - Method in class <a href="id/xfunction/XProcess.html" title="class in id.xfunction">XProcess</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="id/xfunction/Exec.Result.html#stdoutAsString()">stdoutAsString()</a></span> - Method in class <a href="id/xfunction/Exec.Result.html" title="class in id.xfunction">Exec.Result</a></dt>
+<dt><span class="memberNameLink"><a href="id/xfunction/XProcess.html#stdoutAsString()">stdoutAsString()</a></span> - Method in class <a href="id/xfunction/XProcess.html" title="class in id.xfunction">XProcess</a></dt>
 <dd>&nbsp;</dd>
 </dl>
 <a id="I:T">
@@ -479,7 +463,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Wait user to press enter</div>
 </dd>
-<dt><span class="memberNameLink"><a href="id/xfunction/Exec.html#withInput(java.util.stream.Stream)">withInput(Stream&lt;String&gt;)</a></span> - Method in class <a href="id/xfunction/Exec.html" title="class in id.xfunction">Exec</a></dt>
+<dt><span class="memberNameLink"><a href="id/xfunction/XExec.html#withInput(java.util.stream.Stream)">withInput(Stream&lt;String&gt;)</a></span> - Method in class <a href="id/xfunction/XExec.html" title="class in id.xfunction">XExec</a></dt>
 <dd>
 <div class="block">Given input will be sent to command's stdin.</div>
 </dd>
@@ -520,6 +504,18 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="id/xfunction/XAsserts.html#%3Cinit%3E()">XAsserts()</a></span> - Constructor for class <a href="id/xfunction/XAsserts.html" title="class in id.xfunction">XAsserts</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="id/xfunction/XExec.html" title="class in id.xfunction"><span class="typeNameLink">XExec</span></a> - Class in <a href="id/xfunction/package-summary.html">id.xfunction</a></dt>
+<dd>
+<div class="block">Run shell command and obtain its output as a stream of lines.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="id/xfunction/XExec.html#%3Cinit%3E(java.lang.String)">XExec(String)</a></span> - Constructor for class <a href="id/xfunction/XExec.html" title="class in id.xfunction">XExec</a></dt>
+<dd>
+<div class="block">Constructor which accepts the full command line to run</div>
+</dd>
+<dt><span class="memberNameLink"><a href="id/xfunction/XExec.html#%3Cinit%3E(java.lang.String...)">XExec(String...)</a></span> - Constructor for class <a href="id/xfunction/XExec.html" title="class in id.xfunction">XExec</a></dt>
+<dd>
+<div class="block">Constructor which accepts the command to run.</div>
+</dd>
 <dt><a href="id/xfunction/XLogger.html" title="class in id.xfunction"><span class="typeNameLink">XLogger</span></a> - Class in <a href="id/xfunction/package-summary.html">id.xfunction</a></dt>
 <dd>
 <div class="block">Using JUL you have to specify location of logging.properties
@@ -533,6 +529,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Set of functions to process XML</div>
 </dd>
 <dt><span class="memberNameLink"><a href="id/xfunction/Xml.html#%3Cinit%3E()">Xml()</a></span> - Constructor for class <a href="id/xfunction/Xml.html" title="class in id.xfunction">Xml</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="id/xfunction/XProcess.html" title="class in id.xfunction"><span class="typeNameLink">XProcess</span></a> - Class in <a href="id/xfunction/package-summary.html">id.xfunction</a></dt>
+<dd>
+<div class="block">Wraps standard Process class with convenient methods</div>
+</dd>
+<dt><span class="memberNameLink"><a href="id/xfunction/XProcess.html#%3Cinit%3E(java.lang.Process)">XProcess(Process)</a></span> - Constructor for class <a href="id/xfunction/XProcess.html" title="class in id.xfunction">XProcess</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="id/xfunction/XUtils.html" title="class in id.xfunction"><span class="typeNameLink">XUtils</span></a> - Class in <a href="id/xfunction/package-summary.html">id.xfunction</a></dt>
 <dd>

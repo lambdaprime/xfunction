@@ -15,69 +15,33 @@
  */
 package id.xfunction;
 
-import static java.util.stream.Collectors.joining;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.Arrays;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 import java.util.stream.Stream;
-
-import id.xfunction.function.Unchecked;
 
 /**
  * Run shell command and obtain its output as a stream of lines.
  */
-public class Exec {
+public class XExec {
 
     private String[] cmd;
     private boolean singleLine;
     private Stream<String> input;
 
     /**
-     * Holds result of command execution
-     */
-    public static class Result {
-        public Stream<String> stdout;
-        public Stream<String> stderr;
-        public Future<Integer> code;
-
-        public Result(Stream<String> stdout, Stream<String> stderr) {
-            this.stdout = stdout; this.stderr = stderr;
-        }
-
-        /**
-         * @return Standard output as a string
-         */
-        public String stdoutAsString() {
-            return stdout.collect(joining("\n"));
-        }
-
-        /**
-         * @return Standard error output as a string
-         */
-        public String stderrAsString() {
-            return stderr.collect(joining("\n"));
-        }
-
-    }
-
-    /**
      * Constructor which accepts the command to run.
      * First item of the array should be the command itself and the
      * rest items are arguments of it.  
      */
-    public Exec(String... cmd) {
+    public XExec(String... cmd) {
         this.cmd = cmd;
     }
 
     /**
      * Constructor which accepts the full command line to run
      */
-    public Exec(String cmd) {
+    public XExec(String cmd) {
         this(new String[] {cmd});
         singleLine = true;
     }
@@ -85,28 +49,23 @@ public class Exec {
     /**
      * Given input will be sent to command's stdin.
      */
-    public Exec withInput(Stream<String> input) {
+    public XExec withInput(Stream<String> input) {
         this.input = input;
         return this;
     }
 
     /**
-     * Run the command and send it the input if any
+     * Run the command with given input if any
      */
-    public Result run() {
+    public XProcess run() {
         try {
             Process p = runProcess();
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(p.getInputStream()));
             if (input != null) {
                 PrintStream ps = new PrintStream(p.getOutputStream(), true);
                 input.forEach(ps::println);
                 ps.close();
             }
-            BufferedReader ein = new BufferedReader(
-                new InputStreamReader(p.getErrorStream()));
-            Result result = new Result(in.lines(), ein.lines());
-            result.code = CompletableFuture.supplyAsync(Unchecked.wrapGet(p::waitFor));
+            XProcess result = new XProcess(p);
             return result;
             
         } catch (Exception e) {
