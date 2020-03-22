@@ -65,7 +65,7 @@ public class Unchecked {
      * If checked exception is thrown it is wrapped into unchecked RuntimeException and is
      * thrown further. 
      */
-    public static <E extends Exception> int runUnchecked(ThrowingIntSupplier<E> s) {
+    public static <E extends Exception> int getInt(ThrowingIntSupplier<E> s) {
         try {
             return s.run();
         } catch (Exception ex) {
@@ -133,7 +133,7 @@ public class Unchecked {
      * IntSupplier which throws unchecked one
      */
     public static <E extends Exception> IntSupplier wrapGetInt(ThrowingIntSupplier<E> s) {
-        return () -> runUnchecked(s);
+        return () -> getInt(s);
     }
 
     /**
