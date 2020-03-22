@@ -44,6 +44,16 @@ public class XProcess {
     }
 
     /**
+     * This ctor supposed to be used in tests when you want to mock results of XExec
+     */
+    public XProcess(Process process, Stream<String> stdout, Stream<String> stderr, int code) {
+        this.process = process;
+        this.stdout = stdout;
+        this.stderr = stderr;
+        this.code = Optional.of(CompletableFuture.completedFuture(code));
+    }
+
+    /**
      * @return Standard output as a string
      */
     public String stdoutAsString() {

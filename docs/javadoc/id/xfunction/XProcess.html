@@ -157,6 +157,15 @@ extends Object</pre>
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.Process)">XProcess</a></span>&#8203;(Process&nbsp;process)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.Process,java.util.stream.Stream,java.util.stream.Stream,int)">XProcess</a></span>&#8203;(Process&nbsp;process,
+        Stream&lt;String&gt;&nbsp;stdout,
+        Stream&lt;String&gt;&nbsp;stderr,
+        int&nbsp;code)</code></th>
+<td class="colLast">
+<div class="block">This ctor supposed to be used in tests when you want to mock results of XExec</div>
+</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -232,10 +241,23 @@ extends Object</pre>
 <a id="&lt;init&gt;(java.lang.Process)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>XProcess</h4>
 <pre>public&nbsp;XProcess&#8203;(Process&nbsp;process)</pre>
+</li>
+</ul>
+<a id="&lt;init&gt;(java.lang.Process,java.util.stream.Stream,java.util.stream.Stream,int)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>XProcess</h4>
+<pre>public&nbsp;XProcess&#8203;(Process&nbsp;process,
+                Stream&lt;String&gt;&nbsp;stdout,
+                Stream&lt;String&gt;&nbsp;stderr,
+                int&nbsp;code)</pre>
+<div class="block">This ctor supposed to be used in tests when you want to mock results of XExec</div>
 </li>
 </ul>
 </li>
