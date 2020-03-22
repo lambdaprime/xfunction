@@ -21,7 +21,7 @@ public class XUtilsTests {
 
     @Test
     public void testSafe() {
-        Unchecked.runUnchecked(this::m);
+        Unchecked.get(this::m);
     }
 
     @SuppressWarnings("rawtypes")

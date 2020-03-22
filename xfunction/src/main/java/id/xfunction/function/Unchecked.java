@@ -41,7 +41,7 @@ import java.util.function.Supplier;
  * You can use this class:
  * 
  * <pre>{@code
- * runUnchecked(this::m);
+ * getInt(this::m);
  * }</pre>
  * 
  */
@@ -52,7 +52,7 @@ public class Unchecked {
      * If checked exception is thrown it is wrapped into unchecked RuntimeException and is
      * thrown further. 
      */
-    public static <R, E extends Exception> R runUnchecked(ThrowingSupplier<R, E> s) {
+    public static <R, E extends Exception> R get(ThrowingSupplier<R, E> s) {
         try {
             return s.run();
         } catch (Exception ex) {
@@ -78,7 +78,7 @@ public class Unchecked {
      * If checked exception is thrown it is wrapped into unchecked RuntimeException and is
      * thrown further. 
      */
-    public static <E extends Exception> void runUnchecked(ThrowingRunnable<E> s) {
+    public static <E extends Exception> void run(ThrowingRunnable<E> s) {
         try {
             s.run();
         } catch (Exception ex) {
@@ -91,7 +91,7 @@ public class Unchecked {
      * If checked exception is thrown it is wrapped into unchecked RuntimeException and is
      * thrown further. 
      */
-    public static <A, R, E extends Exception> R runUnchecked(ThrowingFunction<A, R, E> s, A a) {
+    public static <A, R, E extends Exception> R apply(ThrowingFunction<A, R, E> s, A a) {
         try {
             return s.apply(a);
         } catch (Exception ex) {
@@ -104,7 +104,7 @@ public class Unchecked {
      * If checked exception is thrown it is wrapped into unchecked RuntimeException and is
      * thrown further. 
      */
-    public static <T, E extends Exception> void runUnchecked(ThrowingConsumer<T, E> c, T t) {
+    public static <T, E extends Exception> void accept(ThrowingConsumer<T, E> c, T t) {
         try {
             c.accept(t);
         } catch (Exception ex) {
@@ -117,7 +117,7 @@ public class Unchecked {
      * runnable which throws unchecked one
      */
     public static <E extends Exception> Runnable wrapRun(ThrowingRunnable<E> r) {
-        return () -> runUnchecked(r);
+        return () -> run(r);
     }
 
     /**
@@ -125,7 +125,7 @@ public class Unchecked {
      * Supplier which throws unchecked one
      */
     public static <R, E extends Exception> Supplier<R> wrapGet(ThrowingSupplier<R, E> s) {
-        return () -> runUnchecked(s);
+        return () -> get(s);
     }
 
     /**
@@ -141,7 +141,7 @@ public class Unchecked {
      * Function which throws unchecked one
      */
     public static <A, R, E extends Exception> Function<A, R> wrapApply(ThrowingFunction<A, R, E> f) {
-        return (A a) -> runUnchecked(f, a);
+        return (A a) -> apply(f, a);
     }
 
     /**
@@ -149,7 +149,7 @@ public class Unchecked {
      * Consumer which throws unchecked one
      */
     public static <T, E extends Exception> Consumer<T> wrapAccept(ThrowingConsumer<T, E> c) {
-        return (T t) -> runUnchecked(c, t);
+        return (T t) -> accept(c, t);
     }
 }
 

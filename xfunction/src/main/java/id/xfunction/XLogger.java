@@ -45,6 +45,6 @@ public class XLogger {
     static void load(String resource) {
         final InputStream inputStream = ClassLoader.getSystemResourceAsStream(resource);
         if (inputStream == null) return;
-        Unchecked.runUnchecked(() -> LogManager.getLogManager().readConfiguration(inputStream));
+        Unchecked.run(() -> LogManager.getLogManager().readConfiguration(inputStream));
     }
 }

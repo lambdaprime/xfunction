@@ -15,15 +15,21 @@
  */
 package id.xfunction.function;
 
+import static id.xfunction.function.Unchecked.getInt;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
 public class UncheckedTests {
 
+    int m() throws Exception {
+        return 0;
+    }
+    
     @Test
     public void test_getInt() throws Exception {
-        int v = Unchecked.getInt(() -> 12);
+        int v = getInt(() -> 12);
         assertEquals(12, v);
+        assertEquals(0, getInt(this::m));
     }
 }
