@@ -209,14 +209,20 @@ extends Object</pre>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readResource(java.lang.Class,java.lang.String)">readResource</a></span>&#8203;(Class&lt;?&gt;&nbsp;clazz,
             String&nbsp;name)</code></th>
 <td class="colLast">
-<div class="block">Reads given resource file and returns its content as a string</div>
+<div class="block">Reads given resource file and returns its content as a string
+ 
+ If you try to read resource from the module you need to "open" that module
+ to xfunction, otherwise Java will throw NPE.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>static String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readResource(java.lang.String)">readResource</a></span>&#8203;(String&nbsp;absolutePath)</code></th>
 <td class="colLast">
-<div class="block">Reads given resource file and returns its content as a string</div>
+<div class="block">Reads given resource file and returns its content as a string
+ 
+ If you try to read resource from the module you need to "open" that module
+ to xfunction, otherwise Java will throw NPE.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -224,14 +230,17 @@ extends Object</pre>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readResourceAsStream(java.lang.Class,java.lang.String)">readResourceAsStream</a></span>&#8203;(Class&lt;?&gt;&nbsp;clazz,
                     String&nbsp;name)</code></th>
 <td class="colLast">
-<div class="block">Reads given resource file and returns its content as a stream of lines</div>
+<div class="block">Reads given resource file and returns its content as a stream of lines
+ 
+ If you try to read resource from the module you need to "open" that module
+ to xfunction, otherwise Java will throw NPE.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>static Stream&lt;String&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readResourceAsStream(java.lang.String)">readResourceAsStream</a></span>&#8203;(String&nbsp;absolutePath)</code></th>
 <td class="colLast">
-<div class="block">Reads given resource file and returns its content as a stream of lines</div>
+<div class="block">Reads given resource file and returns its content as a stream of lines.</div>
 </td>
 </tr>
 </table>
@@ -342,7 +351,10 @@ extends Object</pre>
 <li class="blockList">
 <h4>readResourceAsStream</h4>
 <pre class="methodSignature">public static&nbsp;Stream&lt;String&gt;&nbsp;readResourceAsStream&#8203;(String&nbsp;absolutePath)</pre>
-<div class="block">Reads given resource file and returns its content as a stream of lines</div>
+<div class="block">Reads given resource file and returns its content as a stream of lines.
+ 
+ If you try to read resource from the module you need to "open" that module
+ to xfunction, otherwise Java will throw NPE.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>absolutePath</code> - absolute path to the resource in form "xxx/xxx/.../resource"</dd>
@@ -357,7 +369,10 @@ extends Object</pre>
 <h4>readResourceAsStream</h4>
 <pre class="methodSignature">public static&nbsp;Stream&lt;String&gt;&nbsp;readResourceAsStream&#8203;(Class&lt;?&gt;&nbsp;clazz,
                                                   String&nbsp;name)</pre>
-<div class="block">Reads given resource file and returns its content as a stream of lines</div>
+<div class="block">Reads given resource file and returns its content as a stream of lines
+ 
+ If you try to read resource from the module you need to "open" that module
+ to xfunction, otherwise Java will throw NPE.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>clazz</code> - class in which package resource is located</dd>
@@ -372,7 +387,10 @@ extends Object</pre>
 <li class="blockList">
 <h4>readResource</h4>
 <pre class="methodSignature">public static&nbsp;String&nbsp;readResource&#8203;(String&nbsp;absolutePath)</pre>
-<div class="block">Reads given resource file and returns its content as a string</div>
+<div class="block">Reads given resource file and returns its content as a string
+ 
+ If you try to read resource from the module you need to "open" that module
+ to xfunction, otherwise Java will throw NPE.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>absolutePath</code> - absolute path to the resource in form "xxx/xxx/.../resource"</dd>
@@ -387,7 +405,10 @@ extends Object</pre>
 <h4>readResource</h4>
 <pre class="methodSignature">public static&nbsp;String&nbsp;readResource&#8203;(Class&lt;?&gt;&nbsp;clazz,
                                   String&nbsp;name)</pre>
-<div class="block">Reads given resource file and returns its content as a string</div>
+<div class="block">Reads given resource file and returns its content as a string
+ 
+ If you try to read resource from the module you need to "open" that module
+ to xfunction, otherwise Java will throw NPE.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>clazz</code> - class in which package resource is located</dd>

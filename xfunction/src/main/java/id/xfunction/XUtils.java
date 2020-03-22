@@ -104,7 +104,11 @@ public class XUtils {
     }
 
     /**
-     * Reads given resource file and returns its content as a stream of lines
+     * Reads given resource file and returns its content as a stream of lines.
+     * 
+     * If you try to read resource from the module you need to "open" that module
+     * to xfunction, otherwise Java will throw NPE.
+     * 
      * @param absolutePath absolute path to the resource in form "xxx/xxx/.../resource"
      */
     public static Stream<String> readResourceAsStream(String absolutePath) {
@@ -118,6 +122,10 @@ public class XUtils {
 
     /**
      * Reads given resource file and returns its content as a stream of lines
+     * 
+     * If you try to read resource from the module you need to "open" that module
+     * to xfunction, otherwise Java will throw NPE.
+     * 
      * @param clazz class in which package resource is located
      * @param name resource name
      */
@@ -132,6 +140,10 @@ public class XUtils {
 
     /**
      * Reads given resource file and returns its content as a string
+     * 
+     * If you try to read resource from the module you need to "open" that module
+     * to xfunction, otherwise Java will throw NPE.
+     * 
      * @param absolutePath absolute path to the resource in form "xxx/xxx/.../resource"
      */
     public static String readResource(String absolutePath) {
@@ -141,6 +153,10 @@ public class XUtils {
 
     /**
      * Reads given resource file and returns its content as a string
+     * 
+     * If you try to read resource from the module you need to "open" that module
+     * to xfunction, otherwise Java will throw NPE.
+     * 
      * @param clazz class in which package resource is located
      * @param name resource name
      */
