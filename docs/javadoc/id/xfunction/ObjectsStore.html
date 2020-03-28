@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10};
+var data = {"i0":10,"i1":9,"i2":10,"i3":9,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -165,27 +165,34 @@ extends Object</pre>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>static &lt;T extends Serializable&gt;<br><a href="ObjectsStore.html" title="class in id.xfunction">ObjectsStore</a>&lt;T&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#create(java.util.Set)">create</a></span>&#8203;(Set&lt;T&gt;&nbsp;entities)</code></th>
+<td class="colLast">
+<div class="block">Creates in memory ObjectsStore.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>List&lt;<a href="ObjectsStore.html" title="type parameter in ObjectsStore">T</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findAll()">findAll</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Retrieve all objects from a store</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static &lt;T extends Serializable&gt;<br><a href="ObjectsStore.html" title="class in id.xfunction">ObjectsStore</a>&lt;T&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#load(java.nio.file.Path)">load</a></span>&#8203;(Path&nbsp;store)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#load(java.nio.file.Path)">load</a></span>&#8203;(Path&nbsp;path)</code></th>
 <td class="colLast">
 <div class="block">Loads an ObjectsStore from a given file</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#save()">save</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Persist the store content to a file in which it is located</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#update(T)">update</a></span>&#8203;(<a href="ObjectsStore.html" title="type parameter in ObjectsStore">T</a>&nbsp;entity)</code></th>
 <td class="colLast">
@@ -263,11 +270,21 @@ extends Object</pre>
 <a id="load(java.nio.file.Path)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>load</h4>
-<pre class="methodSignature">public static&nbsp;&lt;T extends Serializable&gt;&nbsp;<a href="ObjectsStore.html" title="class in id.xfunction">ObjectsStore</a>&lt;T&gt;&nbsp;load&#8203;(Path&nbsp;store)</pre>
+<pre class="methodSignature">public static&nbsp;&lt;T extends Serializable&gt;&nbsp;<a href="ObjectsStore.html" title="class in id.xfunction">ObjectsStore</a>&lt;T&gt;&nbsp;load&#8203;(Path&nbsp;path)</pre>
 <div class="block">Loads an ObjectsStore from a given file</div>
+</li>
+</ul>
+<a id="create(java.util.Set)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>create</h4>
+<pre class="methodSignature">public static&nbsp;&lt;T extends Serializable&gt;&nbsp;<a href="ObjectsStore.html" title="class in id.xfunction">ObjectsStore</a>&lt;T&gt;&nbsp;create&#8203;(Set&lt;T&gt;&nbsp;entities)</pre>
+<div class="block">Creates in memory ObjectsStore. Useful in tests for mocking file version.</div>
 </li>
 </ul>
 </li>

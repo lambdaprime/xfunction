@@ -26,6 +26,7 @@ import java.io.Serializable;
 import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -36,10 +37,10 @@ import java.util.Set;
  */
 public class ObjectsStore<T extends Serializable> {
 
-	private Path store;
+	private Optional<Path> store;
 	private Set<T> entities;
 
-	private ObjectsStore(Path store, Set<T> entities) {
+	private ObjectsStore(Optional<Path> store, Set<T> entities) {
 		this.store = store;
 		this.entities = entities;
 	}
@@ -65,12 +66,14 @@ public class ObjectsStore<T extends Serializable> {
      * Persist the store content to a file in which it is located
      */
 	public void save() {
-		try (FileOutputStream f = new FileOutputStream(store.toFile());
-				ObjectOutputStream o = new ObjectOutputStream(f);) {
-			o.writeObject(entities);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+	    store.ifPresent(path -> {
+    		try (FileOutputStream f = new FileOutputStream(path.toFile());
+    				ObjectOutputStream o = new ObjectOutputStream(f);) {
+    			o.writeObject(entities);
+    		} catch (Exception e) {
+    			throw new RuntimeException(e);
+    		}
+	    });
 	}
 
 	/**
@@ -85,11 +88,12 @@ public class ObjectsStore<T extends Serializable> {
 	 * Loads an ObjectsStore from a given file
 	 */
 	@SuppressWarnings("unchecked")
-    public static <T extends Serializable> ObjectsStore<T> load(Path store) {
-		File file = store.toFile();
+    public static <T extends Serializable> ObjectsStore<T> load(Path path) {
+	    Optional<Path> store = Optional.of(path);
+		File file = path.toFile();
 		if (!file.exists())
 			return new ObjectsStore<T>(store, new HashSet<>());
-		try (FileInputStream fi = new FileInputStream(store.toFile());
+		try (FileInputStream fi = new FileInputStream(file);
 				ObjectInputStream oi = new ObjectInputStream(fi);) {
 			Set<T> entities = (Set<T>) oi.readObject();
 			return new ObjectsStore<>(store, entities);
@@ -98,4 +102,10 @@ public class ObjectsStore<T extends Serializable> {
 		}
 	}
 
+	/**
+     * Creates in memory ObjectsStore. Useful in tests for mocking file version.
+     */
+    public static <T extends Serializable> ObjectsStore<T> create(Set<T> entities) {
+        return new ObjectsStore<>(Optional.empty(), entities);
+    }
 }
