@@ -17,7 +17,6 @@
 package id.xfunction;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.LogManager;
@@ -34,7 +33,7 @@ public class XLoggerTests {
     public void test_read_config() throws IOException {
         Logger logger = XLogger.getLogger(XLoggerTests.class);
         Path file = Paths.get("/tmp/l.txt");
-        Files.delete(file);
+        file.toFile().delete();
         logger.info("test");
         Assertions.assertTrue(file.toFile().exists());
         Assertions.assertEquals("java.util.logging.FileHandler",
