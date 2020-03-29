@@ -41,7 +41,7 @@ public class XAsserts {
      * @throws NullPointerException is obj is null
      */
     public static void assertTrue(boolean b, String message) throws AssertionError {
-        if (!b) throw new AssertionError();
+        if (!b) throw new AssertionError(message);
     }
 
     /**
