@@ -74,6 +74,19 @@ public class Unchecked {
     }
 
     /**
+     * Executes given boolean supplier and catch all checked exceptions.
+     * If checked exception is thrown it is wrapped into unchecked RuntimeException and is
+     * thrown further. 
+     */
+    public static <E extends Exception> boolean getBoolean(ThrowingBooleanSupplier<E> s) {
+        try {
+            return s.run();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    /**
      * Executes given runnable and catch all checked exceptions.
      * If checked exception is thrown it is wrapped into unchecked RuntimeException and is
      * thrown further. 
