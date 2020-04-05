@@ -97,12 +97,18 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </a>
 <h2 class="title">A</h2>
 <dl>
+<dt><span class="memberNameLink"><a href="id/xfunction/function/ThrowingIntConsumer.html#accept(int)">accept(int)</a></span> - Method in interface <a href="id/xfunction/function/ThrowingIntConsumer.html" title="interface in id.xfunction.function">ThrowingIntConsumer</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="id/xfunction/function/Unchecked.html#accept(id.xfunction.function.ThrowingConsumer,T)">accept(ThrowingConsumer&lt;T, E&gt;, T)</a></span> - Static method in class <a href="id/xfunction/function/Unchecked.html" title="class in id.xfunction.function">Unchecked</a></dt>
 <dd>
 <div class="block">Executes given consumer with a given argument and catch all checked exceptions.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="id/xfunction/function/ThrowingConsumer.html#accept(T)">accept(T)</a></span> - Method in interface <a href="id/xfunction/function/ThrowingConsumer.html" title="interface in id.xfunction.function">ThrowingConsumer</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="id/xfunction/function/Unchecked.html#acceptInt(id.xfunction.function.ThrowingIntConsumer,int)">acceptInt(ThrowingIntConsumer&lt;E&gt;, int)</a></span> - Static method in class <a href="id/xfunction/function/Unchecked.html" title="class in id.xfunction.function">Unchecked</a></dt>
+<dd>
+<div class="block">Executes given consumer with a given argument and catch all checked exceptions.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="id/xfunction/XObservable.html#addListener(java.util.function.Consumer)">addListener(Consumer&lt;T&gt;)</a></span> - Method in class <a href="id/xfunction/XObservable.html" title="class in id.xfunction">XObservable</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="id/xfunction/function/ThrowingFunction.html#apply(A)">apply(A)</a></span> - Method in interface <a href="id/xfunction/function/ThrowingFunction.html" title="interface in id.xfunction.function">ThrowingFunction</a></dt>
@@ -441,6 +447,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><a href="id/xfunction/function/ThrowingFunction.html" title="interface in id.xfunction.function"><span class="typeNameLink">ThrowingFunction</span></a>&lt;<a href="id/xfunction/function/ThrowingFunction.html" title="type parameter in ThrowingFunction">A</a>,&#8203;<a href="id/xfunction/function/ThrowingFunction.html" title="type parameter in ThrowingFunction">R</a>,&#8203;<a href="id/xfunction/function/ThrowingFunction.html" title="type parameter in ThrowingFunction">E</a> extends Exception&gt; - Interface in <a href="id/xfunction/function/package-summary.html">id.xfunction.function</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="id/xfunction/function/ThrowingIntConsumer.html" title="interface in id.xfunction.function"><span class="typeNameLink">ThrowingIntConsumer</span></a>&lt;<a href="id/xfunction/function/ThrowingIntConsumer.html" title="type parameter in ThrowingIntConsumer">E</a> extends Exception&gt; - Interface in <a href="id/xfunction/function/package-summary.html">id.xfunction.function</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="id/xfunction/function/ThrowingIntSupplier.html" title="interface in id.xfunction.function"><span class="typeNameLink">ThrowingIntSupplier</span></a>&lt;<a href="id/xfunction/function/ThrowingIntSupplier.html" title="type parameter in ThrowingIntSupplier">E</a> extends Exception&gt; - Interface in <a href="id/xfunction/function/package-summary.html">id.xfunction.function</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="id/xfunction/function/ThrowingRunnable.html" title="interface in id.xfunction.function"><span class="typeNameLink">ThrowingRunnable</span></a>&lt;<a href="id/xfunction/function/ThrowingRunnable.html" title="type parameter in ThrowingRunnable">E</a> extends Exception&gt; - Interface in <a href="id/xfunction/function/package-summary.html">id.xfunction.function</a></dt>
@@ -477,6 +485,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Given input will be sent to command's stdin.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="id/xfunction/function/Unchecked.html#wrapAccept(id.xfunction.function.ThrowingConsumer)">wrapAccept(ThrowingConsumer&lt;T, E&gt;)</a></span> - Static method in class <a href="id/xfunction/function/Unchecked.html" title="class in id.xfunction.function">Unchecked</a></dt>
+<dd>
+<div class="block">Accepts ThrowingConsumer which throws checked exception and converts it to
+ Consumer which throws unchecked one</div>
+</dd>
+<dt><span class="memberNameLink"><a href="id/xfunction/function/Unchecked.html#wrapAcceptInt(id.xfunction.function.ThrowingIntConsumer)">wrapAcceptInt(ThrowingIntConsumer&lt;E&gt;)</a></span> - Static method in class <a href="id/xfunction/function/Unchecked.html" title="class in id.xfunction.function">Unchecked</a></dt>
 <dd>
 <div class="block">Accepts ThrowingConsumer which throws checked exception and converts it to
  Consumer which throws unchecked one</div>

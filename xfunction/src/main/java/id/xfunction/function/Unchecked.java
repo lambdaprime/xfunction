@@ -17,6 +17,7 @@ package id.xfunction.function;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.IntConsumer;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
@@ -126,6 +127,19 @@ public class Unchecked {
     }
 
     /**
+     * Executes given consumer with a given argument and catch all checked exceptions.
+     * If checked exception is thrown it is wrapped into unchecked RuntimeException and is
+     * thrown further. 
+     */
+    public static <E extends Exception> void acceptInt(ThrowingIntConsumer<E> c, int t) {
+        try {
+            c.accept(t);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    /**
      * Accepts ThrowingRunnable which throws checked exception and converts it to
      * runnable which throws unchecked one
      */
@@ -163,6 +177,14 @@ public class Unchecked {
      */
     public static <T, E extends Exception> Consumer<T> wrapAccept(ThrowingConsumer<T, E> c) {
         return (T t) -> accept(c, t);
+    }
+    
+    /**
+     * Accepts ThrowingConsumer which throws checked exception and converts it to
+     * Consumer which throws unchecked one
+     */
+    public static <E extends Exception> IntConsumer wrapAcceptInt(ThrowingIntConsumer<E> c) {
+        return (int t) -> acceptInt(c, t);
     }
 }
 
