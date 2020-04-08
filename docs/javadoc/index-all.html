@@ -105,6 +105,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="id/xfunction/function/ThrowingConsumer.html#accept(T)">accept(T)</a></span> - Method in interface <a href="id/xfunction/function/ThrowingConsumer.html" title="interface in id.xfunction.function">ThrowingConsumer</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="id/xfunction/function/ThrowingBiConsumer.html#accept(T1,T2)">accept(T1, T2)</a></span> - Method in interface <a href="id/xfunction/function/ThrowingBiConsumer.html" title="interface in id.xfunction.function">ThrowingBiConsumer</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="id/xfunction/function/Unchecked.html#acceptInt(id.xfunction.function.ThrowingIntConsumer,int)">acceptInt(ThrowingIntConsumer&lt;E&gt;, int)</a></span> - Static method in class <a href="id/xfunction/function/Unchecked.html" title="class in id.xfunction.function">Unchecked</a></dt>
 <dd>
 <div class="block">Executes given consumer with a given argument and catch all checked exceptions.</div>
@@ -165,21 +167,29 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="id/xfunction/CommandLineInterface.html#%3Cinit%3E(java.io.InputStream,java.io.OutputStream)">CommandLineInterface(InputStream, OutputStream)</a></span> - Constructor for class <a href="id/xfunction/CommandLineInterface.html" title="class in id.xfunction">CommandLineInterface</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="id/xfunction/function/Curry.html#curry(id.xfunction.function.ThrowingConsumer,T)">curry(ThrowingConsumer&lt;T, E&gt;, T)</a></span> - Static method in class <a href="id/xfunction/function/Curry.html" title="class in id.xfunction.function">Curry</a></dt>
-<dd>
-<div class="block">Curry argument for Consumer</div>
-</dd>
 <dt><a href="id/xfunction/function/Curry.html" title="class in id.xfunction.function"><span class="typeNameLink">Curry</span></a> - Class in <a href="id/xfunction/function/package-summary.html">id.xfunction.function</a></dt>
 <dd>
 <div class="block">Set of functions for implementing currying in Java.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="id/xfunction/function/Curry.html#%3Cinit%3E()">Curry()</a></span> - Constructor for class <a href="id/xfunction/function/Curry.html" title="class in id.xfunction.function">Curry</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="id/xfunction/function/Curry.html#curry1st(id.xfunction.function.ThrowingBiFunction,T1)">curry1st(ThrowingBiFunction&lt;T1, T2, R, E&gt;, T1)</a></span> - Static method in class <a href="id/xfunction/function/Curry.html" title="class in id.xfunction.function">Curry</a></dt>
+<dt><span class="memberNameLink"><a href="id/xfunction/function/Curry.html#curryAccept(id.xfunction.function.ThrowingConsumer,T)">curryAccept(ThrowingConsumer&lt;T, E&gt;, T)</a></span> - Static method in class <a href="id/xfunction/function/Curry.html" title="class in id.xfunction.function">Curry</a></dt>
+<dd>
+<div class="block">Curry argument for Consumer</div>
+</dd>
+<dt><span class="memberNameLink"><a href="id/xfunction/function/Curry.html#curryAccept1st(id.xfunction.function.ThrowingBiConsumer,T1)">curryAccept1st(ThrowingBiConsumer&lt;T1, T2, E&gt;, T1)</a></span> - Static method in class <a href="id/xfunction/function/Curry.html" title="class in id.xfunction.function">Curry</a></dt>
+<dd>
+<div class="block">Curry 1st argument for a BiConsumer</div>
+</dd>
+<dt><span class="memberNameLink"><a href="id/xfunction/function/Curry.html#curryAccept2nd(id.xfunction.function.ThrowingBiConsumer,T2)">curryAccept2nd(ThrowingBiConsumer&lt;T1, T2, E&gt;, T2)</a></span> - Static method in class <a href="id/xfunction/function/Curry.html" title="class in id.xfunction.function">Curry</a></dt>
+<dd>
+<div class="block">Curry 2nd argument for a BiConsumer</div>
+</dd>
+<dt><span class="memberNameLink"><a href="id/xfunction/function/Curry.html#curryApply1st(id.xfunction.function.ThrowingBiFunction,T1)">curryApply1st(ThrowingBiFunction&lt;T1, T2, R, E&gt;, T1)</a></span> - Static method in class <a href="id/xfunction/function/Curry.html" title="class in id.xfunction.function">Curry</a></dt>
 <dd>
 <div class="block">Curry 1st argument for a BiFunction</div>
 </dd>
-<dt><span class="memberNameLink"><a href="id/xfunction/function/Curry.html#curry2nd(id.xfunction.function.ThrowingBiFunction,T2)">curry2nd(ThrowingBiFunction&lt;T1, T2, R, E&gt;, T2)</a></span> - Static method in class <a href="id/xfunction/function/Curry.html" title="class in id.xfunction.function">Curry</a></dt>
+<dt><span class="memberNameLink"><a href="id/xfunction/function/Curry.html#curryApply2nd(id.xfunction.function.ThrowingBiFunction,T2)">curryApply2nd(ThrowingBiFunction&lt;T1, T2, R, E&gt;, T2)</a></span> - Static method in class <a href="id/xfunction/function/Curry.html" title="class in id.xfunction.function">Curry</a></dt>
 <dd>
 <div class="block">Curry 2nd argument for a BiFunction</div>
 </dd>
@@ -438,6 +448,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
  another text documents.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="id/xfunction/TemplateMatcher.html#%3Cinit%3E(java.lang.String)">TemplateMatcher(String)</a></span> - Constructor for class <a href="id/xfunction/TemplateMatcher.html" title="class in id.xfunction">TemplateMatcher</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="id/xfunction/function/ThrowingBiConsumer.html" title="interface in id.xfunction.function"><span class="typeNameLink">ThrowingBiConsumer</span></a>&lt;<a href="id/xfunction/function/ThrowingBiConsumer.html" title="type parameter in ThrowingBiConsumer">T1</a>,&#8203;<a href="id/xfunction/function/ThrowingBiConsumer.html" title="type parameter in ThrowingBiConsumer">T2</a>,&#8203;<a href="id/xfunction/function/ThrowingBiConsumer.html" title="type parameter in ThrowingBiConsumer">E</a> extends Exception&gt; - Interface in <a href="id/xfunction/function/package-summary.html">id.xfunction.function</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="id/xfunction/function/ThrowingBiFunction.html" title="interface in id.xfunction.function"><span class="typeNameLink">ThrowingBiFunction</span></a>&lt;<a href="id/xfunction/function/ThrowingBiFunction.html" title="type parameter in ThrowingBiFunction">A1</a>,&#8203;<a href="id/xfunction/function/ThrowingBiFunction.html" title="type parameter in ThrowingBiFunction">A2</a>,&#8203;<a href="id/xfunction/function/ThrowingBiFunction.html" title="type parameter in ThrowingBiFunction">R</a>,&#8203;<a href="id/xfunction/function/ThrowingBiFunction.html" title="type parameter in ThrowingBiFunction">E</a> extends Exception&gt; - Interface in <a href="id/xfunction/function/package-summary.html">id.xfunction.function</a></dt>
 <dd>&nbsp;</dd>

@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -202,24 +202,40 @@ extends Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static &lt;T,&#8203;E extends Exception&gt;<br><a href="ThrowingRunnable.html" title="interface in id.xfunction.function">ThrowingRunnable</a>&lt;E&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#curry(id.xfunction.function.ThrowingConsumer,T)">curry</a></span>&#8203;(<a href="ThrowingConsumer.html" title="interface in id.xfunction.function">ThrowingConsumer</a>&lt;T,&#8203;E&gt;&nbsp;consumer,
-     T&nbsp;v)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#curryAccept(id.xfunction.function.ThrowingConsumer,T)">curryAccept</a></span>&#8203;(<a href="ThrowingConsumer.html" title="interface in id.xfunction.function">ThrowingConsumer</a>&lt;T,&#8203;E&gt;&nbsp;consumer,
+           T&nbsp;v)</code></th>
 <td class="colLast">
 <div class="block">Curry argument for Consumer</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>static &lt;T1,&#8203;T2,&#8203;E extends Exception&gt;<br><a href="ThrowingConsumer.html" title="interface in id.xfunction.function">ThrowingConsumer</a>&lt;T2,&#8203;E&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#curryAccept1st(id.xfunction.function.ThrowingBiConsumer,T1)">curryAccept1st</a></span>&#8203;(<a href="ThrowingBiConsumer.html" title="interface in id.xfunction.function">ThrowingBiConsumer</a>&lt;T1,&#8203;T2,&#8203;E&gt;&nbsp;consumer,
+              T1&nbsp;t1)</code></th>
+<td class="colLast">
+<div class="block">Curry 1st argument for a BiConsumer</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>static &lt;T1,&#8203;T2,&#8203;R,&#8203;E extends Exception&gt;<br><a href="ThrowingConsumer.html" title="interface in id.xfunction.function">ThrowingConsumer</a>&lt;T1,&#8203;E&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#curryAccept2nd(id.xfunction.function.ThrowingBiConsumer,T2)">curryAccept2nd</a></span>&#8203;(<a href="ThrowingBiConsumer.html" title="interface in id.xfunction.function">ThrowingBiConsumer</a>&lt;T1,&#8203;T2,&#8203;E&gt;&nbsp;consumer,
+              T2&nbsp;t2)</code></th>
+<td class="colLast">
+<div class="block">Curry 2nd argument for a BiConsumer</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static &lt;T1,&#8203;T2,&#8203;R,&#8203;E extends Exception&gt;<br><a href="ThrowingFunction.html" title="interface in id.xfunction.function">ThrowingFunction</a>&lt;T2,&#8203;R,&#8203;E&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#curry1st(id.xfunction.function.ThrowingBiFunction,T1)">curry1st</a></span>&#8203;(<a href="ThrowingBiFunction.html" title="interface in id.xfunction.function">ThrowingBiFunction</a>&lt;T1,&#8203;T2,&#8203;R,&#8203;E&gt;&nbsp;function,
-        T1&nbsp;t1)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#curryApply1st(id.xfunction.function.ThrowingBiFunction,T1)">curryApply1st</a></span>&#8203;(<a href="ThrowingBiFunction.html" title="interface in id.xfunction.function">ThrowingBiFunction</a>&lt;T1,&#8203;T2,&#8203;R,&#8203;E&gt;&nbsp;function,
+             T1&nbsp;t1)</code></th>
 <td class="colLast">
 <div class="block">Curry 1st argument for a BiFunction</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static &lt;T1,&#8203;T2,&#8203;R,&#8203;E extends Exception&gt;<br><a href="ThrowingFunction.html" title="interface in id.xfunction.function">ThrowingFunction</a>&lt;T1,&#8203;R,&#8203;E&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#curry2nd(id.xfunction.function.ThrowingBiFunction,T2)">curry2nd</a></span>&#8203;(<a href="ThrowingBiFunction.html" title="interface in id.xfunction.function">ThrowingBiFunction</a>&lt;T1,&#8203;T2,&#8203;R,&#8203;E&gt;&nbsp;function,
-        T2&nbsp;t2)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#curryApply2nd(id.xfunction.function.ThrowingBiFunction,T2)">curryApply2nd</a></span>&#8203;(<a href="ThrowingBiFunction.html" title="interface in id.xfunction.function">ThrowingBiFunction</a>&lt;T1,&#8203;T2,&#8203;R,&#8203;E&gt;&nbsp;function,
+             T2&nbsp;t2)</code></th>
 <td class="colLast">
 <div class="block">Curry 2nd argument for a BiFunction</div>
 </td>
@@ -267,43 +283,69 @@ extends Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="curry(id.xfunction.function.ThrowingConsumer,java.lang.Object)">
+<a id="curryAccept(id.xfunction.function.ThrowingConsumer,java.lang.Object)">
 <!--   -->
-</a><a id="curry(id.xfunction.function.ThrowingConsumer,T)">
+</a><a id="curryAccept(id.xfunction.function.ThrowingConsumer,T)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>curry</h4>
-<pre class="methodSignature">public static&nbsp;&lt;T,&#8203;E extends Exception&gt;&nbsp;<a href="ThrowingRunnable.html" title="interface in id.xfunction.function">ThrowingRunnable</a>&lt;E&gt;&nbsp;curry&#8203;(<a href="ThrowingConsumer.html" title="interface in id.xfunction.function">ThrowingConsumer</a>&lt;T,&#8203;E&gt;&nbsp;consumer,
-                                                                      T&nbsp;v)</pre>
+<h4>curryAccept</h4>
+<pre class="methodSignature">public static&nbsp;&lt;T,&#8203;E extends Exception&gt;&nbsp;<a href="ThrowingRunnable.html" title="interface in id.xfunction.function">ThrowingRunnable</a>&lt;E&gt;&nbsp;curryAccept&#8203;(<a href="ThrowingConsumer.html" title="interface in id.xfunction.function">ThrowingConsumer</a>&lt;T,&#8203;E&gt;&nbsp;consumer,
+                                                                            T&nbsp;v)</pre>
 <div class="block">Curry argument for Consumer</div>
 </li>
 </ul>
-<a id="curry1st(id.xfunction.function.ThrowingBiFunction,java.lang.Object)">
+<a id="curryApply1st(id.xfunction.function.ThrowingBiFunction,java.lang.Object)">
 <!--   -->
-</a><a id="curry1st(id.xfunction.function.ThrowingBiFunction,T1)">
+</a><a id="curryApply1st(id.xfunction.function.ThrowingBiFunction,T1)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>curry1st</h4>
-<pre class="methodSignature">public static&nbsp;&lt;T1,&#8203;T2,&#8203;R,&#8203;E extends Exception&gt;&nbsp;<a href="ThrowingFunction.html" title="interface in id.xfunction.function">ThrowingFunction</a>&lt;T2,&#8203;R,&#8203;E&gt;&nbsp;curry1st&#8203;(<a href="ThrowingBiFunction.html" title="interface in id.xfunction.function">ThrowingBiFunction</a>&lt;T1,&#8203;T2,&#8203;R,&#8203;E&gt;&nbsp;function,
-                                                                                                            T1&nbsp;t1)</pre>
+<h4>curryApply1st</h4>
+<pre class="methodSignature">public static&nbsp;&lt;T1,&#8203;T2,&#8203;R,&#8203;E extends Exception&gt;&nbsp;<a href="ThrowingFunction.html" title="interface in id.xfunction.function">ThrowingFunction</a>&lt;T2,&#8203;R,&#8203;E&gt;&nbsp;curryApply1st&#8203;(<a href="ThrowingBiFunction.html" title="interface in id.xfunction.function">ThrowingBiFunction</a>&lt;T1,&#8203;T2,&#8203;R,&#8203;E&gt;&nbsp;function,
+                                                                                                                 T1&nbsp;t1)</pre>
 <div class="block">Curry 1st argument for a BiFunction</div>
 </li>
 </ul>
-<a id="curry2nd(id.xfunction.function.ThrowingBiFunction,java.lang.Object)">
+<a id="curryApply2nd(id.xfunction.function.ThrowingBiFunction,java.lang.Object)">
 <!--   -->
-</a><a id="curry2nd(id.xfunction.function.ThrowingBiFunction,T2)">
+</a><a id="curryApply2nd(id.xfunction.function.ThrowingBiFunction,T2)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>curryApply2nd</h4>
+<pre class="methodSignature">public static&nbsp;&lt;T1,&#8203;T2,&#8203;R,&#8203;E extends Exception&gt;&nbsp;<a href="ThrowingFunction.html" title="interface in id.xfunction.function">ThrowingFunction</a>&lt;T1,&#8203;R,&#8203;E&gt;&nbsp;curryApply2nd&#8203;(<a href="ThrowingBiFunction.html" title="interface in id.xfunction.function">ThrowingBiFunction</a>&lt;T1,&#8203;T2,&#8203;R,&#8203;E&gt;&nbsp;function,
+                                                                                                                 T2&nbsp;t2)</pre>
+<div class="block">Curry 2nd argument for a BiFunction</div>
+</li>
+</ul>
+<a id="curryAccept1st(id.xfunction.function.ThrowingBiConsumer,java.lang.Object)">
+<!--   -->
+</a><a id="curryAccept1st(id.xfunction.function.ThrowingBiConsumer,T1)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>curryAccept1st</h4>
+<pre class="methodSignature">public static&nbsp;&lt;T1,&#8203;T2,&#8203;E extends Exception&gt;&nbsp;<a href="ThrowingConsumer.html" title="interface in id.xfunction.function">ThrowingConsumer</a>&lt;T2,&#8203;E&gt;&nbsp;curryAccept1st&#8203;(<a href="ThrowingBiConsumer.html" title="interface in id.xfunction.function">ThrowingBiConsumer</a>&lt;T1,&#8203;T2,&#8203;E&gt;&nbsp;consumer,
+                                                                                                  T1&nbsp;t1)</pre>
+<div class="block">Curry 1st argument for a BiConsumer</div>
+</li>
+</ul>
+<a id="curryAccept2nd(id.xfunction.function.ThrowingBiConsumer,java.lang.Object)">
+<!--   -->
+</a><a id="curryAccept2nd(id.xfunction.function.ThrowingBiConsumer,T2)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>curry2nd</h4>
-<pre class="methodSignature">public static&nbsp;&lt;T1,&#8203;T2,&#8203;R,&#8203;E extends Exception&gt;&nbsp;<a href="ThrowingFunction.html" title="interface in id.xfunction.function">ThrowingFunction</a>&lt;T1,&#8203;R,&#8203;E&gt;&nbsp;curry2nd&#8203;(<a href="ThrowingBiFunction.html" title="interface in id.xfunction.function">ThrowingBiFunction</a>&lt;T1,&#8203;T2,&#8203;R,&#8203;E&gt;&nbsp;function,
-                                                                                                            T2&nbsp;t2)</pre>
-<div class="block">Curry 2nd argument for a BiFunction</div>
+<h4>curryAccept2nd</h4>
+<pre class="methodSignature">public static&nbsp;&lt;T1,&#8203;T2,&#8203;R,&#8203;E extends Exception&gt;&nbsp;<a href="ThrowingConsumer.html" title="interface in id.xfunction.function">ThrowingConsumer</a>&lt;T1,&#8203;E&gt;&nbsp;curryAccept2nd&#8203;(<a href="ThrowingBiConsumer.html" title="interface in id.xfunction.function">ThrowingBiConsumer</a>&lt;T1,&#8203;T2,&#8203;E&gt;&nbsp;consumer,
+                                                                                                          T2&nbsp;t2)</pre>
+<div class="block">Curry 2nd argument for a BiConsumer</div>
 </li>
 </ul>
 </li>

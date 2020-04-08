@@ -30,15 +30,15 @@ public class CurryTest {
 
     @Test
     public void test_run() throws Exception {
-        run(Unchecked.wrapRun(Curry.curry(this::accept, "12")));
+        run(Unchecked.wrapRun(Curry.curryAccept(this::accept, "12")));
         assertTrue(isOk);
 
         ThrowingFunction<String, String, RuntimeException> curry2nd =
-                Curry.curry2nd(this::m1, 12);
-        curry2nd = Curry.curry2nd(this::m2, 12);
+                Curry.curryApply2nd(this::m1, 12);
+        curry2nd = Curry.curryApply2nd(this::m2, 12);
 
         ThrowingFunction<String, Integer, RuntimeException> curry2ndFail =
-                Curry.curry2nd(Integer::parseInt, 12);
+                Curry.curryApply2nd(Integer::parseInt, 12);
     }
 
 }
