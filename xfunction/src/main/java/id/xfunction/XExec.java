@@ -18,6 +18,7 @@ package id.xfunction;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -36,6 +37,15 @@ public class XExec {
      */
     public XExec(String... cmd) {
         this.cmd = cmd;
+    }
+
+    /**
+     * Constructor which accepts the command to run.
+     * First item of the list should be the command itself and the
+     * rest items are arguments of it.  
+     */
+    public XExec(List<String> cmd) {
+        this.cmd = cmd.toArray(new String[0]);
     }
 
     /**
