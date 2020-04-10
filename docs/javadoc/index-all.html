@@ -99,6 +99,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dl>
 <dt><span class="memberNameLink"><a href="id/xfunction/function/ThrowingIntConsumer.html#accept(int)">accept(int)</a></span> - Method in interface <a href="id/xfunction/function/ThrowingIntConsumer.html" title="interface in id.xfunction.function">ThrowingIntConsumer</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="id/xfunction/function/Unchecked.html#accept(id.xfunction.function.ThrowingBiConsumer,T1,T2)">accept(ThrowingBiConsumer&lt;T1, T2, E&gt;, T1, T2)</a></span> - Static method in class <a href="id/xfunction/function/Unchecked.html" title="class in id.xfunction.function">Unchecked</a></dt>
+<dd>
+<div class="block">Executes given biconsumer with a given arguments and catch all checked exceptions.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="id/xfunction/function/Unchecked.html#accept(id.xfunction.function.ThrowingConsumer,T)">accept(ThrowingConsumer&lt;T, E&gt;, T)</a></span> - Static method in class <a href="id/xfunction/function/Unchecked.html" title="class in id.xfunction.function">Unchecked</a></dt>
 <dd>
 <div class="block">Executes given consumer with a given argument and catch all checked exceptions.</div>
@@ -495,6 +499,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="id/xfunction/XExec.html#withInput(java.util.stream.Stream)">withInput(Stream&lt;String&gt;)</a></span> - Method in class <a href="id/xfunction/XExec.html" title="class in id.xfunction">XExec</a></dt>
 <dd>
 <div class="block">Given input will be sent to command's stdin.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="id/xfunction/function/Unchecked.html#wrapAccept(id.xfunction.function.ThrowingBiConsumer)">wrapAccept(ThrowingBiConsumer&lt;T1, T2, E&gt;)</a></span> - Static method in class <a href="id/xfunction/function/Unchecked.html" title="class in id.xfunction.function">Unchecked</a></dt>
+<dd>
+<div class="block">Accepts ThrowingConsumer which throws checked exception and converts it to
+ Consumer which throws unchecked one</div>
 </dd>
 <dt><span class="memberNameLink"><a href="id/xfunction/function/Unchecked.html#wrapAccept(id.xfunction.function.ThrowingConsumer)">wrapAccept(ThrowingConsumer&lt;T, E&gt;)</a></span> - Static method in class <a href="id/xfunction/function/Unchecked.html" title="class in id.xfunction.function">Unchecked</a></dt>
 <dd>

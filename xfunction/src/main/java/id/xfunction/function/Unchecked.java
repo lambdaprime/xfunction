@@ -15,6 +15,7 @@
  */
 package id.xfunction.function;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.IntConsumer;
@@ -127,6 +128,19 @@ public class Unchecked {
     }
 
     /**
+     * Executes given biconsumer with a given arguments and catch all checked exceptions.
+     * If checked exception is thrown it is wrapped into unchecked RuntimeException and is
+     * thrown further. 
+     */
+    public static <T1, T2, E extends Exception> void accept(ThrowingBiConsumer<T1, T2, E> c, T1 t1, T2 t2) {
+        try {
+            c.accept(t1, t2);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    /**
      * Executes given consumer with a given argument and catch all checked exceptions.
      * If checked exception is thrown it is wrapped into unchecked RuntimeException and is
      * thrown further. 
@@ -178,7 +192,15 @@ public class Unchecked {
     public static <T, E extends Exception> Consumer<T> wrapAccept(ThrowingConsumer<T, E> c) {
         return (T t) -> accept(c, t);
     }
-    
+
+    /**
+     * Accepts ThrowingConsumer which throws checked exception and converts it to
+     * Consumer which throws unchecked one
+     */
+    public static <T1, T2, E extends Exception> BiConsumer<T1, T2> wrapAccept(ThrowingBiConsumer<T1, T2, E> c) {
+        return (T1 t1, T2 t2) -> accept(c, t1, t2);
+    }
+
     /**
      * Accepts ThrowingConsumer which throws checked exception and converts it to
      * Consumer which throws unchecked one
