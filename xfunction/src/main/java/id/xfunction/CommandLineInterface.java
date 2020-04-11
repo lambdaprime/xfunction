@@ -76,14 +76,14 @@ public class CommandLineInterface {
     }
 
     /**
-     * Reads a line and returns it
+     * Read a line and returns it
      */
     public String read() {
         return scanner.next();
     }
 
     /**
-     * Reads an integer and returns it
+     * Read an integer and returns it
      */
     public int readInt() {
         return scanner.nextInt();
@@ -112,7 +112,8 @@ public class CommandLineInterface {
     }
 
     /**
-     * Terminate application with error code
+     * Print error to stderr and terminate application with
+     * error code 1
      */
     public static void error(String msg) {
         System.err.println(msg);
