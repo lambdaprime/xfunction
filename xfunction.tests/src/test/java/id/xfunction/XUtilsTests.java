@@ -76,6 +76,19 @@ public class XUtilsTests {
             actual.toString());
     }
 
+    @Test
+    public void test_unquote() throws Exception {
+        assertEquals("ggg", XUtils.unquote("\"ggg\""));
+        assertEquals("", XUtils.unquote(""));
+        assertEquals(" \"", XUtils.unquote(" \""));
+        assertEquals("", XUtils.unquote("  \"\""));
+        assertEquals("\"sdsdsd  ", XUtils.unquote("\"sdsdsd  "));
+        assertEquals("\"sdsdsd", XUtils.unquote("\"sdsdsd"));
+        assertEquals("sd", XUtils.unquote("\"sd\"  "));
+        assertEquals("sd", XUtils.unquote("  \"sd\"  "));
+        assertEquals("  sd  ", XUtils.unquote("  sd  "));
+    }
+
     public static void main(String[] args) {
         XUtils.printMemoryConsumption(100);
         new XUtilsTests().testSafe();

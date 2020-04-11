@@ -170,4 +170,17 @@ public class XUtils {
     public static void throwRuntime(String msg) {
         throw new RuntimeException(msg);
     }
+    
+    /**
+     * Trims the string and removes quotes from the head and tail.
+     * If string has one quote or no quotes nothing is done. 
+     */
+    public static String unquote(String s) {
+        String st = s.trim();
+        if (st.isEmpty()) return s;
+        if (st.length() < 2) return s;
+        if (st.charAt(0) == '"' && st.charAt(st.length() - 1) == '"')
+            return st.substring(1, st.length()-1);
+        return s;
+    }
 }
