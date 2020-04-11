@@ -96,14 +96,6 @@ public class XUtils {
     }
 
     /**
-     * Terminate application with error code
-     */
-    public static void error(String msg) {
-        System.err.println(msg);
-        System.exit(1);
-    }
-
-    /**
      * Reads given resource file and returns its content as a stream of lines.
      * 
      * If you try to read resource from the module you need to "open" that module
@@ -163,5 +155,19 @@ public class XUtils {
     public static String readResource(Class<?> clazz, String name) {
         return readResourceAsStream(clazz, name)
                 .collect(joining("\n"));
+    }
+
+    /**
+     * Throw RuntimeException
+     */
+    public static void throwRuntime() {
+        throw new RuntimeException();
+    }
+
+    /**
+     * Throw RuntimeException with message
+     */
+    public static void throwRuntime(String msg) {
+        throw new RuntimeException(msg);
     }
 }
