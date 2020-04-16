@@ -16,9 +16,11 @@
 package id.xfunction.function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
@@ -26,6 +28,18 @@ import static java.util.stream.IntStream.range;
 
 public class ParallelConsumerTests {
 
+    @Test
+    public void test_exception_handler() throws Exception {
+        Consumer<String> consumer = s -> {
+            throw new RuntimeException();
+        };
+        boolean[] b = new boolean[1];
+        try (ParallelConsumer<String> pconsumer = new ParallelConsumer<>(consumer, (t, ex) -> b[0] = true)) {
+            Stream.of("1", "2").forEach(pconsumer);
+        }
+        assertTrue(b[0]);
+    }
+    
     @Test
     public void test_consumes_all() throws Exception {
         int COUNT = 1000000;

@@ -223,7 +223,10 @@ implements Consumer&lt;T&gt;, AutoCloseable</pre>
  <ul>
  <li>you are leaking parallel consumers (make sure to close them)</li>
  <li>one of your consumers still running preventing JVM from stopping</li>
- </ul></div>
+ </ul>
+ 
+ All exceptions in worker threads by default will be printed to stderr unless the
+ exception handler is defined.</div>
 </li>
 </ul>
 </div>
@@ -250,6 +253,11 @@ implements Consumer&lt;T&gt;, AutoCloseable</pre>
 <tr class="rowColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.function.Consumer,int)">ParallelConsumer</a></span>&#8203;(Consumer&lt;<a href="ParallelConsumer.html" title="type parameter in ParallelConsumer">T</a>&gt;&nbsp;consumer,
                 int&nbsp;parallelismLevel)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.function.Consumer,java.lang.Thread.UncaughtExceptionHandler)">ParallelConsumer</a></span>&#8203;(Consumer&lt;<a href="ParallelConsumer.html" title="type parameter in ParallelConsumer">T</a>&gt;&nbsp;consumer,
+                Thread.UncaughtExceptionHandler&nbsp;exHandler)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -323,11 +331,21 @@ implements Consumer&lt;T&gt;, AutoCloseable</pre>
 <a id="&lt;init&gt;(java.util.function.Consumer,int)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>ParallelConsumer</h4>
 <pre>public&nbsp;ParallelConsumer&#8203;(Consumer&lt;<a href="ParallelConsumer.html" title="type parameter in ParallelConsumer">T</a>&gt;&nbsp;consumer,
                         int&nbsp;parallelismLevel)</pre>
+</li>
+</ul>
+<a id="&lt;init&gt;(java.util.function.Consumer,java.lang.Thread.UncaughtExceptionHandler)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>ParallelConsumer</h4>
+<pre>public&nbsp;ParallelConsumer&#8203;(Consumer&lt;<a href="ParallelConsumer.html" title="type parameter in ParallelConsumer">T</a>&gt;&nbsp;consumer,
+                        Thread.UncaughtExceptionHandler&nbsp;exHandler)</pre>
 </li>
 </ul>
 </li>

@@ -109,11 +109,17 @@ import java.util.function.Consumer;
  * <li>you are leaking parallel consumers (make sure to close them)</li>
  * <li>one of your consumers still running preventing JVM from stopping</li>
  * </ul>
+ * 
+ * All exceptions in worker threads by default will be printed to stderr unless the
+ * exception handler is defined.
  */
 public class ParallelConsumer<T> implements Consumer<T>, AutoCloseable {
 
     private ExecutorService executor;
     private Consumer<T> consumer;
+    private Thread.UncaughtExceptionHandler exHandler = (t, ex) -> {
+        ex.printStackTrace();
+    };
 
     public ParallelConsumer(Consumer<T> consumer) {
         this(consumer, ForkJoinPool.getCommonPoolParallelism());
@@ -124,9 +130,20 @@ public class ParallelConsumer<T> implements Consumer<T>, AutoCloseable {
         this.executor = Executors.newFixedThreadPool(parallelismLevel);
     }
 
+    public ParallelConsumer(Consumer<T> consumer, Thread.UncaughtExceptionHandler exHandler) {
+        this(consumer, ForkJoinPool.getCommonPoolParallelism());
+        this.exHandler = exHandler;        
+    }
+    
     @Override
     public void accept(T t) {
-        executor.submit(() -> consumer.accept(t));
+        executor.submit(() -> {
+            try {
+                consumer.accept(t);
+            } catch (Throwable e) {
+                exHandler.uncaughtException(Thread.currentThread(), e);
+            }
+        });
     }
 
     @Override
