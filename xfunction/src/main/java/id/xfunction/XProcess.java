@@ -88,5 +88,13 @@ public class XProcess {
         }
         return code.get();
     }
-    
+
+    /**
+     * Waits for process to complete and returns code safely wrapping all checked exceptions
+     * to RuntimeException
+     * @throws RuntimeException
+     */
+    public int getCode() {
+        return Unchecked.getInt(code()::get);
+    }
 }

@@ -24,16 +24,23 @@ public class XUtilsTests {
         Unchecked.get(this::m);
     }
 
-    @SuppressWarnings("rawtypes")
     @Test
     public void test_infiniteRandomStream() {
-        Set s1 = XUtils.infiniteRandomStream(10)
+        Set<String> s1 = XUtils.infiniteRandomStream(10)
                 .limit(5)
                 .collect(toSet());
-        Set s2 = XUtils.infiniteRandomStream(10)
+        Set<String> s2 = XUtils.infiniteRandomStream(10)
                 .limit(5)
                 .collect(toSet());
         assertNotEquals(s1, s2);
+    }
+
+    @Test
+    public void test_infiniteRandomStream_limit_1() {
+        Set<String> s1 = XUtils.infiniteRandomStream(10)
+                .limit(1)
+                .collect(toSet());
+        assertEquals(1, s1.size());
     }
 
     @Test

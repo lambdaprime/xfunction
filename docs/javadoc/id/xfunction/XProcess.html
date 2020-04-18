@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -190,26 +190,34 @@ extends Object</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCode()">getCode</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Waits for process to complete and returns code safely wrapping all checked exceptions
+ to RuntimeException</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>Process</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#process()">process</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>Stream&lt;String&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stderr()">stderr</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stderrAsString()">stderrAsString</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>Stream&lt;String&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stdout()">stdout</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stdoutAsString()">stdoutAsString</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
@@ -326,13 +334,28 @@ extends Object</pre>
 <a id="code()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>code</h4>
 <pre class="methodSignature">public&nbsp;Future&lt;Integer&gt;&nbsp;code()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>process return code</dd>
+</dl>
+</li>
+</ul>
+<a id="getCode()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getCode</h4>
+<pre class="methodSignature">public&nbsp;int&nbsp;getCode()</pre>
+<div class="block">Waits for process to complete and returns code safely wrapping all checked exceptions
+ to RuntimeException</div>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>RuntimeException</code></dd>
 </dl>
 </li>
 </ul>
