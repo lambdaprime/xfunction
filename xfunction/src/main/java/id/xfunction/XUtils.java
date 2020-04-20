@@ -174,6 +174,13 @@ public class XUtils {
     public static void throwRuntime(String msg) {
         throw new RuntimeException(msg);
     }
+
+    /**
+     * Throw RuntimeException with formatted message
+     */
+    public static void throwRuntime(String fmt, Object...objs) {
+        throw new RuntimeException(String.format(fmt, objs));
+    }
     
     /**
      * Trims the string and removes quotes from the head and tail.

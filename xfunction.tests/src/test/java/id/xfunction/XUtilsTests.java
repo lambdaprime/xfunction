@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import id.xfunction.XUtils;
@@ -96,6 +97,13 @@ public class XUtilsTests {
         assertEquals("  sd  ", XUtils.unquote("  sd  "));
     }
 
+    @Test
+    public void test_throwRuntime() {
+        RuntimeException ex = Assertions.assertThrows(RuntimeException.class, () -> 
+            XUtils.throwRuntime("msg %s %d", "a1", 3));
+        assertEquals("msg a1 3", ex.getMessage());
+    }
+    
     public static void main(String[] args) {
         XUtils.printMemoryConsumption(100);
         new XUtilsTests().testSafe();
