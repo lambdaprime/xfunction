@@ -32,7 +32,7 @@ public class CommandLineInterfaceTest {
     public void test_askConfirm() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ByteArrayInputStream bais = new ByteArrayInputStream("yes".getBytes());
-        CommandLineInterface cli = new CommandLineInterface(bais, baos);
+        CommandLineInterface cli = new CommandLineInterface(bais, baos, baos);
         String msg = "test?";
         boolean actual = cli.askConfirm(msg);
         assertTrue(actual);
@@ -43,10 +43,26 @@ public class CommandLineInterfaceTest {
     public void test_askConfirm_wrong_answer() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ByteArrayInputStream bais = new ByteArrayInputStream("ye\nnoo\nno".getBytes());
-        CommandLineInterface cli = new CommandLineInterface(bais, baos);
+        CommandLineInterface cli = new CommandLineInterface(bais, baos, baos);
         String msg = "test?";
         boolean actual = cli.askConfirm(msg);
         assertFalse(actual);
         assertEquals(msg + "\nPlease confirm [yes/no]: Please confirm [yes/no]: Please confirm [yes/no]: ", baos.toString());
+    }
+    
+    @Test
+    public void test_print() {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        CommandLineInterface cli = new CommandLineInterface(System.in, baos, baos);
+        cli.print(12);
+        assertEquals("12\n", baos.toString());
+    }
+    
+    @Test
+    public void test_print_string() {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        CommandLineInterface cli = new CommandLineInterface(System.in, baos, baos);
+        cli.print("12");
+        assertEquals("12\n", baos.toString());
     }
 }

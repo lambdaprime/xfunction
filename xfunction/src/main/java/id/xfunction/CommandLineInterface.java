@@ -27,18 +27,20 @@ public class CommandLineInterface {
 
     private PrintStream out;
     private InputStream in;
+    private PrintStream err;
     private Scanner scanner;
 
     /**
      * Default ctor which binds to System.in, System.out
      */
     public CommandLineInterface() {
-        this(System.in, System.out);
+        this(System.in, System.out, System.err);
     }
 
-    public CommandLineInterface(InputStream in, OutputStream out) {
+    public CommandLineInterface(InputStream in, OutputStream out, OutputStream err) {
         this.in = in;
         this.out = new PrintStream(out);
+        this.err = new PrintStream(err);
         this.scanner = new Scanner(in);
     }
 
@@ -92,8 +94,8 @@ public class CommandLineInterface {
     /**
      * Read password safely from the user
      */
-    public String readPassword(String msg) {
-        return new String(System.console().readPassword(msg));
+    public String readPassword(String fmt, Object...args) {
+        return new String(System.console().readPassword(fmt, args));
     }
 
     /**
@@ -115,8 +117,36 @@ public class CommandLineInterface {
      * Print error to stderr and terminate application with
      * error code 1
      */
-    public static void error(String msg) {
-        System.err.println(msg);
+    public void fail(String fmt, Object...args) {
+        printerr(fmt, args);
         System.exit(1);
+    }
+
+    /**
+     * Print formatted message to stdout adding new line at the end
+     */
+    public void print(String fmt, Object...args) {
+        out.println(String.format(fmt, args));
+    }
+
+    /**
+     * Print object to stdout adding new line at the end
+     */
+    public void print(Object obj) {
+        print(obj.toString(), "");
+    }
+    
+    /**
+     * Print formatted message to stderr adding new line at the end
+     */
+    public void printerr(String fmt, Object...args) {
+        err.println(String.format(fmt, args));
+    }
+    
+    /**
+     * Print object to stderr adding new line at the end
+     */
+    public void printerr(Object obj) {
+        printerr(obj.toString(), "");
     }
 }
