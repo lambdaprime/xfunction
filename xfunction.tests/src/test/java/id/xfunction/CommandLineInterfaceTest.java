@@ -65,4 +65,12 @@ public class CommandLineInterfaceTest {
         cli.print("12");
         assertEquals("12\n", baos.toString());
     }
+    
+    @Test
+    public void test_print_string_with_special_char() {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        CommandLineInterface cli = new CommandLineInterface(System.in, baos, baos);
+        cli.print("12%d");
+        assertEquals("12%d\n", baos.toString());
+    }
 }

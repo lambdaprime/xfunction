@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -240,20 +240,34 @@ extends Object</pre>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#print(java.lang.String)">print</a></span>&#8203;(String&nbsp;message)</code></th>
+<td class="colLast">
+<div class="block">Print message to stdout adding new line at the end</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#print(java.lang.String,java.lang.Object...)">print</a></span>&#8203;(String&nbsp;fmt,
      Object...&nbsp;args)</code></th>
 <td class="colLast">
 <div class="block">Print formatted message to stdout adding new line at the end</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#printerr(java.lang.Object)">printerr</a></span>&#8203;(Object&nbsp;obj)</code></th>
 <td class="colLast">
 <div class="block">Print object to stderr adding new line at the end</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#printerr(java.lang.String)">printerr</a></span>&#8203;(String&nbsp;message)</code></th>
+<td class="colLast">
+<div class="block">Print formatted message to stderr adding new line at the end</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#printerr(java.lang.String,java.lang.Object...)">printerr</a></span>&#8203;(String&nbsp;fmt,
         Object...&nbsp;args)</code></th>
@@ -261,28 +275,28 @@ extends Object</pre>
 <div class="block">Print formatted message to stderr adding new line at the end</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read()">read</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Read a line and returns it</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(java.lang.String)">read</a></span>&#8203;(String&nbsp;msg)</code></th>
 <td class="colLast">
 <div class="block">Show message to the user and return what he enters</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readInt()">readInt</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Read an integer and returns it</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readPassword(java.lang.String,java.lang.Object...)">readPassword</a></span>&#8203;(String&nbsp;fmt,
             Object...&nbsp;args)</code></th>
@@ -290,7 +304,7 @@ extends Object</pre>
 <div class="block">Read password safely from the user</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#waitPressEnter()">waitPressEnter</a></span>()</code></th>
 <td class="colLast">
@@ -470,6 +484,16 @@ extends Object</pre>
 <div class="block">Print formatted message to stdout adding new line at the end</div>
 </li>
 </ul>
+<a id="print(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>print</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;print&#8203;(String&nbsp;message)</pre>
+<div class="block">Print message to stdout adding new line at the end</div>
+</li>
+</ul>
 <a id="print(java.lang.Object)">
 <!--   -->
 </a>
@@ -488,6 +512,16 @@ extends Object</pre>
 <h4>printerr</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;printerr&#8203;(String&nbsp;fmt,
                      Object...&nbsp;args)</pre>
+<div class="block">Print formatted message to stderr adding new line at the end</div>
+</li>
+</ul>
+<a id="printerr(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>printerr</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;printerr&#8203;(String&nbsp;message)</pre>
 <div class="block">Print formatted message to stderr adding new line at the end</div>
 </li>
 </ul>

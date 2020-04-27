@@ -130,10 +130,17 @@ public class CommandLineInterface {
     }
 
     /**
+     * Print message to stdout adding new line at the end
+     */
+    public void print(String message) {
+        out.println(message);
+    }
+
+    /**
      * Print object to stdout adding new line at the end
      */
     public void print(Object obj) {
-        print(obj.toString(), "");
+        print(obj.toString());
     }
     
     /**
@@ -144,9 +151,16 @@ public class CommandLineInterface {
     }
     
     /**
+     * Print formatted message to stderr adding new line at the end
+     */
+    public void printerr(String message) {
+        err.println(message);
+    }
+    
+    /**
      * Print object to stderr adding new line at the end
      */
     public void printerr(Object obj) {
-        printerr(obj.toString(), "");
+        printerr(obj.toString());
     }
 }
