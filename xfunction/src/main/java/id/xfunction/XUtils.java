@@ -21,6 +21,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.Random;
@@ -169,14 +174,14 @@ public class XUtils {
     }
 
     /**
-     * Throw RuntimeException with message
+     * Throws RuntimeException with message
      */
     public static void throwRuntime(String msg) {
         throw new RuntimeException(msg);
     }
 
     /**
-     * Throw RuntimeException with formatted message
+     * Throws RuntimeException with formatted message
      */
     public static void throwRuntime(String fmt, Object...objs) {
         throw new RuntimeException(String.format(fmt, objs));
@@ -202,5 +207,25 @@ public class XUtils {
         concat(of(ex, ex.getCause()), Arrays.stream(ex.getSuppressed()))
             .filter(e -> e != null)
             .forEach(Throwable::printStackTrace);
+    }
+    
+    /**
+     * Deletes directory recursively with all files and sub-directories
+     */
+    public static void deleteDir(Path dir) throws IOException {
+        if (!dir.toFile().exists())
+            return;
+        Files.walkFileTree(dir, new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                Files.delete(file);
+                return FileVisitResult.CONTINUE;
+            }
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                Files.delete(dir);
+                return FileVisitResult.CONTINUE;
+            }
+        });
     }
 }

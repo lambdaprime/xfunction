@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -176,27 +176,34 @@ extends Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#deleteDir(java.nio.file.Path)">deleteDir</a></span>&#8203;(Path&nbsp;dir)</code></th>
+<td class="colLast">
+<div class="block">Deletes directory recursively with all files and sub-directories</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>static Stream&lt;String&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#infiniteRandomStream(int)">infiniteRandomStream</a></span>&#8203;(int&nbsp;length)</code></th>
 <td class="colLast">
 <div class="block">Returns infinite stream of randomly generated strings with given length</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#md5Sum(java.lang.String)">md5Sum</a></span>&#8203;(String&nbsp;string)</code></th>
 <td class="colLast">
 <div class="block">Calculates md5 sum for input string</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#printExceptions(java.lang.Throwable)">printExceptions</a></span>&#8203;(Throwable&nbsp;ex)</code></th>
 <td class="colLast">
 <div class="block">Prints all exceptions including suppressed ones</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#printMemoryConsumption(long)">printMemoryConsumption</a></span>&#8203;(long&nbsp;delayMillis)</code></th>
 <td class="colLast">
@@ -204,7 +211,7 @@ extends Object</pre>
  after given period of time.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readResource(java.lang.Class,java.lang.String)">readResource</a></span>&#8203;(Class&lt;?&gt;&nbsp;clazz,
             String&nbsp;name)</code></th>
@@ -215,7 +222,7 @@ extends Object</pre>
  to xfunction, otherwise Java will throw NPE.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readResource(java.lang.String)">readResource</a></span>&#8203;(String&nbsp;absolutePath)</code></th>
 <td class="colLast">
@@ -225,7 +232,7 @@ extends Object</pre>
  to xfunction, otherwise Java will throw NPE.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static Stream&lt;String&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readResourceAsStream(java.lang.Class,java.lang.String)">readResourceAsStream</a></span>&#8203;(Class&lt;?&gt;&nbsp;clazz,
                     String&nbsp;name)</code></th>
@@ -236,36 +243,36 @@ extends Object</pre>
  to xfunction, otherwise Java will throw NPE.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static Stream&lt;String&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readResourceAsStream(java.lang.String)">readResourceAsStream</a></span>&#8203;(String&nbsp;absolutePath)</code></th>
 <td class="colLast">
 <div class="block">Reads given resource file and returns its content as a stream of lines.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#throwRuntime()">throwRuntime</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Throw RuntimeException</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#throwRuntime(java.lang.String)">throwRuntime</a></span>&#8203;(String&nbsp;msg)</code></th>
 <td class="colLast">
-<div class="block">Throw RuntimeException with message</div>
+<div class="block">Throws RuntimeException with message</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#throwRuntime(java.lang.String,java.lang.Object...)">throwRuntime</a></span>&#8203;(String&nbsp;fmt,
             Object...&nbsp;objs)</code></th>
 <td class="colLast">
-<div class="block">Throw RuntimeException with formatted message</div>
+<div class="block">Throws RuntimeException with formatted message</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>static String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unquote(java.lang.String)">unquote</a></span>&#8203;(String&nbsp;s)</code></th>
 <td class="colLast">
@@ -452,7 +459,7 @@ extends Object</pre>
 <li class="blockList">
 <h4>throwRuntime</h4>
 <pre class="methodSignature">public static&nbsp;void&nbsp;throwRuntime&#8203;(String&nbsp;msg)</pre>
-<div class="block">Throw RuntimeException with message</div>
+<div class="block">Throws RuntimeException with message</div>
 </li>
 </ul>
 <a id="throwRuntime(java.lang.String,java.lang.Object...)">
@@ -463,7 +470,7 @@ extends Object</pre>
 <h4>throwRuntime</h4>
 <pre class="methodSignature">public static&nbsp;void&nbsp;throwRuntime&#8203;(String&nbsp;fmt,
                                 Object...&nbsp;objs)</pre>
-<div class="block">Throw RuntimeException with formatted message</div>
+<div class="block">Throws RuntimeException with formatted message</div>
 </li>
 </ul>
 <a id="unquote(java.lang.String)">
@@ -480,11 +487,26 @@ extends Object</pre>
 <a id="printExceptions(java.lang.Throwable)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>printExceptions</h4>
 <pre class="methodSignature">public static&nbsp;void&nbsp;printExceptions&#8203;(Throwable&nbsp;ex)</pre>
 <div class="block">Prints all exceptions including suppressed ones</div>
+</li>
+</ul>
+<a id="deleteDir(java.nio.file.Path)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>deleteDir</h4>
+<pre class="methodSignature">public static&nbsp;void&nbsp;deleteDir&#8203;(Path&nbsp;dir)
+                      throws IOException</pre>
+<div class="block">Deletes directory recursively with all files and sub-directories</div>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>IOException</code></dd>
+</dl>
 </li>
 </ul>
 </li>
