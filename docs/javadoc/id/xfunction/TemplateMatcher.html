@@ -133,24 +133,26 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public class <span class="typeNameLabel">TemplateMatcher</span>
 extends Object</pre>
-<div class="block">Imagine you have a template text document and want to compare it to
- another text documents.
+<div class="block"><p>Imagine you have a template text document and want to compare it to
+ another text documents.</p>
  
- You don't want to do exact comparison and allow only words on certain
- positions to be different.
+ <p>You don't want to do exact comparison and allow only words on certain
+ positions to be different.</p>
  
- You can use regexp .* for that. You escape all meta symbols in your
+ <p>You can use regexp .* for that. You escape all meta symbols in your
  template document and treat it as a regexp. This is pretty straight
- forward solution and it will work.
+ forward solution and it will work.</p>
  
- But now imagine that this template document is 100 lines long. Then
+ <p>But now imagine that this template document is 100 lines long. Then
  you will have to go through it line by line and escape all the meta
- symbols again.
+ symbols again.</p>
  
- This class helps you to deal with such situations by providing you
+ <p>This class helps you to deal with such situations by providing you
  with only one meta symbol * so the only thing which you will need to do
- is to put it in your template instead of words which should be
- ignored during matching.</div>
+ is to put it in your template instead of text which should be
+ ignored during matching. It can match text with multiple lines too.</p>
+ 
+ <p>Worst case complexity is O(n^m)</p></div>
 </li>
 </ul>
 </div>

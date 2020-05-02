@@ -70,4 +70,9 @@ public class TemplateMatcherTests {
         assertTrue(matcher.matches("abcccccfunnnn"));
     }
 
+    @Test
+    public void test_matches_wildcard_multiline() {
+        TemplateMatcher matcher = new TemplateMatcher("is\n*\nending\n");
+        assertTrue(matcher.matches("is\nnever\ndfgdfg\nending\n"));
+    }
 }
