@@ -20,15 +20,15 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * Class for parsing command line arguments.
+ * <p>Class for parsing command line arguments.</p>
  * 
- * Key-value arguments (like "-k val") are sent to HANDLERS.
+ * <p>Key-value arguments (like "-k val") are sent to HANDLERS.</p>
  * 
- * Key only arguments (like "-l") are sent to DEFAULT_HANDLER.
+ * <p>Key only arguments (like "-l") are sent to DEFAULT_HANDLER.</p>
  * 
- * If default handler returns false we stop processing further arguments.
+ * <p>If default handler returns false we stop processing further arguments.</p>
  * 
- * Example:
+ * <p>Example:</p>
  * 
  * <pre>{@code
  * private Map<String, Consumer<String>> handlers = new HashMap<String, Consumer<String>>() {{
@@ -46,14 +46,14 @@ import java.util.function.Function;
  *         ...
  *         return true;
  *     }}
- *     throw new RuntimeException();
+ *     throw new ArgumentParsingException();
  * };
  * SmartArgs args = new SmartArgs(handlers, defaultHandler);
  * args.parse(new String[] {"-k" , "value", "-v", "-e", "expr"});
  * }</pre>
  * 
- * You can use key-value arguments with positional arguments as well. To do this
- * you just gather all values of default handler:
+ * <p>You can use key-value arguments with positional arguments as well. To do this
+ * you just gather all values of default handler:</p>
  * 
  * <pre>{@code
  * List<String> positionalArgs = new ArrayList<>();
@@ -75,13 +75,13 @@ public class SmartArgs {
 
     /**
      * Parse the args invoking corresponding handlers.
-     * @throws Exception if value is not given for some key-value argument 
+     * @throws ArgumentParsingException if value is not given for some key-value argument 
      */
-    public void parse(String[] args) throws Exception {
+    public void parse(String[] args) throws ArgumentParsingException {
         for (int i = 0; i < args.length; i++) {
             boolean expectValue = handlers.containsKey(args[i]);
             if (expectValue && i + 1 == args.length)
-                throw new Exception();
+                throw new ArgumentParsingException();
             if (!expectValue && !defaultHandler.apply(args[i]))
                 return;
             if (!expectValue)

@@ -31,7 +31,7 @@ public class SmartArgsTest {
     };
 
     @Test
-    public void test_run() throws Exception {
+    public void test_run() {
         SmartArgs args = new SmartArgs(handlers, defaultHandler);
         args.parse(new String[] {"-k" , "value"});
         assertEquals("[Dir: value]", buf.toString());
@@ -50,13 +50,13 @@ public class SmartArgsTest {
     }
 
     @Test
-    public void test_unknown_arg() throws Exception {
+    public void test_unknown_arg() {
         SmartArgs args = new SmartArgs(handlers, defaultHandler);
         assertThrows(RuntimeException.class, () -> args.parse(new String[] {"-g", "ggg"}));
     }
 
     @Test
-    public void test_positional_args() throws Exception {
+    public void test_positional_args() {
         List<String> args = new ArrayList<>();
         new SmartArgs(handlers, arg -> args.add(arg)).parse(new String[] {"-k" , "value", "arg1", "arg2", "arg3"});
         assertEquals("[Dir: value]", buf.toString());
