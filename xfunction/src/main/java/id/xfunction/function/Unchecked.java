@@ -57,6 +57,8 @@ public class Unchecked {
     public static <R, E extends Exception> R get(ThrowingSupplier<R, E> s) {
         try {
             return s.run();
+        } catch (RuntimeException ex) {
+            throw ex;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -70,6 +72,8 @@ public class Unchecked {
     public static <E extends Exception> int getInt(ThrowingIntSupplier<E> s) {
         try {
             return s.run();
+        } catch (RuntimeException ex) {
+            throw ex;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -83,6 +87,8 @@ public class Unchecked {
     public static <E extends Exception> boolean getBoolean(ThrowingBooleanSupplier<E> s) {
         try {
             return s.run();
+        } catch (RuntimeException ex) {
+            throw ex;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -96,6 +102,8 @@ public class Unchecked {
     public static <E extends Exception> void run(ThrowingRunnable<E> s) {
         try {
             s.run();
+        } catch (RuntimeException ex) {
+            throw ex;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -109,6 +117,8 @@ public class Unchecked {
     public static <A, R, E extends Exception> R apply(ThrowingFunction<A, R, E> s, A a) {
         try {
             return s.apply(a);
+        } catch (RuntimeException ex) {
+            throw ex;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -122,6 +132,8 @@ public class Unchecked {
     public static <T, E extends Exception> void accept(ThrowingConsumer<T, E> c, T t) {
         try {
             c.accept(t);
+        } catch (RuntimeException ex) {
+            throw ex;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -135,6 +147,8 @@ public class Unchecked {
     public static <T1, T2, E extends Exception> void accept(ThrowingBiConsumer<T1, T2, E> c, T1 t1, T2 t2) {
         try {
             c.accept(t1, t2);
+        } catch (RuntimeException ex) {
+            throw ex;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -148,6 +162,8 @@ public class Unchecked {
     public static <E extends Exception> void acceptInt(ThrowingIntConsumer<E> c, int t) {
         try {
             c.accept(t);
+        } catch (RuntimeException ex) {
+            throw ex;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
