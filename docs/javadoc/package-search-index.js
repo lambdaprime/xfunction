@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"id.xfunction"},{"l":"id.xfunction.function"},{"l":"id.xfunction.net"}]
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"id.xfunction"},{"l":"id.xfunction.function"},{"l":"id.xfunction.logging"},{"l":"id.xfunction.net"}]

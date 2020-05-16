@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package id.xfunction;
+package id.xfunction.logging;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import id.xfunction.XLogger;
+import id.xfunction.logging.XLogger;
 
 public class XLoggerTests {
 
@@ -42,6 +42,7 @@ public class XLoggerTests {
 
     @Test
     public void test_config_not_found() {
+        // no exception
         XLogger.load("ggg");
     }
 }

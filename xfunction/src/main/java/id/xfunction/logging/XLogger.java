@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package id.xfunction;
+package id.xfunction.logging;
 
 import java.io.InputStream;
 import java.util.logging.LogManager;

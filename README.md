@@ -6,6 +6,7 @@
 - XML query/update utilities using XPath
 - md5 method which returns String
 - extension for HttpClient.Builder which allows to make insecure connections
+- prefix trie collection
 - ...
 
 lambdaprime <id.blackmesa@gmail.com>
