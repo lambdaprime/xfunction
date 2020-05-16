@@ -97,4 +97,12 @@ public class PrefixTrieTests {
         assertEquals(0, trie.prefixMatches("asfasdf"));
         assertEquals(0, trie.prefixMatches("hell"));
     }
+
+    @Test
+    public void test_empty() {
+        PrefixTrieSet trie = new PrefixTrieSet();
+        assertEquals(0, trie.size());
+        assertFalse(trie.contains("test"));
+        assertEquals(0, trie.prefixMatches("fdd"));
+    }
 }
