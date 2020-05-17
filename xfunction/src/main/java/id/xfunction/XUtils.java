@@ -18,6 +18,8 @@ package id.xfunction;
 import static java.util.stream.Collectors.joining;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -96,12 +98,25 @@ public class XUtils {
         byte[] bytesOfMessage = string.getBytes();
         MessageDigest md = MessageDigest.getInstance("MD5");
         byte[] digest = md.digest(bytesOfMessage);
-        StringBuilder buf = new StringBuilder();
-        for (byte b: digest) {
-            if (Byte.toUnsignedInt(b) <= 16) buf.append('0');
-            buf.append(Integer.toUnsignedString(Byte.toUnsignedInt(b), 16));
+        return XByte.toHexString(digest);
+    }
+
+    /**
+     * Calculates md5 sum for a file
+     * @return md5 sum
+     * @throws Exception
+     */
+    public static String md5Sum(File f) throws Exception {
+        XAsserts.assertTrue(f.isFile(), "Argument " + f + " is not a file");
+        try (InputStream bais = new FileInputStream(f)) {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] b = new byte[1<<20];
+            int l = 0;
+            while ((l = bais.read(b)) != -1) {
+                md.update(b, 0, l);
+            }
+            return XByte.toHexString(md.digest());
         }
-        return buf.toString();
     }
 
     /**

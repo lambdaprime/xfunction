@@ -5,6 +5,9 @@ import static java.util.stream.Collectors.toSet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -52,6 +55,15 @@ public class XUtilsTests {
             XUtils.md5Sum("A state of trance").toUpperCase());
         assertEquals("31CF05BEC43849BED31296557B064071",
             XUtils.md5Sum("until the sky falls down").toUpperCase());
+    }
+
+    @Test
+    public void test_md5Sum_file() throws Exception {
+        Path file = Files.createTempFile("gg", "");
+        Files.writeString(file, "very long string".repeat(100));
+        assertEquals("05ee552a62cdfeb6b21ac40f401c5eed",
+            XUtils.md5Sum(file.toFile()));
+        file.toFile().delete();
     }
 
     @Test
@@ -107,5 +119,9 @@ public class XUtilsTests {
     public static void main(String[] args) {
         XUtils.printMemoryConsumption(100);
         new XUtilsTests().testSafe();
+        
+        byte[] b = "test".getBytes();
+        System.out.println("fff");
+        System.out.println(Arrays.toString(b));
     }
 }
