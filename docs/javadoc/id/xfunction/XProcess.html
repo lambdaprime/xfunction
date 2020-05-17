@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -190,6 +190,20 @@ extends Object</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#flushStderr()">flushStderr</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Consumes stderr stream into internal buffer.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#flushStdout()">flushStdout</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Consumes stdout stream into internal buffer.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCode()">getCode</a></span>()</code></th>
 <td class="colLast">
@@ -197,30 +211,38 @@ extends Object</pre>
  to RuntimeException</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>Process</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#process()">process</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>Stream&lt;String&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stderr()">stderr</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>String</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stderrAsString()">stderrAsString</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>Stream&lt;String&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stdout()">stdout</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stderr()">stderr</a></span>()</code></th>
+<td class="colLast">
+<div class="block">After you consume this stream it will not be longer valid.</div>
+</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stderrAsString()">stderrAsString</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns standard error output as a string.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>Stream&lt;String&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stdout()">stdout</a></span>()</code></th>
+<td class="colLast">
+<div class="block">After you consume this stream it will not be longer valid.</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stdoutAsString()">stdoutAsString</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Returns standard output as a string.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -285,10 +307,26 @@ extends Object</pre>
 <li class="blockList">
 <h4>stdoutAsString</h4>
 <pre class="methodSignature">public&nbsp;String&nbsp;stdoutAsString()</pre>
+<div class="block">Returns standard output as a string.
+ This call will consume stdout stream meaning that you can call
+ it only once. If you want to call it multiple times make sure to
+ flush stdout first.</div>
 <dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>Standard output as a string</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>IllegalStateException</code> - if called more than once</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="#flushStdout()"><code>flushStdout()</code></a></dd>
 </dl>
+</li>
+</ul>
+<a id="flushStdout()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>flushStdout</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;flushStdout()</pre>
+<div class="block">Consumes stdout stream into internal buffer.</div>
 </li>
 </ul>
 <a id="stderrAsString()">
@@ -298,10 +336,26 @@ extends Object</pre>
 <li class="blockList">
 <h4>stderrAsString</h4>
 <pre class="methodSignature">public&nbsp;String&nbsp;stderrAsString()</pre>
+<div class="block">Returns standard error output as a string.
+ This call will consume stderr stream meaning that you can call
+ it only once. If you want to call it multiple times make sure to
+ flush stderr first.</div>
 <dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>Standard error output as a string</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>IllegalStateException</code> - if called more than once</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="#flushStderr()"><code>flushStderr()</code></a></dd>
 </dl>
+</li>
+</ul>
+<a id="flushStderr()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>flushStderr</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;flushStderr()</pre>
+<div class="block">Consumes stderr stream into internal buffer.</div>
 </li>
 </ul>
 <a id="process()">
@@ -320,6 +374,11 @@ extends Object</pre>
 <li class="blockList">
 <h4>stdout</h4>
 <pre class="methodSignature">public&nbsp;Stream&lt;String&gt;&nbsp;stdout()</pre>
+<div class="block">After you consume this stream it will not be longer valid.</div>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="#flushStdout()"><code>flushStdout()</code></a></dd>
+</dl>
 </li>
 </ul>
 <a id="stderr()">
@@ -329,6 +388,11 @@ extends Object</pre>
 <li class="blockList">
 <h4>stderr</h4>
 <pre class="methodSignature">public&nbsp;Stream&lt;String&gt;&nbsp;stderr()</pre>
+<div class="block">After you consume this stream it will not be longer valid.</div>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="#flushStderr()"><code>flushStderr()</code></a></dd>
+</dl>
 </li>
 </ul>
 <a id="code()">

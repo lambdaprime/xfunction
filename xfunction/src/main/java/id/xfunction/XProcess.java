@@ -33,6 +33,8 @@ public class XProcess {
     private Process process;
     private Stream<String> stdout;
     private Stream<String> stderr;
+    private Optional<String> stdoutAsString = Optional.empty();
+    private Optional<String> stderrAsString = Optional.empty();
     private Optional<Future<Integer>> code = Optional.empty();
 
     public XProcess(Process process) {
@@ -54,27 +56,61 @@ public class XProcess {
     }
 
     /**
-     * @return Standard output as a string
+     * Returns standard output as a string.
+     * This call will consume stdout stream meaning that you can call
+     * it only once. If you want to call it multiple times make sure to
+     * flush stdout first.
+     * 
+     * @see flushStdout
+     * @throws IllegalStateException if called more than once
      */
     public String stdoutAsString() {
-        return stdout.collect(joining("\n"));
+        return stdoutAsString.orElseGet(() -> stdout.collect(joining("\n")));
     }
 
     /**
-     * @return Standard error output as a string
+     * Consumes stdout stream into internal buffer.
+     */
+    public void flushStdout() {
+        stdoutAsString = Optional.of(stdout.collect(joining("\n")));
+    }
+
+    /**
+     * Returns standard error output as a string.
+     * This call will consume stderr stream meaning that you can call
+     * it only once. If you want to call it multiple times make sure to
+     * flush stderr first.
+     * 
+     * @see flushStderr
+     * @throws IllegalStateException if called more than once
      */
     public String stderrAsString() {
-        return stderr.collect(joining("\n"));
+        return stderrAsString.orElseGet(() -> stderr.collect(joining("\n")));
+    }
+
+    /**
+     * Consumes stderr stream into internal buffer.
+     */
+    public void flushStderr() {
+        stderrAsString = Optional.of(stderr.collect(joining("\n")));
     }
 
     public Process process() {
         return process;
     }
 
+    /**
+     * After you consume this stream it will not be longer valid.
+     * @see flushStdout
+     */
     public Stream<String> stdout() {
         return stdout;
     }
 
+    /**
+     * After you consume this stream it will not be longer valid.
+     * @see flushStderr
+     */
     public Stream<String> stderr() {
         return stderr;
     }

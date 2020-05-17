@@ -26,4 +26,27 @@ public class XProcessTests {
         assertEquals(0, new XExec("ls").run().getCode());
     }
 
+    @Test
+    public void test_stdoutAsString() {
+        assertEquals("test", new XExec("echo", "test").run().stdoutAsString());
+    }
+
+    @Test
+    public void test_flushStdout() {
+        XProcess proc = new XExec("echo", "test").run();
+        proc.flushStdout();
+        proc.stdoutAsString();
+        proc.stdoutAsString();
+        assertEquals("test", proc.stdoutAsString());
+    }
+
+    @Test
+    public void test_flushStderr() {
+        XProcess proc = new XExec("pwd", "-z").run();
+        proc.flushStderr();
+        proc.stderrAsString();
+        proc.stderrAsString();
+        assertEquals("pwd: invalid option -- 'z'\nTry 'pwd --help' for more information.",
+            proc.stderrAsString());
+    }
 }
