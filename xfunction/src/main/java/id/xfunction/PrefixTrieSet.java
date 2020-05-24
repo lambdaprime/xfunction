@@ -17,6 +17,8 @@ package id.xfunction;
 
 import static java.util.stream.Collectors.joining;
 
+import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.AbstractSet;
 import java.util.Collection;
 import java.util.Deque;
@@ -156,7 +158,7 @@ public class PrefixTrieSet extends AbstractSet<String> {
     }
 
     private static class PrefixTrieIterator implements Iterator<String> {
-        private static final Entry<Character, Node> DELIM = Map.entry('\0', new Node());
+        private static final Entry<Character, Node> DELIM = new AbstractMap.SimpleEntry<>('\0', new Node());
         private StringBuilder buf = new StringBuilder();
         private Deque<Entry<Character, Node>> path = new LinkedList<>();
 

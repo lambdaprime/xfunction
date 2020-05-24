@@ -50,6 +50,7 @@ java11doc.doLast {
 compileJava {
     sourceCompatibility = '1.8'
     targetCompatibility = '1.8'
+    options.compilerArgs << '--release' << '8'
 }
 
 compileJava11Java {

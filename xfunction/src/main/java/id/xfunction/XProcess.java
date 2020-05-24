@@ -119,7 +119,7 @@ public class XProcess {
      * @return process return code
      */
     public Future<Integer> code() {
-        if (code.isEmpty()) {
+        if (!code.isPresent()) {
             code = Optional.of(CompletableFuture.supplyAsync(Unchecked.wrapGet(process::waitFor)));
         }
         return code.get();
