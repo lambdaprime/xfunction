@@ -98,7 +98,7 @@ public class XUtils {
         byte[] bytesOfMessage = string.getBytes();
         MessageDigest md = MessageDigest.getInstance("MD5");
         byte[] digest = md.digest(bytesOfMessage);
-        return XByte.toHexString(digest);
+        return XByte.toHex(digest);
     }
 
     /**
@@ -115,7 +115,7 @@ public class XUtils {
             while ((l = bais.read(b)) != -1) {
                 md.update(b, 0, l);
             }
-            return XByte.toHexString(md.digest());
+            return XByte.toHex(md.digest());
         }
     }
 
