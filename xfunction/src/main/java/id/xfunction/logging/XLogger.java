@@ -41,8 +41,12 @@ public class XLogger {
         return Logger.getLogger(cls.getName());
     }
 
-    static void load(String resource) {
-        final InputStream inputStream = ClassLoader.getSystemResourceAsStream(resource);
+    /**
+     * Initializes JUL using specified property resource
+     * @param propertyResource absolute path to resource file
+     */
+    public static void load(String propertyResource) {
+        final InputStream inputStream = ClassLoader.getSystemResourceAsStream(propertyResource);
         if (inputStream == null) return;
         Unchecked.run(() -> LogManager.getLogManager().readConfiguration(inputStream));
     }
