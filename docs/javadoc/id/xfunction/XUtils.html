@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -220,6 +220,13 @@ extends Object</pre>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>static String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#quote(java.lang.String)">quote</a></span>&#8203;(String&nbsp;s)</code></th>
+<td class="colLast">
+<div class="block">Trims the string and:</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>static String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readResource(java.lang.Class,java.lang.String)">readResource</a></span>&#8203;(Class&lt;?&gt;&nbsp;clazz,
             String&nbsp;name)</code></th>
 <td class="colLast">
@@ -229,7 +236,7 @@ extends Object</pre>
  to xfunction, otherwise Java will throw NPE.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readResource(java.lang.String)">readResource</a></span>&#8203;(String&nbsp;absolutePath)</code></th>
 <td class="colLast">
@@ -239,7 +246,7 @@ extends Object</pre>
  to xfunction, otherwise Java will throw NPE.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static Stream&lt;String&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readResourceAsStream(java.lang.Class,java.lang.String)">readResourceAsStream</a></span>&#8203;(Class&lt;?&gt;&nbsp;clazz,
                     String&nbsp;name)</code></th>
@@ -250,28 +257,28 @@ extends Object</pre>
  to xfunction, otherwise Java will throw NPE.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static Stream&lt;String&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readResourceAsStream(java.lang.String)">readResourceAsStream</a></span>&#8203;(String&nbsp;absolutePath)</code></th>
 <td class="colLast">
 <div class="block">Reads given resource file and returns its content as a stream of lines.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#throwRuntime()">throwRuntime</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Throw RuntimeException</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#throwRuntime(java.lang.String)">throwRuntime</a></span>&#8203;(String&nbsp;msg)</code></th>
 <td class="colLast">
 <div class="block">Throws RuntimeException with message</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#throwRuntime(java.lang.String,java.lang.Object...)">throwRuntime</a></span>&#8203;(String&nbsp;fmt,
             Object...&nbsp;objs)</code></th>
@@ -279,7 +286,7 @@ extends Object</pre>
 <div class="block">Throws RuntimeException with formatted message</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>static String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unquote(java.lang.String)">unquote</a></span>&#8203;(String&nbsp;s)</code></th>
 <td class="colLast">
@@ -495,6 +502,21 @@ extends Object</pre>
 <pre class="methodSignature">public static&nbsp;void&nbsp;throwRuntime&#8203;(String&nbsp;fmt,
                                 Object...&nbsp;objs)</pre>
 <div class="block">Throws RuntimeException with formatted message</div>
+</li>
+</ul>
+<a id="quote(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>quote</h4>
+<pre class="methodSignature">public static&nbsp;String&nbsp;quote&#8203;(String&nbsp;s)</pre>
+<div class="block"><p>Trims the string and:</p>
+ <ul>
+ <li>If string starts or ends with quote - nothing is done
+ <li>If string is empty after the trim - nothing is done.
+ <li>Surrounds it with quotes and returns
+ </ul></div>
 </li>
 </ul>
 <a id="unquote(java.lang.String)">

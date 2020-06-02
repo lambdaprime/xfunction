@@ -97,6 +97,19 @@ public class XUtilsTests {
     }
 
     @Test
+    public void test_quote() throws Exception {
+        assertEquals("\"ggg\"", XUtils.quote("\"ggg\""));
+        assertEquals("", XUtils.quote(""));
+        assertEquals(" \"", XUtils.quote(" \""));
+        assertEquals("  \"\"", XUtils.quote("  \"\""));
+        assertEquals("\"sdsdsd  ", XUtils.quote("\"sdsdsd  "));
+        assertEquals("\"sdsdsd", XUtils.quote("\"sdsdsd"));
+        assertEquals("\"sd\"", XUtils.quote("sd  "));
+        assertEquals("\"sd\"", XUtils.quote("  sd  "));
+        assertEquals("  \"sd\"  ", XUtils.quote("  \"sd\"  "));
+    }
+
+    @Test
     public void test_unquote() throws Exception {
         assertEquals("ggg", XUtils.unquote("\"ggg\""));
         assertEquals("", XUtils.unquote(""));

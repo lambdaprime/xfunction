@@ -31,6 +31,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.StringJoiner;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Stream;
 
@@ -200,6 +201,22 @@ public class XUtils {
      */
     public static void throwRuntime(String fmt, Object...objs) {
         throw new RuntimeException(String.format(fmt, objs));
+    }
+
+    /**
+     * <p>Trims the string and:</p>
+     * <ul>
+     * <li>If string starts or ends with quote - nothing is done
+     * <li>If string is empty after the trim - nothing is done.
+     * <li>Surrounds it with quotes and returns
+     * </ul>
+     */
+    public static String quote(String s) {
+        String st = s.trim();
+        if (st.isEmpty()) return s;
+        if (st.charAt(0) == '"' || st.charAt(st.length() - 1) == '"')
+            return s;
+        return "\"" + st + "\"";
     }
     
     /**
