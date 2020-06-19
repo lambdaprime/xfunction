@@ -135,6 +135,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="id/xfunction/ArgumentParsingException.html#%3Cinit%3E(java.lang.String)">ArgumentParsingException(String)</a></span> - Constructor for exception <a href="id/xfunction/ArgumentParsingException.html" title="class in id.xfunction">ArgumentParsingException</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="id/xfunction/io/XOutputStream.html#asHexString()">asHexString()</a></span> - Method in class <a href="id/xfunction/io/XOutputStream.html" title="class in id.xfunction.io">XOutputStream</a></dt>
+<dd>
+<div class="block">Returns written data in form of HEX string.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="id/xfunction/CommandLineInterface.html#askConfirm(java.lang.String)">askConfirm(String)</a></span> - Method in class <a href="id/xfunction/CommandLineInterface.html" title="class in id.xfunction">CommandLineInterface</a></dt>
 <dd>
 <div class="block">Print user message and ask to confirm it entering either "yes" or "no"</div>
@@ -142,6 +146,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="id/xfunction/CommandLineInterface.html#askPressEnter()">askPressEnter()</a></span> - Method in class <a href="id/xfunction/CommandLineInterface.html" title="class in id.xfunction">CommandLineInterface</a></dt>
 <dd>
 <div class="block">Print user message to press Enter and wait</div>
+</dd>
+<dt><span class="memberNameLink"><a href="id/xfunction/io/XOutputStream.html#asList()">asList()</a></span> - Method in class <a href="id/xfunction/io/XOutputStream.html" title="class in id.xfunction.io">XOutputStream</a></dt>
+<dd>
+<div class="block">Returns written data in form of List of integers.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="id/xfunction/XAsserts.html#assertNotNull(java.lang.Object)">assertNotNull(Object)</a></span> - Static method in class <a href="id/xfunction/XAsserts.html" title="class in id.xfunction">XAsserts</a></dt>
 <dd>
@@ -298,6 +306,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><a href="id/xfunction/package-summary.html">id.xfunction</a> - package id.xfunction</dt>
 <dd>&nbsp;</dd>
 <dt><a href="id/xfunction/function/package-summary.html">id.xfunction.function</a> - package id.xfunction.function</dt>
+<dd>&nbsp;</dd>
+<dt><a href="id/xfunction/io/package-summary.html">id.xfunction.io</a> - package id.xfunction.io</dt>
 <dd>&nbsp;</dd>
 <dt><a href="id/xfunction/logging/package-summary.html">id.xfunction.logging</a> - package id.xfunction.logging</dt>
 <dd>&nbsp;</dd>
@@ -461,6 +471,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Read a line and returns it</div>
 </dd>
+<dt><span class="memberNameLink"><a href="id/xfunction/io/XInputStream.html#read()">read()</a></span> - Method in class <a href="id/xfunction/io/XInputStream.html" title="class in id.xfunction.io">XInputStream</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="id/xfunction/CommandLineInterface.html#read(java.lang.String)">read(String)</a></span> - Method in class <a href="id/xfunction/CommandLineInterface.html" title="class in id.xfunction">CommandLineInterface</a></dt>
 <dd>
 <div class="block">Show message to the user and return what he enters</div>
@@ -697,6 +709,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Accepts ThrowingRunnable which throws checked exception and converts it to
  runnable which throws unchecked one</div>
 </dd>
+<dt><span class="memberNameLink"><a href="id/xfunction/io/XOutputStream.html#write(int)">write(int)</a></span> - Method in class <a href="id/xfunction/io/XOutputStream.html" title="class in id.xfunction.io">XOutputStream</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <a id="I:X">
 <!--   -->
@@ -729,6 +743,18 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Constructor which accepts the command to run.</div>
 </dd>
+<dt><a href="id/xfunction/io/XInputStream.html" title="class in id.xfunction.io"><span class="typeNameLink">XInputStream</span></a> - Class in <a href="id/xfunction/io/package-summary.html">id.xfunction.io</a></dt>
+<dd>
+<div class="block">Creates an InputStream from different types of inputs.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="id/xfunction/io/XInputStream.html#%3Cinit%3E(java.lang.String)">XInputStream(String)</a></span> - Constructor for class <a href="id/xfunction/io/XInputStream.html" title="class in id.xfunction.io">XInputStream</a></dt>
+<dd>
+<div class="block">From HEX string.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="id/xfunction/io/XInputStream.html#%3Cinit%3E(java.util.List)">XInputStream(List&lt;Integer&gt;)</a></span> - Constructor for class <a href="id/xfunction/io/XInputStream.html" title="class in id.xfunction.io">XInputStream</a></dt>
+<dd>
+<div class="block">From list of integers.</div>
+</dd>
 <dt><a href="id/xfunction/XJson.html" title="class in id.xfunction"><span class="typeNameLink">XJson</span></a> - Class in <a href="id/xfunction/package-summary.html">id.xfunction</a></dt>
 <dd>
 <div class="block">Set of functions to work with JSON</div>
@@ -756,6 +782,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
  changed.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="id/xfunction/XObservable.html#%3Cinit%3E()">XObservable()</a></span> - Constructor for class <a href="id/xfunction/XObservable.html" title="class in id.xfunction">XObservable</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="id/xfunction/io/XOutputStream.html" title="class in id.xfunction.io"><span class="typeNameLink">XOutputStream</span></a> - Class in <a href="id/xfunction/io/package-summary.html">id.xfunction.io</a></dt>
+<dd>
+<div class="block">Implements an OutputStream into which you can write and later
+ get all data in one of the formats available.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="id/xfunction/io/XOutputStream.html#%3Cinit%3E()">XOutputStream()</a></span> - Constructor for class <a href="id/xfunction/io/XOutputStream.html" title="class in id.xfunction.io">XOutputStream</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="id/xfunction/XProcess.html" title="class in id.xfunction"><span class="typeNameLink">XProcess</span></a> - Class in <a href="id/xfunction/package-summary.html">id.xfunction</a></dt>
 <dd>
