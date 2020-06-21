@@ -51,7 +51,9 @@ public class XJson {
         for (int i = 0; i < pairs.length; i += 2) {
             Object k = pairs[i];
             Object v = pairs[i + 1];
-            String vstr =  XUtils.quote(v.toString());
+            String vstr = v.toString();
+            if (vstr.charAt(0) != '{')
+                vstr = XUtils.quote(vstr);
             if (v instanceof Map) {
                 vstr = asString((Map<?, ?>)v);
             } else if (v instanceof Collection) {

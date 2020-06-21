@@ -25,6 +25,15 @@ import org.junit.jupiter.api.Test;
 
 public class XJsonTests {
 
+    class Obj {
+        @Override
+        public String toString() {
+            return XJson.asString(
+                "k1", "v1",
+                "k2", "v2");
+        }
+    }
+
     @Test
     public void test_asJson_list() {
         assertEquals(XUtils.readResource(getClass(), "json-list"), XJson.asString(
@@ -44,5 +53,13 @@ public class XJsonTests {
             "k1", 123,
             "k2", "ggg",
             "k3", m));
+    }
+    
+    @Test
+    public void test_asJson_nested() {
+        assertEquals(XUtils.readResource(getClass(), "json-nested"), XJson.asString(
+            "obj1", new Obj(),
+            "obj2", new Obj(),
+            "k3", List.of("sg", "dfg", "dsfg")));
     }
 }
