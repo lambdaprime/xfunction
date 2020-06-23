@@ -62,4 +62,10 @@ public class XJsonTests {
             "obj2", new Obj(),
             "k3", List.of("sg", "dfg", "dsfg")));
     }
+
+    @Test
+    public void test_empty() {
+        assertEquals("{ \"k1\": \"\" }", XJson.asString(
+            "k1", ""));
+    }
 }

@@ -99,7 +99,7 @@ public class XUtilsTests {
     @Test
     public void test_quote() throws Exception {
         assertEquals("\"ggg\"", XUtils.quote("\"ggg\""));
-        assertEquals("", XUtils.quote(""));
+        assertEquals("\"\"", XUtils.quote(""));
         assertEquals(" \"", XUtils.quote(" \""));
         assertEquals("  \"\"", XUtils.quote("  \"\""));
         assertEquals("\"sdsdsd  ", XUtils.quote("\"sdsdsd  "));

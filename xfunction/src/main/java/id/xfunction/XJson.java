@@ -52,7 +52,9 @@ public class XJson {
             Object k = pairs[i];
             Object v = pairs[i + 1];
             String vstr = v.toString();
-            if (vstr.charAt(0) != '{')
+            if (vstr == null)
+                vstr = "";
+            if (vstr.isEmpty() || vstr.charAt(0) != '{')
                 vstr = XUtils.quote(vstr);
             if (v instanceof Map) {
                 vstr = asString((Map<?, ?>)v);
