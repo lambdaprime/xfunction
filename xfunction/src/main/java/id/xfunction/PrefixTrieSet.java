@@ -18,7 +18,6 @@ package id.xfunction;
 import static java.util.stream.Collectors.joining;
 
 import java.util.AbstractMap;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.AbstractSet;
 import java.util.Collection;
 import java.util.Deque;

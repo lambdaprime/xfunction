@@ -182,27 +182,6 @@ public class XUtils {
     }
 
     /**
-     * Throw RuntimeException
-     */
-    public static void throwRuntime() {
-        throw new RuntimeException();
-    }
-
-    /**
-     * Throws RuntimeException with message
-     */
-    public static void throwRuntime(String msg) {
-        throw new RuntimeException(msg);
-    }
-
-    /**
-     * Throws RuntimeException with formatted message
-     */
-    public static void throwRuntime(String fmt, Object...objs) {
-        throw new RuntimeException(String.format(fmt, objs));
-    }
-
-    /**
      * <p>Trims the string and:</p>
      * <ul>
      * <li>If string starts or ends with quote - nothing is done
