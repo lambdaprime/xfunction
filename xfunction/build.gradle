@@ -21,6 +21,9 @@ sourceSets {
 javadoc {
     options.noTimestamp = true;
     options.noQualifiers = ["all"];
+    options.noTree = true;
+    options.noIndex = true;
+    options.noNavBar = true;
 }
 
 task java11doc(type: Javadoc) {
@@ -28,6 +31,9 @@ task java11doc(type: Javadoc) {
     destinationDir = new File(destinationDir.getParent(), "java11doc")
     options.noTimestamp = true;
     options.noQualifiers = ["all"];
+    options.noTree = true;
+    options.noIndex = true;
+    options.noNavBar = true;
 }
 
 import java.nio.file.*;
