@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9};
+var data = {"i0":9,"i1":9,"i2":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <pre>public class <span class="typeNameLabel">XJson</span>
 extends Object</pre>
-<div class="block">Set of functions to work with JSON</div>
+<div class="block">Set of functions to work with JSON format</div>
 </li>
 </ul>
 </div>
@@ -103,6 +103,13 @@ extends Object</pre>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#asString(java.util.Map)">asString</a></span>&#8203;(Map&lt;K,&#8203;V&gt;&nbsp;m)</code></th>
 <td class="colLast">
 <div class="block">Build a JSON from a given pair of objects (k1, v1, k2, v2, ...).</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>static String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#merge(java.lang.String...)">merge</a></span>&#8203;(String...&nbsp;jsons)</code></th>
+<td class="colLast">
+<div class="block">Merges multiple JSONs into one.</div>
 </td>
 </tr>
 </table>
@@ -173,7 +180,7 @@ extends Object</pre>
 <a id="asString(java.util.Map)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>asString</h4>
 <pre class="methodSignature">public static&nbsp;&lt;K,&#8203;V&gt;&nbsp;String&nbsp;asString&#8203;(Map&lt;K,&#8203;V&gt;&nbsp;m)</pre>
@@ -181,6 +188,27 @@ extends Object</pre>
  String for each object is obtained by calling toString on the object itself.</p>
  
  <p>All pairs will be processed in lexicographical order of their keys.</p></div>
+</li>
+</ul>
+<a id="merge(java.lang.String...)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>merge</h4>
+<pre class="methodSignature">public static&nbsp;String&nbsp;merge&#8203;(String...&nbsp;jsons)</pre>
+<div class="block"><p>Merges multiple JSONs into one.</p>
+ <p>Useful when you override toString on a subclass which returns JSON. In that case
+ you can use this method to merge it with JSON produced from its super class.</p>
+ <p>Example:</p>
+ 
+ <pre><code>
+ return XJson.merge(
+     super.toString(),
+     XJson.asString(
+         "k1", "v1",
+         "k2", "v2"));
+ </code></pre></div>
 </li>
 </ul>
 </li>

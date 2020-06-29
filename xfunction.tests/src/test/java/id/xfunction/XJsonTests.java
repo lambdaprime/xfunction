@@ -42,7 +42,7 @@ public class XJsonTests {
             "k3", List.of("sg", "dfg", "dsfg")));
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Test
     public void test_asJson_map() {
         Map m = new HashMap<>();
@@ -67,5 +67,18 @@ public class XJsonTests {
     public void test_empty() {
         assertEquals("{ \"k1\": \"\" }", XJson.asString(
             "k1", ""));
+    }
+    
+    @Test
+    public void test_merge() {
+        assertEquals(XUtils.readResource(getClass(), "json-merge"), XJson.merge(
+            XJson.asString(
+                "k1", "v1",
+                "k2", "v2"),
+            XJson.asString(
+                "k3", "v3",
+                "k4", "v4"),
+            XJson.asString(
+                "k5", "v5")));
     }
 }

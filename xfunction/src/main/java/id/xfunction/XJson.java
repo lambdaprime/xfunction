@@ -16,16 +16,19 @@
 package id.xfunction;
 
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringJoiner;
 import java.util.stream.Stream;
 
 /**
- * Set of functions to work with JSON
+ * Set of functions to work with JSON format
  */
 public class XJson {
     
@@ -84,5 +87,36 @@ public class XJson {
             .sorted(Entry.comparingByKey())
             .flatMap(e -> Stream.<Object>of(e.getKey(), e.getValue()))
             .toArray());
+    }
+    
+    /**
+     * <p>Merges multiple JSONs into one.</p>
+     * <p>Useful when you override toString on a subclass which returns JSON. In that case
+     * you can use this method to merge it with JSON produced from its super class.</p>
+     * <p>Example:</p>
+     * 
+     * <pre>{@code
+     * return XJson.merge(
+     *     super.toString(),
+     *     XJson.asString(
+     *         "k1", "v1",
+     *         "k2", "v2"));
+     * }</pre>
+     */
+    public static String merge(String...jsons) {
+        String json = "";
+        if (jsons.length == 0) return json;
+        List<String> list = Arrays.stream(jsons)
+            .map(String::trim)
+            .collect(toList());
+        if (list.size() == 1) return list.get(0);
+        json = list.get(0);
+        for (int i = 1; i < jsons.length; ++i) {
+            json = json.substring(0, json.length() - 1);
+            json = json.trim();
+            json += ",";
+            json += jsons[i].substring(1);
+        }
+        return json;
     }
 }
