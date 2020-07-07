@@ -81,4 +81,17 @@ public class XJsonTests {
             XJson.asString(
                 "k5", "v5")));
     }
+    
+    @Test
+    public void test_list_of_jsons() {
+        assertEquals(XUtils.readResource(getClass(), "json-list-jsons"), XJson.asString(
+            "k3", List.of(XJson.asString(
+                "k1", "v1",
+                "k2", "v2"),
+            XJson.asString(
+                "k3", "v3",
+                "k4", "v4"),
+            XJson.asString(
+                "k5", "v5"))));
+    }
 }

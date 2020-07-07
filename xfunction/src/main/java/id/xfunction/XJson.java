@@ -57,15 +57,14 @@ public class XJson {
             String vstr = v.toString();
             if (vstr == null)
                 vstr = "";
-            if (vstr.isEmpty() || vstr.charAt(0) != '{')
-                vstr = XUtils.quote(vstr);
+            vstr = quote(vstr);
             if (v instanceof Map) {
                 vstr = asString((Map<?, ?>)v);
             } else if (v instanceof Collection) {
                 Collection<?> c = (Collection<?>) v;
                 vstr = c.stream()
                     .map(Object::toString)
-                    .map(XUtils::quote)
+                    .map(XJson::quote)
                     .collect(joining(", "));
                 vstr = "[" + vstr + "]";
             }
@@ -74,6 +73,12 @@ public class XJson {
         return "{ " + buf.toString() + " }";
     }
     
+    private static String quote(String value) {
+        if (value.isEmpty() || value.charAt(0) != '{')
+            return XUtils.quote(value);
+        return value;
+    }
+
     /**
      * <p>Build a JSON from a given pair of objects (k1, v1, k2, v2, ...).
      * String for each object is obtained by calling toString on the object itself.</p>
