@@ -22,11 +22,17 @@ import java.util.logging.Logger;
 import id.xfunction.function.Unchecked;
 
 /**
- * Using JUL you have to specify location of logging.properties
+ * <p>Using JUL you have to specify location of logging.properties
  * file using -Djava.util.logging.config.file=ABSOLUTE_PATH
  * If you want to put it inside of your jar it may be a problem.
  * XLogger helps to overcome this. It will search for /logging.properties
- * in your jar and initialize JUL with it.
+ * in your jar and initialize JUL with it.</p>
+ * 
+ * <p>Use it in same way as you would use Logger.</p>
+ * <pre>{@code
+ * static final Logger LOGGER = XLogger.getLogger(HelloWorld.class);
+ * LOGGER.log(Level.FINE, "Publishers: {0}", publishers);
+ * }</pre>
  */
 public class XLogger {
 
@@ -35,14 +41,15 @@ public class XLogger {
     }
 
     /**
-     * Returns Logger with given class name
+     * <p>Returns Logger with given class name.</p>
      */
     public static Logger getLogger(Class<?> cls) {
         return Logger.getLogger(cls.getName());
     }
 
     /**
-     * Initializes JUL using specified property resource
+     * <p>Initializes JUL using specified property resource.</p>
+     * <p>Visible for tests only.</p>
      * @param propertyResource absolute path to resource file
      */
     public static void load(String propertyResource) {
