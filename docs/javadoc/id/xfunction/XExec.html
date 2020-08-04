@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10};
+var data = {"i0":10,"i1":10,"i2":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -114,6 +114,13 @@ extends Object</pre>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="XExec.html" title="class in id.xfunction">XExec</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withDirectory(java.lang.String)">withDirectory</a></span>&#8203;(String&nbsp;workingDirectory)</code></th>
+<td class="colLast">
+<div class="block">Sets the working directory for the process</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="XExec.html" title="class in id.xfunction">XExec</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withInput(java.util.stream.Stream)">withInput</a></span>&#8203;(Stream&lt;String&gt;&nbsp;input)</code></th>
 <td class="colLast">
 <div class="block">Given input will be sent to command's stdin.</div>
@@ -195,6 +202,16 @@ extends Object</pre>
 <h4>withInput</h4>
 <pre class="methodSignature">public&nbsp;<a href="XExec.html" title="class in id.xfunction">XExec</a>&nbsp;withInput&#8203;(Stream&lt;String&gt;&nbsp;input)</pre>
 <div class="block">Given input will be sent to command's stdin.</div>
+</li>
+</ul>
+<a id="withDirectory(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>withDirectory</h4>
+<pre class="methodSignature">public&nbsp;<a href="XExec.html" title="class in id.xfunction">XExec</a>&nbsp;withDirectory&#8203;(String&nbsp;workingDirectory)</pre>
+<div class="block">Sets the working directory for the process</div>
 </li>
 </ul>
 <a id="run()">

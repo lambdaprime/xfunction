@@ -15,10 +15,12 @@
  */
 package id.xfunction;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -29,6 +31,7 @@ public class XExec {
     private String[] cmd;
     private boolean singleLine;
     private Stream<String> input;
+    private Optional<File> workingDirectory = Optional.empty();
 
     /**
      * Constructor which accepts the command to run.
@@ -65,6 +68,14 @@ public class XExec {
     }
 
     /**
+     * Sets the working directory for the process
+     */
+    public XExec withDirectory(String workingDirectory) {
+        this.workingDirectory = Optional.of(new File(workingDirectory));
+        return this;
+    }
+
+    /**
      * Run the command with given input if any
      */
     public XProcess run() {
@@ -85,9 +96,18 @@ public class XExec {
 
     private Process runProcess() throws IOException {
         if (singleLine) {
-            return Runtime.getRuntime().exec(cmd[0]);
+            String[] envp = System.getenv().entrySet().stream()
+                    .map(e -> e.getKey() + "=" + e.getValue())
+                    .toArray(s -> new String[s]);
+            File cwd = new File(System.getProperty("user.dir"), "");
+            if (workingDirectory.isPresent())
+                cwd = workingDirectory.get();
+            return Runtime.getRuntime().exec(cmd[0], envp, cwd);
         }
-        return new ProcessBuilder(cmd).start();
+        ProcessBuilder pb = new ProcessBuilder(cmd);
+        if (workingDirectory.isPresent())
+            pb.directory(workingDirectory.get());
+        return pb.start();
     }
 
 }
