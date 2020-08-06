@@ -22,8 +22,8 @@ import org.junit.jupiter.api.Test;
 public class XProcessTests {
 
     @Test
-    public void test_getCode() {
-        assertEquals(0, new XExec("ls").run().getCode());
+    public void test_await() {
+        assertEquals(0, new XExec("ls").run().await());
     }
 
     @Test
@@ -34,7 +34,8 @@ public class XProcessTests {
     @Test
     public void test_flushStdout() {
         XProcess proc = new XExec("echo", "test").run();
-        proc.flushStdout();
+        proc.flushStdout(false);
+        proc.await();
         proc.stdoutAsString();
         proc.stdoutAsString();
         assertEquals("test", proc.stdoutAsString());
@@ -43,10 +44,20 @@ public class XProcessTests {
     @Test
     public void test_flushStderr() {
         XProcess proc = new XExec("pwd", "-z").run();
-        proc.flushStderr();
+        proc.flushStderr(false);
+        proc.await();
         proc.stderrAsString();
         proc.stderrAsString();
         assertEquals("pwd: invalid option -- 'z'\nTry 'pwd --help' for more information.",
             proc.stderrAsString());
     }
+    
+    @Test
+    public void test_await_not_hangs() throws Exception {
+        XExec xe = new XExec("printf \"%120000d\" 12");
+        XProcess proc = xe.run();
+        proc.flush(true);
+        System.out.println(proc.await());
+    }
+
 }

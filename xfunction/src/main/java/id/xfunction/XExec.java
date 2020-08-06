@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- * Run shell command and obtain its output as a stream of lines.
+ * Runs command and obtain its output as a stream of lines.
  */
 public class XExec {
 

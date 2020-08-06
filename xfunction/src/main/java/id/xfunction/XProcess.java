@@ -21,13 +21,21 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 import id.xfunction.function.Unchecked;
 
 /**
- * Wraps standard Process class with convenient methods
+ * <p>Wraps standard Process class with convenient methods.</p>
+ * 
+ * <p>Some commands may block until you start reading their
+ * stdout or stderr. This may be problem when you just want
+ * to run a command ignoring its output. Use flush methods
+ * in that case.</p> 
  */
 public class XProcess {
     private Process process;
@@ -36,6 +44,7 @@ public class XProcess {
     private Optional<String> stdoutAsString = Optional.empty();
     private Optional<String> stderrAsString = Optional.empty();
     private Optional<Future<Integer>> code = Optional.empty();
+    private ExecutorService executor = Executors.newFixedThreadPool(2);
 
     public XProcess(Process process) {
         this.process = process;
@@ -59,9 +68,9 @@ public class XProcess {
      * Returns standard output as a string.
      * This call will consume stdout stream meaning that you can call
      * it only once. If you want to call it multiple times make sure to
-     * flush stdout first.
+     * flush stdout first and wait until process will finish.
      * 
-     * @see flushStdout
+     * @see flushStdout getCode
      * @throws IllegalStateException if called more than once
      */
     public String stdoutAsString() {
@@ -69,10 +78,17 @@ public class XProcess {
     }
 
     /**
-     * Consumes stdout stream into internal buffer.
+     * Consumes stdout stream into internal buffer or ignores it.
+     * This call is async.
      */
-    public void flushStdout() {
-        stdoutAsString = Optional.of(stdout.collect(joining("\n")));
+    public void flushStdout(boolean ignore) {
+        executor.execute(() -> {
+            if (ignore) {
+                stdout.forEach(l -> {});
+            } else {
+                stdoutAsString = Optional.of(stdout.collect(joining("\n")));
+            }
+        });
     }
 
     /**
@@ -89,10 +105,27 @@ public class XProcess {
     }
 
     /**
-     * Consumes stderr stream into internal buffer.
+     * Consumes stderr stream into internal buffer asynchronously.
+     * This call is async.
      */
-    public void flushStderr() {
-        stderrAsString = Optional.of(stderr.collect(joining("\n")));
+    public void flushStderr(boolean ignore) {
+        executor.execute(() -> {
+            if (ignore) {
+                stderr.forEach(l -> {});
+            } else {
+                stderrAsString = Optional.of(stderr.collect(joining("\n")));
+            }
+        });
+    }
+
+    /**
+     * Flushes stdout and stderr.
+     * 
+     * @see flushStderr flushStdout
+     */
+    public void flush(boolean ignore) {
+        flushStderr(ignore);
+        flushStdout(ignore);
     }
 
     public Process process() {
@@ -126,11 +159,19 @@ public class XProcess {
     }
 
     /**
-     * Waits for process to complete and returns code safely wrapping all checked exceptions
-     * to RuntimeException
+     * <p>Waits for process to complete and returns code safely wrapping all checked exceptions
+     * to RuntimeException.</p>
+     * <p>Make sure to use flush methods if you ignore output/stderr.</p>
+     * 
      * @throws RuntimeException
      */
-    public int getCode() {
+    public int await() {
+        executor.shutdown();
+        try {
+            executor.awaitTermination(Integer.MAX_VALUE, TimeUnit.DAYS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return Unchecked.getInt(code()::get);
     }
 }

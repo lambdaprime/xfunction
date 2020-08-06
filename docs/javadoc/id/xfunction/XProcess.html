@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -49,7 +49,12 @@ var activeTableTab = "activeTableTab";
 <hr>
 <pre>public class <span class="typeNameLabel">XProcess</span>
 extends Object</pre>
-<div class="block">Wraps standard Process class with convenient methods</div>
+<div class="block"><p>Wraps standard Process class with convenient methods.</p>
+ 
+ <p>Some commands may block until you start reading their
+ stdout or stderr. This may be problem when you just want
+ to run a command ignoring its output. Use flush methods
+ in that case.</p></div>
 </li>
 </ul>
 </div>
@@ -101,59 +106,66 @@ extends Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#await()">await</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Waits for process to complete and returns code safely wrapping all checked exceptions
+ to RuntimeException.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>Future&lt;Integer&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#code()">code</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#flushStderr()">flushStderr</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Consumes stderr stream into internal buffer.</div>
-</td>
-</tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#flushStdout()">flushStdout</a></span>()</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#flush(boolean)">flush</a></span>&#8203;(boolean&nbsp;ignore)</code></th>
 <td class="colLast">
-<div class="block">Consumes stdout stream into internal buffer.</div>
+<div class="block">Flushes stdout and stderr.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCode()">getCode</a></span>()</code></th>
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#flushStderr(boolean)">flushStderr</a></span>&#8203;(boolean&nbsp;ignore)</code></th>
 <td class="colLast">
-<div class="block">Waits for process to complete and returns code safely wrapping all checked exceptions
- to RuntimeException</div>
+<div class="block">Consumes stderr stream into internal buffer asynchronously.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#flushStdout(boolean)">flushStdout</a></span>&#8203;(boolean&nbsp;ignore)</code></th>
+<td class="colLast">
+<div class="block">Consumes stdout stream into internal buffer or ignores it.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>Process</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#process()">process</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>Stream&lt;String&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stderr()">stderr</a></span>()</code></th>
 <td class="colLast">
 <div class="block">After you consume this stream it will not be longer valid.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stderrAsString()">stderrAsString</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns standard error output as a string.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>Stream&lt;String&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stdout()">stdout</a></span>()</code></th>
 <td class="colLast">
 <div class="block">After you consume this stream it will not be longer valid.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stdoutAsString()">stdoutAsString</a></span>()</code></th>
 <td class="colLast">
@@ -226,23 +238,24 @@ extends Object</pre>
 <div class="block">Returns standard output as a string.
  This call will consume stdout stream meaning that you can call
  it only once. If you want to call it multiple times make sure to
- flush stdout first.</div>
+ flush stdout first and wait until process will finish.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>IllegalStateException</code> - if called more than once</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="#flushStdout()"><code>flushStdout()</code></a></dd>
+<dd><a href="#flushStdout(boolean)"><code>getCode</code></a></dd>
 </dl>
 </li>
 </ul>
-<a id="flushStdout()">
+<a id="flushStdout(boolean)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>flushStdout</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;flushStdout()</pre>
-<div class="block">Consumes stdout stream into internal buffer.</div>
+<pre class="methodSignature">public&nbsp;void&nbsp;flushStdout&#8203;(boolean&nbsp;ignore)</pre>
+<div class="block">Consumes stdout stream into internal buffer or ignores it.
+ This call is async.</div>
 </li>
 </ul>
 <a id="stderrAsString()">
@@ -260,18 +273,33 @@ extends Object</pre>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>IllegalStateException</code> - if called more than once</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="#flushStderr()"><code>flushStderr()</code></a></dd>
+<dd><a href="#flushStderr(boolean)"><code>flushStderr(boolean)</code></a></dd>
 </dl>
 </li>
 </ul>
-<a id="flushStderr()">
+<a id="flushStderr(boolean)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>flushStderr</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;flushStderr()</pre>
-<div class="block">Consumes stderr stream into internal buffer.</div>
+<pre class="methodSignature">public&nbsp;void&nbsp;flushStderr&#8203;(boolean&nbsp;ignore)</pre>
+<div class="block">Consumes stderr stream into internal buffer asynchronously.
+ This call is async.</div>
+</li>
+</ul>
+<a id="flush(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>flush</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;flush&#8203;(boolean&nbsp;ignore)</pre>
+<div class="block">Flushes stdout and stderr.</div>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="#flushStderr(boolean)"><code>flushStdout</code></a></dd>
+</dl>
 </li>
 </ul>
 <a id="process()">
@@ -293,7 +321,7 @@ extends Object</pre>
 <div class="block">After you consume this stream it will not be longer valid.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="#flushStdout()"><code>flushStdout()</code></a></dd>
+<dd><a href="#flushStdout(boolean)"><code>flushStdout(boolean)</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -307,7 +335,7 @@ extends Object</pre>
 <div class="block">After you consume this stream it will not be longer valid.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="#flushStderr()"><code>flushStderr()</code></a></dd>
+<dd><a href="#flushStderr(boolean)"><code>flushStderr(boolean)</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -324,15 +352,16 @@ extends Object</pre>
 </dl>
 </li>
 </ul>
-<a id="getCode()">
+<a id="await()">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>getCode</h4>
-<pre class="methodSignature">public&nbsp;int&nbsp;getCode()</pre>
-<div class="block">Waits for process to complete and returns code safely wrapping all checked exceptions
- to RuntimeException</div>
+<h4>await</h4>
+<pre class="methodSignature">public&nbsp;int&nbsp;await()</pre>
+<div class="block"><p>Waits for process to complete and returns code safely wrapping all checked exceptions
+ to RuntimeException.</p>
+ <p>Make sure to use flush methods if you ignore output/stderr.</p></div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>RuntimeException</code></dd>
