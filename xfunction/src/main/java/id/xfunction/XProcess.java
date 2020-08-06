@@ -45,6 +45,8 @@ public class XProcess {
     private Optional<String> stderrAsString = Optional.empty();
     private Optional<Future<Integer>> code = Optional.empty();
     private ExecutorService executor = Executors.newFixedThreadPool(2);
+    private boolean isStderrConsumed;
+    private boolean isStdoutConsumed;
 
     public XProcess(Process process) {
         this.process = process;
@@ -70,7 +72,7 @@ public class XProcess {
      * it only once. If you want to call it multiple times make sure to
      * flush stdout first and wait until process will finish.
      * 
-     * @see flushStdout getCode
+     * @see flushStdout await
      * @throws IllegalStateException if called more than once
      */
     public String stdoutAsString() {
@@ -81,7 +83,8 @@ public class XProcess {
      * Consumes stdout stream into internal buffer or ignores it.
      * This call is async.
      */
-    public void flushStdout(boolean ignore) {
+    public XProcess flushStdout(boolean ignore) {
+        consumeStdout();
         executor.execute(() -> {
             if (ignore) {
                 stdout.forEach(l -> {});
@@ -89,6 +92,19 @@ public class XProcess {
                 stdoutAsString = Optional.of(stdout.collect(joining("\n")));
             }
         });
+        return this;
+    }
+
+    /**
+     * Consumes stdout stream and forwards it to System.out
+     * This call is async.
+     */
+    public XProcess forwardStdout() {
+        consumeStdout();
+        executor.execute(() -> {
+            stdout.forEach(System.out::println);
+        });
+        return this;
     }
 
     /**
@@ -108,7 +124,8 @@ public class XProcess {
      * Consumes stderr stream into internal buffer asynchronously.
      * This call is async.
      */
-    public void flushStderr(boolean ignore) {
+    public XProcess flushStderr(boolean ignore) {
+        consumeStderr();
         executor.execute(() -> {
             if (ignore) {
                 stderr.forEach(l -> {});
@@ -116,16 +133,43 @@ public class XProcess {
                 stderrAsString = Optional.of(stderr.collect(joining("\n")));
             }
         });
+        return this;
+    }
+
+    /**
+     * Consumes stderr stream and forwards it to System.err
+     * This call is async.
+     */
+    public XProcess forwardStderr() {
+        consumeStderr();
+        executor.execute(() -> {
+            stderr.forEach(System.err::println);
+        });
+        return this;
     }
 
     /**
      * Flushes stdout and stderr.
      * 
-     * @see flushStderr flushStdout
+     * @see flushStderr
+     * @see flushStdout
      */
-    public void flush(boolean ignore) {
+    public XProcess flush(boolean ignore) {
         flushStderr(ignore);
         flushStdout(ignore);
+        return this;
+    }
+
+    /**
+     * Forwards stdout and stderr to System.out and System.err respectively.
+     * 
+     * @see forwardStderr
+     * @see forwardStdout
+     */
+    public XProcess forward() {
+        forwardStderr();
+        forwardStdout();
+        return this;
     }
 
     public Process process() {
@@ -173,5 +217,17 @@ public class XProcess {
             e.printStackTrace();
         }
         return Unchecked.getInt(code()::get);
+    }
+    
+    private void consumeStdout() {
+        if (isStdoutConsumed)
+            throw new IllegalStateException("Stdout has consumer already");
+        isStdoutConsumed = true;
+    }
+    
+    private void consumeStderr() {
+        if (isStderrConsumed)
+            throw new IllegalStateException("Stderr has consumer already");
+        isStderrConsumed = true;
     }
 }

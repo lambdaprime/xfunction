@@ -17,6 +17,7 @@ package id.xfunction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class XProcessTests {
@@ -34,8 +35,7 @@ public class XProcessTests {
     @Test
     public void test_flushStdout() {
         XProcess proc = new XExec("echo", "test").run();
-        proc.flushStdout(false);
-        proc.await();
+        proc.flushStdout(false).await();
         proc.stdoutAsString();
         proc.stdoutAsString();
         assertEquals("test", proc.stdoutAsString());
@@ -44,8 +44,7 @@ public class XProcessTests {
     @Test
     public void test_flushStderr() {
         XProcess proc = new XExec("pwd", "-z").run();
-        proc.flushStderr(false);
-        proc.await();
+        proc.flushStderr(false).await();
         proc.stderrAsString();
         proc.stderrAsString();
         assertEquals("pwd: invalid option -- 'z'\nTry 'pwd --help' for more information.",
@@ -56,8 +55,20 @@ public class XProcessTests {
     public void test_await_not_hangs() throws Exception {
         XExec xe = new XExec("printf \"%120000d\" 12");
         XProcess proc = xe.run();
-        proc.flush(true);
-        System.out.println(proc.await());
+        System.out.println(proc.flush(true).await());
     }
 
+    @Test
+    public void test_forward() {
+        XProcess proc = new XExec("echo", "test").run();
+        proc.forward().await();
+    }
+    
+    @Test
+    public void test_forward_and_flush_together() {
+        XProcess proc = new XExec("echo", "test").run();
+        proc.flush(false);
+        Assertions.assertThrows(IllegalStateException.class, () ->
+            proc.forward());
+    }
 }

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -119,53 +119,76 @@ extends Object</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>void</code></td>
+<td class="colFirst"><code><a href="XProcess.html" title="class in id.xfunction">XProcess</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#flush(boolean)">flush</a></span>&#8203;(boolean&nbsp;ignore)</code></th>
 <td class="colLast">
 <div class="block">Flushes stdout and stderr.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>void</code></td>
+<td class="colFirst"><code><a href="XProcess.html" title="class in id.xfunction">XProcess</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#flushStderr(boolean)">flushStderr</a></span>&#8203;(boolean&nbsp;ignore)</code></th>
 <td class="colLast">
 <div class="block">Consumes stderr stream into internal buffer asynchronously.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>void</code></td>
+<td class="colFirst"><code><a href="XProcess.html" title="class in id.xfunction">XProcess</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#flushStdout(boolean)">flushStdout</a></span>&#8203;(boolean&nbsp;ignore)</code></th>
 <td class="colLast">
 <div class="block">Consumes stdout stream into internal buffer or ignores it.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="XProcess.html" title="class in id.xfunction">XProcess</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#forward()">forward</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Forwards stdout and stderr to System.out and System.err respectively.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code><a href="XProcess.html" title="class in id.xfunction">XProcess</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#forwardStderr()">forwardStderr</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Consumes stderr stream and forwards it to System.err
+ This call is async.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code><a href="XProcess.html" title="class in id.xfunction">XProcess</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#forwardStdout()">forwardStdout</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Consumes stdout stream and forwards it to System.out
+ This call is async.</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>Process</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#process()">process</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>Stream&lt;String&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stderr()">stderr</a></span>()</code></th>
 <td class="colLast">
 <div class="block">After you consume this stream it will not be longer valid.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stderrAsString()">stderrAsString</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns standard error output as a string.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>Stream&lt;String&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stdout()">stdout</a></span>()</code></th>
 <td class="colLast">
 <div class="block">After you consume this stream it will not be longer valid.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stdoutAsString()">stdoutAsString</a></span>()</code></th>
 <td class="colLast">
@@ -243,7 +266,7 @@ extends Object</pre>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>IllegalStateException</code> - if called more than once</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="#flushStdout(boolean)"><code>getCode</code></a></dd>
+<dd><a href="#flushStdout(boolean)"><code>await</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -253,8 +276,19 @@ extends Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>flushStdout</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;flushStdout&#8203;(boolean&nbsp;ignore)</pre>
+<pre class="methodSignature">public&nbsp;<a href="XProcess.html" title="class in id.xfunction">XProcess</a>&nbsp;flushStdout&#8203;(boolean&nbsp;ignore)</pre>
 <div class="block">Consumes stdout stream into internal buffer or ignores it.
+ This call is async.</div>
+</li>
+</ul>
+<a id="forwardStdout()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>forwardStdout</h4>
+<pre class="methodSignature">public&nbsp;<a href="XProcess.html" title="class in id.xfunction">XProcess</a>&nbsp;forwardStdout()</pre>
+<div class="block">Consumes stdout stream and forwards it to System.out
  This call is async.</div>
 </li>
 </ul>
@@ -283,8 +317,19 @@ extends Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>flushStderr</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;flushStderr&#8203;(boolean&nbsp;ignore)</pre>
+<pre class="methodSignature">public&nbsp;<a href="XProcess.html" title="class in id.xfunction">XProcess</a>&nbsp;flushStderr&#8203;(boolean&nbsp;ignore)</pre>
 <div class="block">Consumes stderr stream into internal buffer asynchronously.
+ This call is async.</div>
+</li>
+</ul>
+<a id="forwardStderr()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>forwardStderr</h4>
+<pre class="methodSignature">public&nbsp;<a href="XProcess.html" title="class in id.xfunction">XProcess</a>&nbsp;forwardStderr()</pre>
+<div class="block">Consumes stderr stream and forwards it to System.err
  This call is async.</div>
 </li>
 </ul>
@@ -294,11 +339,27 @@ extends Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>flush</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;flush&#8203;(boolean&nbsp;ignore)</pre>
+<pre class="methodSignature">public&nbsp;<a href="XProcess.html" title="class in id.xfunction">XProcess</a>&nbsp;flush&#8203;(boolean&nbsp;ignore)</pre>
 <div class="block">Flushes stdout and stderr.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="#flushStderr(boolean)"><code>flushStdout</code></a></dd>
+<dd><a href="#flushStderr(boolean)"><code>flushStderr(boolean)</code></a>, 
+<a href="#flushStdout(boolean)"><code>flushStdout(boolean)</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="forward()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>forward</h4>
+<pre class="methodSignature">public&nbsp;<a href="XProcess.html" title="class in id.xfunction">XProcess</a>&nbsp;forward()</pre>
+<div class="block">Forwards stdout and stderr to System.out and System.err respectively.</div>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="#forwardStderr()"><code>forwardStderr()</code></a>, 
+<a href="#forwardStdout()"><code>forwardStdout()</code></a></dd>
 </dl>
 </li>
 </ul>
