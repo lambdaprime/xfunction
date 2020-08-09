@@ -32,6 +32,7 @@ public class XLoggerTests {
     @Test
     public void test_read_config() throws IOException {
         Logger logger = XLogger.getLogger(XLoggerTests.class);
+        System.out.println(logger.getName());
         Path file = Paths.get("/tmp/l.txt");
         file.toFile().delete();
         logger.info("test");
