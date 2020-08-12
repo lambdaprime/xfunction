@@ -150,7 +150,10 @@ extends Logger</pre>
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#exiting(java.lang.String,java.lang.Object)">exiting</a></span>&#8203;(String&nbsp;sourceMethod,
        Object&nbsp;result)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Unfortunately original Logger method does not convert result to String
+ and requires you to call it explicitly and only then pass String result.</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
@@ -330,6 +333,10 @@ extends Logger</pre>
 <h4>exiting</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;exiting&#8203;(String&nbsp;sourceMethod,
                     Object&nbsp;result)</pre>
+<div class="block">Unfortunately original Logger method does not convert result to String
+ and requires you to call it explicitly and only then pass String result.
+ This method does it for you and converts the result to String and pass it
+ further to Logger.</div>
 </li>
 </ul>
 <a id="info(java.lang.String)">

@@ -16,6 +16,7 @@
 package id.xfunction.logging;
 
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.LogRecord;
@@ -105,8 +106,14 @@ public class XLogger extends Logger {
         super.exiting(getName(), sourceMethod);
     }
     
+    /**
+     * Unfortunately original Logger method does not convert result to String
+     * and requires you to call it explicitly and only then pass String result.
+     * This method does it for you and converts the result to String and pass it
+     * further to Logger.
+     */
     public void exiting(String sourceMethod, Object result) {
-        super.exiting(getName(), sourceMethod, result);
+        super.exiting(getName(), sourceMethod, Objects.toString(result));
     }
     
     public void info(String msg) {
