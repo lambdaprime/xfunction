@@ -283,13 +283,48 @@ public class XByte {
      * <p>Each byte of the array is converted to the code base 16.
      * The code is padded with 0 at the front if its length is
      * less than 2. It means that length of the code is always
-     * 2 symbols: a - 0a</p>  
+     * 2 symbols: a - 0a</p> 
+     * 
+     * <p>Example:</p>
+     * 
+     * <pre>{@code
+     * XByte.toHex("hello world".getBytes())
+     * }</pre>
+     * 
+     * <p>Will return string "68656c6c6f20776f726c64".</p>
+     * 
      */
     public static String toHex(byte[] a) {
         StringBuilder buf = new StringBuilder();
         for (byte b: a) {
             buf.append(toHex(b));
         }
+        String hex = buf.toString();
+        XAsserts.assertTrue(hex.length() % 2 == 0);
+        return hex;
+    }
+
+    /**
+     * <p>Returns a string representation of the byte array as a
+     * sequence of pairs of numbers base 16.</p>
+     * 
+     * <p>Example:</p>
+     * 
+     * <pre>{@code
+     * XByte.toHexPairs("hello world".getBytes())
+     * }</pre>
+     * 
+     * <p>Will return string "68 65 6c 6c 6f 20 77 6f 72 6c 64".</p>
+     */
+    public static String toHexPairs(byte[] a) {
+        String hex = toHex(a);
+        StringBuilder buf = new StringBuilder();
+        for (int i = 0; i < hex.length(); i += 2) {
+            buf.append(hex.substring(i, i + 2));
+            buf.append(" ");
+        }
+        if (buf.length() > 0)
+            buf.setLength(buf.length() - 1);
         return buf.toString();
     }
 
