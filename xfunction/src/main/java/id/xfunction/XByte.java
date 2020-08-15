@@ -15,6 +15,8 @@
  */
 package id.xfunction;
 
+import java.nio.ByteBuffer;
+
 public class XByte {
 
     private final static String[] HEX_CODES = {
@@ -326,6 +328,22 @@ public class XByte {
         if (buf.length() > 0)
             buf.setLength(buf.length() - 1);
         return buf.toString();
+    }
+
+    /**
+     * <p>Converts int to pairs of numbers base 16.</p>
+     * 
+     * <p>Example:</p>
+     * 
+     * <pre>{@code
+     * XByte.toHexPairs(123)
+     * }</pre>
+     * 
+     * <p>Will return string "00 00 00 7b".</p>
+     * 
+     */
+    public static String toHexPairs(int i) {
+        return toHexPairs(ByteBuffer.allocate(4).putInt(i).array());
     }
 
     /**
