@@ -15,28 +15,17 @@
  */
 package id.xfunction.io;
 
-import static java.util.stream.Collectors.joining;
-
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import id.xfunction.XByte;
 
 /**
- * <p>Implements an OutputStream into which you can write and later
- * get all data in one of the formats available.</p>
- *  
+ * <p>Implements an OutputStream by extending ByteArrayOutputStream with methods
+ * which allows you to get all written data in one of the formats available.</p>
  */
-public class XOutputStream extends OutputStream {
-
-    private List<Integer> output = new ArrayList<>();
-    
-    @Override
-    public void write(int v) throws IOException {
-        output.add(v);
-    }
+public class XOutputStream extends ByteArrayOutputStream {
 
     /**
      * <p>Returns written data in form of List of integers. Writing "abc" will result
@@ -44,6 +33,11 @@ public class XOutputStream extends OutputStream {
      * 
      */
     public List<Integer> asList() {
+        byte[] b = toByteArray();
+        List<Integer> output = new ArrayList<>(b.length);
+        for (int i = 0; i < b.length; i++) {
+            output.add(Byte.toUnsignedInt(b[i]));
+        }
         return output;
     }
 
@@ -54,8 +48,14 @@ public class XOutputStream extends OutputStream {
      * 
      */
     public String asHexString() {
-        return output.stream()
-                .map(i -> XByte.toHex(i.byteValue()))
-                .collect(joining(", "));
+        byte[] b = toByteArray();
+        StringBuilder output = new StringBuilder(b.length);
+        for (int i = 0; i < b.length; i++) {
+            output.append(XByte.toHex(b[i]));
+            output.append(", ");
+        }
+        if (output.length() > 0)
+            output.setLength(output.length() - 2);
+        return output.toString();
     }
 }
