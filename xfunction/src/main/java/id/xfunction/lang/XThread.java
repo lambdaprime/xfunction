@@ -40,6 +40,6 @@ public class XThread {
      * 
      */
     public static void sleep(long msec) {
-        Unchecked.wrapRun(() -> Thread.sleep(msec));
+        Unchecked.run(() -> Thread.sleep(msec));
     }
 }
