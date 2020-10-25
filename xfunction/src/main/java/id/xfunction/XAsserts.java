@@ -15,6 +15,8 @@
  */
 package id.xfunction;
 
+import java.util.Objects;
+
 /**
  * Set of assertions
  */
@@ -22,7 +24,7 @@ public class XAsserts {
 
     /**
      * Preconditional check for null objects.
-     * @throws AssertionError is obj is null
+     * @throws AssertionError with a message if obj is null
      */
     public static void assertNotNull(Object obj, String message) throws AssertionError {
         if (obj == null) throw new AssertionError(message);
@@ -30,7 +32,7 @@ public class XAsserts {
 
     /**
      * Preconditional check for null objects.
-     * @throws AssertionError is obj is null
+     * @throws AssertionError if obj is null
      */
     public static void assertNotNull(Object obj) throws AssertionError {
         assertNotNull(obj, "");
@@ -38,7 +40,7 @@ public class XAsserts {
 
     /**
      * Preconditional check.
-     * @throws NullPointerException is obj is null
+     * @throws AssertionError with a message if b is false
      */
     public static void assertTrue(boolean b, String message) throws AssertionError {
         if (!b) throw new AssertionError(message);
@@ -46,9 +48,50 @@ public class XAsserts {
 
     /**
      * Preconditional check.
-     * @throws NullPointerException is obj is null
+     * @throws AssertionError if b is false
      */
     public static void assertTrue(boolean b) throws AssertionError {
         assertTrue(b, "");
+    }
+
+    /**
+     * Preconditional check for equality.
+     * @throws AssertionError if two values are not equal
+     */
+    public static void assertEquals(int expected, int actual) throws AssertionError {
+        assertTrue(expected == actual, String.format("expected value %s, actual value %s", expected, actual));
+    }
+
+    /**
+     * Preconditional check for equality.
+     * @throws AssertionError if two values are not equal
+     */
+    public static void assertEquals(long expected, long actual) throws AssertionError {
+        assertTrue(expected == actual, String.format("expected value %s, actual value %s", expected, actual));
+    }
+
+    /**
+     * Preconditional check for equality.
+     * @throws AssertionError if two values are not equal
+     */
+    public static void assertEquals(float expected, float actual) throws AssertionError {
+        assertTrue(expected == actual, String.format("expected value %s, actual value %s", expected, actual));
+    }
+    
+    /**
+     * Preconditional check for equality.
+     * @throws AssertionError if two values are not equal
+     */
+    public static void assertEquals(double expected, double actual) throws AssertionError {
+        assertTrue(expected == actual, String.format("expected value %s, actual value %s", expected, actual));
+    }
+    
+    /**
+     * Preconditional check for equality.
+     * @throws AssertionError if two values are not equal
+     */
+    public static <T> void assertEquals(T expected, T actual) throws AssertionError {
+        assertTrue(Objects.equals(expected, actual), String.format("expected value %s, actual value %s",
+            expected, actual));
     }
 }

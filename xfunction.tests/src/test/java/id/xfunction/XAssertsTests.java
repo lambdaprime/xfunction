@@ -42,4 +42,10 @@ public class XAssertsTests {
     public void test_assertNotNull_happy() {
         XAsserts.assertNotNull("test");
     }
+    
+    @Test
+    public void test_assertEquals() {
+        XAsserts.assertEquals(null, null);
+        Assertions.assertThrows(AssertionError.class, () -> XAsserts.assertEquals(null, "test"));
+    }
 }
