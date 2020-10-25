@@ -17,7 +17,7 @@ Java 8
 
 # Download
 
-You can download **xfunction** from <https://github.com/lambdaprime/xfunction/tree/master/xfunction/release>
+You can download **xfunction** from <https://github.com/lambdaprime/xfunction/releases>
 
 # Documentation
 
