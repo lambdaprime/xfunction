@@ -21,4 +21,4 @@ You can download **xfunction** from <https://github.com/lambdaprime/xfunction/re
 
 # Documentation
 
-Javadoc is available here <https://lambdaprime.github.io/xfunction/javadoc>
+Javadoc is available here <http://portal2.atwebpages.com/xfunction>
