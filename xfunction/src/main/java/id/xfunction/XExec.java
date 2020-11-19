@@ -29,7 +29,6 @@ import java.util.stream.Stream;
 public class XExec {
 
     private String[] cmd;
-    private boolean singleLine;
     private Stream<String> input;
     private Optional<File> workingDirectory = Optional.empty();
 
@@ -55,8 +54,7 @@ public class XExec {
      * Constructor which accepts the full command line to run
      */
     public XExec(String cmd) {
-        this(new String[] {cmd});
-        singleLine = true;
+        this(new QuotesTokenizer().tokenize(cmd));
     }
 
     /**
@@ -95,15 +93,6 @@ public class XExec {
     }
 
     private Process runProcess() throws IOException {
-        if (singleLine) {
-            String[] envp = System.getenv().entrySet().stream()
-                    .map(e -> e.getKey() + "=" + e.getValue())
-                    .toArray(s -> new String[s]);
-            File cwd = new File(System.getProperty("user.dir"), "");
-            if (workingDirectory.isPresent())
-                cwd = workingDirectory.get();
-            return Runtime.getRuntime().exec(cmd[0], envp, cwd);
-        }
         ProcessBuilder pb = new ProcessBuilder(cmd);
         if (workingDirectory.isPresent())
             pb.directory(workingDirectory.get());
