@@ -16,38 +16,35 @@
 package id.xfunction.text;
 
 /**
- * <p>Imagine you have a template text document and want to compare it to
- * another text documents.</p>
+ * <p>Match text with a wildcards (called template) with any other
+ * text.</p>
  * 
- * <p>You don't want to do exact comparison and allow only words on certain
- * positions to be different.</p>
+ * <p>This matcher supports only one possible wildcard symbol which
+ * is '*'.</p>
  * 
- * <p>You can use regexp .* for that. You escape all meta symbols in your
- * template document and treat it as a regexp. This is pretty straight
- * forward solution and it will work.</p>
+ * <p>That way you don't need to worry to escape any symbols in your
+ * template like in case when using regexps.</p>
  * 
- * <p>But now imagine that this template document is 100 lines long. Then
- * you will have to go through it line by line and escape all the meta
- * symbols again.</p>
+ * <p>For example given template "lol*lol":<p>
  * 
- * <p>This class helps you to deal with such situations by providing you
- * with only one meta symbol * so the only thing which you will need to do
- * is to put it in your template instead of text which should be
- * ignored during matching. It can match text with multiple lines too.</p>
+ * <ul>
+ * <li>lolasdlol - match</li>
+ * <li>looooollol - does not match</li>
+ * </ul>
  * 
  * <p>Worst case complexity is O(n^m)</p>
  * 
  */
-public class TemplateMatcher {
+public class WildcardMatcher {
 
     private String template;
 
-    public TemplateMatcher(String template) {
+    public WildcardMatcher(String template) {
         this.template = template;
     }
 
     /**
-     * Check if given string matches current template.
+     * Check if given text matches current template.
      */
     public boolean matches(String str) {
         return matches(str, 0, 0);

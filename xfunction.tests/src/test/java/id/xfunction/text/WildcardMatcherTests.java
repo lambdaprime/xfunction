@@ -5,33 +5,33 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import id.xfunction.text.TemplateMatcher;
+import id.xfunction.text.WildcardMatcher;
 
-public class TemplateMatcherTests {
+public class WildcardMatcherTests {
 
     @Test
     public void test_empty_template() {
-        TemplateMatcher matcher = new TemplateMatcher("");
+        WildcardMatcher matcher = new WildcardMatcher("");
         assertTrue(matcher.matches(""));
         assertFalse(matcher.matches("ffff"));
     }
 
     @Test
     public void test_empty_string() {
-        TemplateMatcher matcher = new TemplateMatcher("lol");
+        WildcardMatcher matcher = new WildcardMatcher("lol");
         assertFalse(matcher.matches(""));
         assertFalse(matcher.matches("ffff"));
     }
 
     @Test
     public void test_matches_no_wildcard() {
-        TemplateMatcher matcher = new TemplateMatcher("lol");
+        WildcardMatcher matcher = new WildcardMatcher("lol");
         assertTrue(matcher.matches("lol"));
     }
 
     @Test
     public void test_matches_wildcard() {
-        TemplateMatcher matcher = new TemplateMatcher("lol*lol");
+        WildcardMatcher matcher = new WildcardMatcher("lol*lol");
         assertTrue(matcher.matches("lolasdlol"));
         assertTrue(matcher.matches("lolasdloalol"));
         assertTrue(matcher.matches("lollol"));
@@ -46,7 +46,7 @@ public class TemplateMatcherTests {
 
     @Test
     public void test_matches_wildcards() {
-        TemplateMatcher matcher = new TemplateMatcher("abc*fun*kot");
+        WildcardMatcher matcher = new WildcardMatcher("abc*fun*kot");
         assertTrue(matcher.matches("abcccccfunkot"));
         assertTrue(matcher.matches("abcccccfunnnkot"));
         assertTrue(matcher.matches("abcccccfunfunkot"));
@@ -56,29 +56,29 @@ public class TemplateMatcherTests {
 
     @Test
     public void test_matches_everything() {
-        TemplateMatcher matcher = new TemplateMatcher("*");
+        WildcardMatcher matcher = new WildcardMatcher("*");
         assertTrue(matcher.matches("abcccccfunkot"));
     }
 
     @Test
     public void test_matches_wildcard_start() {
-        TemplateMatcher matcher = new TemplateMatcher("*fun");
+        WildcardMatcher matcher = new WildcardMatcher("*fun");
         assertTrue(matcher.matches("abcccccfun"));
         
-        matcher = new TemplateMatcher("*fun*");
+        matcher = new WildcardMatcher("*fun*");
         assertTrue(matcher.matches("abcccccfun"));
         assertTrue(matcher.matches("abcccccfunnnn"));
     }
 
     @Test
     public void test_matches_wildcard_multiline() {
-        TemplateMatcher matcher = new TemplateMatcher("is\n*\nending\n");
+        WildcardMatcher matcher = new WildcardMatcher("is\n*\nending\n");
         assertTrue(matcher.matches("is\nnever\ndfgdfg\nending\n"));
     }
 
     @Test
     public void test_matches_wildcard_multiline_at_the_end() {
-        TemplateMatcher matcher = new TemplateMatcher("is\n*\nending\n*");
+        WildcardMatcher matcher = new WildcardMatcher("is\n*\nending\n*");
         assertTrue(matcher.matches("is\nnever\ndfgdfg\nending\nsfsffff\nggggggg  \n"));
     }
 }
