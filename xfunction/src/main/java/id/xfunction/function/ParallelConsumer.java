@@ -21,8 +21,6 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import id.xfunction.XUtils;
-
 
 /**
  * <P>Parallel streams may partition the stream in any order which means
@@ -120,7 +118,7 @@ public class ParallelConsumer<T> implements Consumer<T>, AutoCloseable {
     private ExecutorService executor;
     private Consumer<T> consumer;
     private Thread.UncaughtExceptionHandler exHandler = (t, ex) -> {
-        XUtils.printExceptions(ex);
+        ex.printStackTrace();
     };
 
     public ParallelConsumer(Consumer<T> consumer) {

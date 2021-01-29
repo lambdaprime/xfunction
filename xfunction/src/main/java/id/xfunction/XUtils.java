@@ -29,13 +29,9 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.security.MessageDigest;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Stream;
-
-import static java.util.stream.Stream.concat;
-import static java.util.stream.Stream.of;
 
 /**
  * Set of miscellaneous functions.
@@ -208,16 +204,7 @@ public class XUtils {
             return st.substring(1, st.length()-1);
         return s;
     }
-    
-    /**
-     * Prints all exceptions including suppressed ones 
-     */
-    public static void printExceptions(Throwable ex) {
-        concat(of(ex, ex.getCause()), Arrays.stream(ex.getSuppressed()))
-            .filter(e -> e != null)
-            .forEach(Throwable::printStackTrace);
-    }
-    
+
     /**
      * Deletes directory recursively with all files and sub-directories
      */

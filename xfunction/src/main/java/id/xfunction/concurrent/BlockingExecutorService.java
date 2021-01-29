@@ -28,7 +28,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import id.xfunction.XUtils;
 import id.xfunction.function.Unchecked;
 
 /**
@@ -63,7 +62,7 @@ public class BlockingExecutorService extends AbstractExecutorService {
                 // put it back for other workers
                 queue.put(EOQ);
             } catch (Exception ex) {
-                XUtils.printExceptions(ex);
+                ex.printStackTrace();
             } finally {
                 semaphore.release();
             }
