@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import id.xfunction.text.QuotesTokenizer;
+
 /**
  * Runs command and obtain its output as a stream of lines.
  */

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package id.xfunction;
+package id.xfunction.text;
 
 /**
  * <p>Imagine you have a template text document and want to compare it to

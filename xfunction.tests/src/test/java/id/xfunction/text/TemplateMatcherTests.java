@@ -1,11 +1,11 @@
-package id.xfunction;
+package id.xfunction.text;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import id.xfunction.TemplateMatcher;
+import id.xfunction.text.TemplateMatcher;
 
 public class TemplateMatcherTests {
 
