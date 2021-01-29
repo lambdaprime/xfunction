@@ -15,10 +15,13 @@
  */
 package id.xfunction;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
 /**
  * Set of functions to work with command line interface
@@ -29,9 +32,10 @@ public class CommandLineInterface {
     private InputStream in;
     private PrintStream err;
     private Scanner scanner;
+    private Future<Void> keyPressed;
 
     /**
-     * Default ctor which binds to System.in, System.out
+     * Default ctor which binds new CLI object to System.in, System.out
      */
     public CommandLineInterface() {
         this(System.in, System.out, System.err);
@@ -68,6 +72,41 @@ public class CommandLineInterface {
         waitPressEnter();
     }
 
+    /**
+     * <p>When this method is called for the first time it returns false.
+     * All consecutive calls will return false as well except when user press
+     * any key since the time when this method was called last time.</p>
+     * 
+     * <p>It allows you to execute some action repeatedly without blocking
+     * it to wait for user to press any key:</p>
+     * 
+     * <pre>{@code
+     * while (!wasKeyPressed()) {
+     *     action();
+     * }
+     * }</pre>
+     * 
+     * <p>Here action() will be executed indefinitely until user press any key.</p>
+     * 
+     */
+    public boolean wasKeyPressed() {
+        if (keyPressed == null) {
+            keyPressed = CompletableFuture.runAsync(() -> {
+                try {
+                    System.in.read();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            return false;
+        }
+        if (keyPressed.isDone()) {
+            keyPressed = null;
+            return true;
+        }
+        return false;
+    }
+    
     /**
      * Show message to the user and return what he enters
      */
