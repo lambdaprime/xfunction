@@ -9,7 +9,7 @@
 - prefix trie collection
 - ...
 
-lambdaprime <id.blackmesa@gmail.com>
+lambdaprime <intid@protonmail.com>
 
 # Requirements
 
