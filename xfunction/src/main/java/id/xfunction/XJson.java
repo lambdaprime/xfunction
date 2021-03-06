@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.stream.Stream;
 
@@ -63,7 +64,7 @@ public class XJson {
             } else if (v instanceof Collection) {
                 Collection<?> c = (Collection<?>) v;
                 vstr = c.stream()
-                    .map(Object::toString)
+                    .map(Objects::toString)
                     .map(XJson::quote)
                     .collect(joining(", "));
                 vstr = "[" + vstr + "]";

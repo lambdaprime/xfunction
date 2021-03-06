@@ -17,6 +17,7 @@ package id.xfunction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +62,14 @@ public class XJsonTests {
             "obj1", new Obj(),
             "obj2", new Obj(),
             "k3", List.of("sg", "dfg", "dsfg")));
+    }
+
+    @Test
+    public void test_asJson_collection_with_null() {
+        assertEquals(XUtils.readResource(getClass(), "json-collection-null"), XJson.asString(
+            "obj1", new Obj(),
+            "obj2", new Obj(),
+            "k3", Arrays.asList(new String[] {null})));
     }
 
     @Test
