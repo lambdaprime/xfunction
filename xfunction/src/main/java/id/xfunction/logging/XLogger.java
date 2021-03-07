@@ -124,6 +124,14 @@ public class XLogger extends Logger {
         super.log(Level.INFO, msg, param);
     }
     
+    public void warning(String msg, Object...param) {
+        super.log(Level.WARNING, msg, param);
+    }
+    
+    public void severe(String msg, Object...param) {
+        super.log(Level.SEVERE, msg, param);
+    }
+
     public void fine(String msg, Object...param) {
         super.log(Level.FINE, msg, param);
     }
