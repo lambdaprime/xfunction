@@ -20,8 +20,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
+
+import id.xfunction.concurrent.DaemonThreadFactory;
 
 /**
  * Set of functions to work with command line interface
@@ -32,7 +32,7 @@ public class CommandLineInterface {
     private InputStream in;
     private PrintStream err;
     private Scanner scanner;
-    private Future<Void> keyPressed;
+    private Thread keyPressWatchdog;
 
     /**
      * Default ctor which binds new CLI object to System.in, System.out
@@ -90,18 +90,19 @@ public class CommandLineInterface {
      * 
      */
     public boolean wasKeyPressed() {
-        if (keyPressed == null) {
-            keyPressed = CompletableFuture.runAsync(() -> {
+        if (keyPressWatchdog == null) {
+            keyPressWatchdog = new DaemonThreadFactory().newThread(() -> {
                 try {
                     System.in.read();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             });
-            return false;
+            keyPressWatchdog.setName("keyPressWatchdog");
+            keyPressWatchdog.start();
         }
-        if (keyPressed.isDone()) {
-            keyPressed = null;
+        if (!keyPressWatchdog.isAlive()) {
+            keyPressWatchdog = null;
             return true;
         }
         return false;
