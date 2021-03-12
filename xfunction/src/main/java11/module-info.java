@@ -25,4 +25,5 @@ module id.xfunction {
     exports id.xfunction.logging;
     exports id.xfunction.net;
     exports id.xfunction.lang;
+    exports id.xfunction.text;
 }
