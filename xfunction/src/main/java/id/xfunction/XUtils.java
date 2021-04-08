@@ -225,15 +225,4 @@ public class XUtils {
         });
     }
 
-    /**
-     * Sleeps with no exception
-     */
-    public static void sleep(long msec) {
-        try {
-            Thread.sleep(msec);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 }
