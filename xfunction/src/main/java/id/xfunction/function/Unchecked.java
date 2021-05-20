@@ -210,6 +210,20 @@ public class Unchecked {
     }
 
     /**
+     * Accepts ThrowingConsumer which throws any exception and converts it to
+     * Consumer which will catch them and suppress into baseException
+     */
+    public static <T, E extends Exception> Consumer<T> wrapAccept(ThrowingConsumer<T, E> c, Exception baseException) {
+        return (T t) -> {
+            try {
+                c.accept(t);
+            } catch (Exception ex) {
+                baseException.addSuppressed(ex);
+            }
+        };
+    }
+
+    /**
      * Accepts ThrowingConsumer which throws checked exception and converts it to
      * Consumer which throws unchecked one
      */
