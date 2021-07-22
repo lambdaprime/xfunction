@@ -44,4 +44,8 @@ public class XRE extends XRuntimeException {
     public XRE(String fmt, Object...objs) {
         super(fmt, objs);
     }
+    
+    public XRE(Throwable t) {
+        super(t);
+    }
 }

@@ -40,4 +40,8 @@ public class XRuntimeException extends RuntimeException {
     public XRuntimeException(String fmt, Object...objs) {
         super(String.format(fmt, objs));
     }
+    
+    public XRuntimeException(Throwable t) {
+        super(t);
+    }
 }

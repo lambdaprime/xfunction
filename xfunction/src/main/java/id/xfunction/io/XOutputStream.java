@@ -51,7 +51,7 @@ public class XOutputStream extends ByteArrayOutputStream {
         byte[] b = toByteArray();
         StringBuilder output = new StringBuilder(b.length);
         for (int i = 0; i < b.length; i++) {
-            output.append(XByte.toHex(b[i]));
+            output.append(XByte.toHexPair(b[i]));
             output.append(", ");
         }
         if (output.length() > 0)

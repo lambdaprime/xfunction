@@ -26,6 +26,8 @@ import org.junit.jupiter.api.Test;
 
 public class XJsonTests {
 
+    private ResourceUtils resourceUtils = new ResourceUtils();
+
     class Obj {
         @Override
         public String toString() {
@@ -37,7 +39,7 @@ public class XJsonTests {
 
     @Test
     public void test_asJson_list() {
-        assertEquals(XUtils.readResource(getClass(), "json-list"), XJson.asString(
+        assertEquals(resourceUtils.readResource(getClass(), "json-list"), XJson.asString(
             "k1", 123,
             "k2", "ggg",
             "k3", List.of("sg", "dfg", "dsfg")));
@@ -50,7 +52,7 @@ public class XJsonTests {
         m.put("23", Integer.valueOf(34));
         m.put("bbs", Double.valueOf(3.23));
         m.put("abs", "bbb");
-        assertEquals(XUtils.readResource(getClass(), "json-map"), XJson.asString(
+        assertEquals(resourceUtils.readResource(getClass(), "json-map"), XJson.asString(
             "k1", 123,
             "k2", "ggg",
             "k3", m));
@@ -58,7 +60,7 @@ public class XJsonTests {
     
     @Test
     public void test_asJson_nested() {
-        assertEquals(XUtils.readResource(getClass(), "json-nested"), XJson.asString(
+        assertEquals(resourceUtils.readResource(getClass(), "json-nested"), XJson.asString(
             "obj1", new Obj(),
             "obj2", new Obj(),
             "k3", List.of("sg", "dfg", "dsfg")));
@@ -66,7 +68,7 @@ public class XJsonTests {
 
     @Test
     public void test_asJson_collection_with_null() {
-        assertEquals(XUtils.readResource(getClass(), "json-collection-null"), XJson.asString(
+        assertEquals(resourceUtils.readResource(getClass(), "json-collection-null"), XJson.asString(
             "obj1", new Obj(),
             "obj2", new Obj(),
             "k3", Arrays.asList(new String[] {null})));
@@ -80,7 +82,7 @@ public class XJsonTests {
     
     @Test
     public void test_merge() {
-        assertEquals(XUtils.readResource(getClass(), "json-merge"), XJson.merge(
+        assertEquals(resourceUtils.readResource(getClass(), "json-merge"), XJson.merge(
             XJson.asString(
                 "k1", "v1",
                 "k2", "v2"),
@@ -93,7 +95,7 @@ public class XJsonTests {
     
     @Test
     public void test_list_of_jsons() {
-        assertEquals(XUtils.readResource(getClass(), "json-list-jsons"), XJson.asString(
+        assertEquals(resourceUtils.readResource(getClass(), "json-list-jsons"), XJson.asString(
             "k3", List.of(XJson.asString(
                 "k1", "v1",
                 "k2", "v2"),

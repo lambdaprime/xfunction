@@ -299,7 +299,7 @@ public class XByte {
     public static String toHex(byte[] a) {
         StringBuilder buf = new StringBuilder();
         for (byte b: a) {
-            buf.append(toHex(b));
+            buf.append(toHexPair(b));
         }
         String hex = buf.toString();
         XAsserts.assertTrue(hex.length() % 2 == 0);
@@ -353,7 +353,7 @@ public class XByte {
      * less than 2. It means that length of the code is always
      * 2 symbols: a - 0a</p>  
      */
-    public static String toHex(byte b) {
+    public static String toHexPair(byte b) {
         return HEX_CODES[Byte.toUnsignedInt(b)];
     }
     
