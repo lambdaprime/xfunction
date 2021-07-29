@@ -19,6 +19,25 @@ Java 8
 
 You can download **xfunction** from <https://github.com/lambdaprime/xfunction/releases>
 
+Or you can add dependency to it as follows:
+
+Gradle:
+
+```
+repositories {
+    mavenCentral()
+    maven {
+        url 'http://portal2.atwebpages.com/repository/'
+    }
+}
+
+dependencies {
+    compile 'io.github.lambdaprime:id.xfunction:<VERSION>'
+}
+```
+
+Where VERSION should be version of the library you want to use.
+
 # Documentation
 
 Javadoc is available here <http://portal2.atwebpages.com/xfunction>

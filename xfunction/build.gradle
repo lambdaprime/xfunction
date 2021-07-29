@@ -1,4 +1,5 @@
 // gradle clean build
+// gradle publishToMavenLocal
 
 plugins {
     id 'java'
@@ -97,3 +98,16 @@ assemble.dependsOn createRelease
 createRelease.dependsOn java11doc,javadoc,packageJavadoc
 java11doc.dependsOn javadoc
 clean.dependsOn cleanRelease
+
+apply plugin: 'maven-publish'
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId = 'id.xfunction'
+            group = "io.github.lambdaprime"
+            version = "${version}"
+            artifact jar.archiveFile
+        }
+    }
+}
