@@ -16,6 +16,7 @@
 package id.xfunction;
 
 import java.nio.ByteBuffer;
+import java.util.stream.IntStream;
 
 public class XByte {
 
@@ -356,5 +357,16 @@ public class XByte {
     public static String toHexPair(byte b) {
         return HEX_CODES[Byte.toUnsignedInt(b)];
     }
-    
+
+    /**
+     * Java does not allow you to specify byte literals.
+     * This methods accepts integer literals and cast them to bytes.
+     */
+    public static byte[] castToByteArray(int...values) {
+        byte[] res = new byte[values.length];
+        for (int i = 0; i < res.length; i++) {
+            res[i] = (byte) values[i];
+        }
+        return res;
+    }
 }
