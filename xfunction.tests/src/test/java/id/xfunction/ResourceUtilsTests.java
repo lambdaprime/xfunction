@@ -18,6 +18,9 @@ package id.xfunction;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -60,6 +63,17 @@ public class ResourceUtilsTests {
         String actual = resourceUtils.readResource(this.getClass(), "testFile2");
         assertEquals("line 1\nline 2",
             actual.toString());
+    }
+    
+    @Test
+    public void test_extractResource() throws IOException {
+        Path out = Files.createTempFile("resource", "");
+        resourceUtils.extractResource("testFile", out);
+        assertEquals(13, Files.size(out));
+        
+        Files.delete(out);
+        resourceUtils.extractResource("testFile", out);
+        assertEquals(13, Files.size(out));        
     }
 
 }
