@@ -45,4 +45,10 @@ public class Ellipsizer {
         buf.append(text, start, text.length());
         return buf.toString();
     }
+
+    public String ellipsizeHead(String text) {
+        if (text.length() <= maxLength) return text;
+        return "..." + text.substring(text.length() - (maxLength - 3));
+    }
+
 }

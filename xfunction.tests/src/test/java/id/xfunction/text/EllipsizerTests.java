@@ -29,18 +29,26 @@ public class EllipsizerTests {
         assertEquals("aaaaa", ellipsizer.ellipsizeMiddle("aaaaa"));
         assertEquals("a...a", ellipsizer.ellipsizeMiddle("aaaaaa"));
         assertEquals("a...a", ellipsizer.ellipsizeMiddle("aaaaaaa"));
+        assertEquals("aaa", ellipsizer.ellipsizeHead("aaa"));
+        assertEquals("aaaaa", ellipsizer.ellipsizeHead("aaaaa"));
+        assertEquals("...aa", ellipsizer.ellipsizeHead("aaaaaa"));
+        assertEquals("...aa", ellipsizer.ellipsizeHead("aaaaaaa"));
         
         ellipsizer = new Ellipsizer(6);
         assertEquals("aa...b", ellipsizer.ellipsizeMiddle("aaaaabb"));
+        assertEquals("...abb", ellipsizer.ellipsizeHead("...abb"));
         
         ellipsizer = new Ellipsizer(7);
         assertEquals("aa...cc", ellipsizer.ellipsizeMiddle("aaaaabbbbcccc"));
+        assertEquals("...cccc", ellipsizer.ellipsizeHead("aaaaabbbbcccc"));
 
         ellipsizer = new Ellipsizer(8);
         assertEquals("aaa...cc", ellipsizer.ellipsizeMiddle("aaaaabbbbcccc"));
-
+        assertEquals("...bcccc", ellipsizer.ellipsizeHead("aaaaabbbbcccc"));
+        
         ellipsizer = new Ellipsizer(9);
         assertEquals("aaa...ccc", ellipsizer.ellipsizeMiddle("aaaaabbbbcccc"));
+        assertEquals("...bbcccc", ellipsizer.ellipsizeHead("aaaaabbbbcccc"));
         
         assertThrows(AssertionError.class, () -> new Ellipsizer(4));
     }
