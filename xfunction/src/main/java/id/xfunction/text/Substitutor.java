@@ -44,6 +44,10 @@ public class Substitutor {
         return this;
     }
 
+    /**
+     * Creates and returns a new list by iterating over the input list and performing
+     * string substitution as defined in the mapping.
+     */
     public List<String> substitute(List<String> text, Map<String, String> mapping) {
         return text.stream()
             .map(l -> replace(l, mapping))
@@ -51,7 +55,7 @@ public class Substitutor {
     }
     
     /**
-     * Substitutes strings in place
+     * Performs inplace substitution of strings in a given file
      */
     public void substitute(Path file, Map<String, String> mapping) throws IOException {
         Path tmp = Files.createTempFile(file.getParent(), "tmp", "");
