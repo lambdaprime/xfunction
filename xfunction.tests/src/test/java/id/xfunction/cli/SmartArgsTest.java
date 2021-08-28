@@ -1,4 +1,4 @@
-package id.xfunction;
+package id.xfunction.cli;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -12,7 +12,7 @@ import java.util.function.Function;
 
 import org.junit.jupiter.api.Test;
 
-import id.xfunction.SmartArgs;
+import id.xfunction.cli.SmartArgs;
 
 public class SmartArgsTest {
 

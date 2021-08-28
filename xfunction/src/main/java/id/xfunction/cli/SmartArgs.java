@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package id.xfunction;
+package id.xfunction.cli;
 
 import java.util.Map;
 import java.util.function.Consumer;
