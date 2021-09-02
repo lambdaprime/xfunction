@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package id.xfunction;
+package id.xfunction.lang;
 
 import static java.util.stream.Collectors.joining;
 
@@ -30,7 +30,7 @@ import java.util.stream.Stream;
 import id.xfunction.function.Unchecked;
 
 /**
- * <p>Wraps standard Process class with convenient methods.</p>
+ * <p>Wraps standard java.lang.Process class with convenient methods.</p>
  * 
  * <p>Some commands may block until you start reading their
  * stdout or stderr. This may be problem when you just want

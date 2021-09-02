@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 lambdaprime
+ * Copyright 2021 lambdaprime
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package id.xfunction;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+package id.xfunction.util;
+
+import static java.util.stream.Collectors.toSet;
+
+import java.util.Set;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class XRuntimeExceptionTest {
+import id.xfunction.util.XCollections;
+
+public class XCollectionsTests {
 
     @Test
-    public void test_throw() {
-        RuntimeException ex = Assertions.assertThrows(XRE.class, () -> {
-            throw new XRE("msg %s %d", "a1", 3);
-        });
-        assertEquals("msg a1 3", ex.getMessage());
+    public void test_isIntersects() {
+        Set<Integer> s1 = Stream.of(1, 2, 3).collect(toSet());
+        Set<Integer> s2 = Stream.of(1, 4, 5).collect(toSet());
+        Assertions.assertEquals(true, XCollections.isIntersects(s1, s2));
+        
+        s2 = Stream.of(4, 5).collect(toSet());
+        Assertions.assertEquals(false, XCollections.isIntersects(s1, s2));
     }
 }

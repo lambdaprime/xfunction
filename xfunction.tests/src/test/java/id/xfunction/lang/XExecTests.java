@@ -1,4 +1,4 @@
-package id.xfunction;
+package id.xfunction.lang;
 
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -8,9 +8,10 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import id.xfunction.XExec;
+import id.xfunction.lang.XExec;
+import id.xfunction.lang.XProcess;
 
-public class ExecTests {
+public class XExecTests {
 
     @Test
     public void test_run() throws Exception {

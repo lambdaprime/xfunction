@@ -40,25 +40,6 @@ public class XUtilsTests {
     }
 
     @Test
-    public void test_infiniteRandomStream() {
-        Set<String> s1 = XUtils.infiniteRandomStream(10)
-                .limit(5)
-                .collect(toSet());
-        Set<String> s2 = XUtils.infiniteRandomStream(10)
-                .limit(5)
-                .collect(toSet());
-        assertNotEquals(s1, s2);
-    }
-
-    @Test
-    public void test_infiniteRandomStream_limit_1() {
-        Set<String> s1 = XUtils.infiniteRandomStream(10)
-                .limit(1)
-                .collect(toSet());
-        assertEquals(1, s1.size());
-    }
-
-    @Test
     public void test_md5Sum() throws Exception {
         assertEquals("F368382E27B21F0D6DB6693DEBE94A14",
             XUtils.md5Sum("I can see what you want").toUpperCase());

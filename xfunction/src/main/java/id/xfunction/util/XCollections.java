@@ -13,26 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package id.xfunction;
-
-import static java.util.stream.Collectors.toSet;
+package id.xfunction.util;
 
 import java.util.Set;
-import java.util.stream.Stream;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+/**
+ * Additions to standard java.util.Collections
+ */
+public class XCollections {
 
-public class XCollectionsTests {
-
-    @Test
-    public void test_isIntersects() {
-        Set<Integer> s1 = Stream.of(1, 2, 3).collect(toSet());
-        Set<Integer> s2 = Stream.of(1, 4, 5).collect(toSet());
-        Assertions.assertEquals(true, XCollections.isIntersects(s1, s2));
-        
-        s2 = Stream.of(4, 5).collect(toSet());
-        Assertions.assertEquals(false, XCollections.isIntersects(s1, s2));
+    /**
+     * Check if two sets share one or more similar elements
+     */
+    public static <T> boolean isIntersects(Set<T> s1, Set<T> s2) {
+        return s1.stream()
+            .filter(v -> s2.contains(v))
+            .findFirst()
+            .isPresent();
     }
 }

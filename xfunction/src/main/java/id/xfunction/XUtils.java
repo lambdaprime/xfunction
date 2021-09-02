@@ -15,51 +15,16 @@
  */
 package id.xfunction;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.security.MessageDigest;
-import java.util.Random;
 import java.util.concurrent.ForkJoinPool;
-import java.util.stream.Stream;
 
 /**
  * Set of miscellaneous functions.
  */
 public class XUtils {
-
-    /**
-     * Returns infinite stream of randomly generated strings with given length
-     * @param length strings length
-     * @return infinite stream
-     */
-    public static Stream<String> infiniteRandomStream(int length) {
-        InputStream in = new InputStream() {
-            Random rand = new Random();
-            char[] buf = new char[length];
-            int i = length;
-            @Override
-            public int read() throws IOException {
-                if (i == buf.length) {
-                    for (int i = 0; i < buf.length - 1; i++) {
-                        buf[i] = (char) ('a' + rand.nextInt('z' - 'a'));
-                    }
-                    buf[length - 1] = '\n';
-                    i = 0;
-                }
-                return buf[i++];
-            }
-        };
-        return new BufferedReader(new InputStreamReader(in)).lines();
-    }
 
     /**
      * Launches background thread which prints JVM memory consumption
@@ -139,26 +104,6 @@ public class XUtils {
         if (st.charAt(0) == '"' && st.charAt(st.length() - 1) == '"')
             return st.substring(1, st.length()-1);
         return s;
-    }
-
-    /**
-     * Deletes directory recursively with all files and sub-directories
-     */
-    public static void deleteDir(Path dir) throws IOException {
-        if (!dir.toFile().exists())
-            return;
-        Files.walkFileTree(dir, new SimpleFileVisitor<Path>() {
-            @Override
-            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                Files.delete(file);
-                return FileVisitResult.CONTINUE;
-            }
-            @Override
-            public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-                Files.delete(dir);
-                return FileVisitResult.CONTINUE;
-            }
-        });
     }
 
 }

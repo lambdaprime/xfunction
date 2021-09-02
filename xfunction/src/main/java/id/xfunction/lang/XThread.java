@@ -17,6 +17,9 @@ package id.xfunction.lang;
 
 import id.xfunction.function.Unchecked;
 
+/**
+ * Additions to standard java.lang.Thread
+ */
 public class XThread {
 
     /**

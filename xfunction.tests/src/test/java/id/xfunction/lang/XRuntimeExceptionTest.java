@@ -13,19 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package id.xfunction;
+package id.xfunction.lang;
 
-import java.util.Set;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class XCollections {
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-    /**
-     * Check if two sets share one or more similar elements
-     */
-    public static <T> boolean isIntersects(Set<T> s1, Set<T> s2) {
-        return s1.stream()
-            .filter(v -> s2.contains(v))
-            .findFirst()
-            .isPresent();
+import id.xfunction.lang.XRE;
+
+public class XRuntimeExceptionTest {
+
+    @Test
+    public void test_throw() {
+        RuntimeException ex = Assertions.assertThrows(XRE.class, () -> {
+            throw new XRE("msg %s %d", "a1", 3);
+        });
+        assertEquals("msg a1 3", ex.getMessage());
     }
 }

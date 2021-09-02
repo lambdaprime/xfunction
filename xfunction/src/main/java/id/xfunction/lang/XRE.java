@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package id.xfunction;
+package id.xfunction.lang;
 
 /**
  * <p>An alias for XRuntimeException which is very useful in Java scripting.</p>

@@ -17,6 +17,9 @@ package id.xfunction.lang;
 
 import id.xfunction.function.ThrowingRunnable;
 
+/**
+ * Additions to standard java.lang.Runtime
+ */
 public class XRuntime {
 
     /**

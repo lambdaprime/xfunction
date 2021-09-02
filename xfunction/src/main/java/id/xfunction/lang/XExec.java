@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package id.xfunction;
+package id.xfunction.lang;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 import id.xfunction.text.QuotesTokenizer;
 
 /**
- * Runs command and obtain its output as a stream of lines.
+ * Additions to standard java.lang.ProcessBuilder
  */
 public class XExec {
 

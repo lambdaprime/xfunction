@@ -20,7 +20,8 @@ import java.util.function.Consumer;
 
 import id.xfunction.ResourceUtils;
 import id.xfunction.XAsserts;
-import id.xfunction.XExec;
+import id.xfunction.lang.XExec;
+import id.xfunction.lang.XProcess;
 
 /**
  * Assert execution of an external command.
