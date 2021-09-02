@@ -17,11 +17,13 @@ package id.xfunction;
 
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import id.xfunction.ResourceUtils;
 import id.xfunction.XAsserts;
 import id.xfunction.lang.XExec;
 import id.xfunction.lang.XProcess;
+import id.xfunction.text.WildcardMatcher;
 
 /**
  * Assert execution of an external command.
@@ -34,6 +36,8 @@ public class AssertRunCommand {
     private Optional<String> expectedOutput = Optional.empty();
     private Optional<Integer> expectedCode = Optional.empty();
     private Optional<Consumer<String>> consumer = Optional.empty();
+
+    private boolean isWildcardMatching;
     
     public AssertRunCommand(String...cmd) {
         this.exec = new XExec(cmd);
@@ -73,6 +77,22 @@ public class AssertRunCommand {
         return this;
     }
     
+    /**
+     * Send input for the command through its stdin
+     */
+    public AssertRunCommand withInput(Stream<String> input) {
+        exec.withInput(input);
+        return this;
+    }
+    
+    /**
+     * Enables support of wildcards in the expected output
+     */
+    public AssertRunCommand withWildcardMatching() {
+        isWildcardMatching = true;
+        return this;
+    }
+    
     public void run() {
         XProcess proc = exec.run();
         proc.flush(false);
@@ -83,7 +103,11 @@ public class AssertRunCommand {
             XAsserts.assertEquals(expectedCode.intValue(), actualCode, "Unexpected return code");
         });
         expectedOutput.ifPresent(expectedOutput -> {
-            XAsserts.assertEquals(expectedOutput, actualOutput);
+            if (!isWildcardMatching)
+                XAsserts.assertEquals(expectedOutput, actualOutput);
+            else
+                XAsserts.assertTrue(new WildcardMatcher(expectedOutput).matches(actualOutput),
+                    "Actual output <" + actualOutput + "> does not match expected");
         });
     }
 }

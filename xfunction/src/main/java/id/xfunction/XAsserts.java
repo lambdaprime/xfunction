@@ -22,7 +22,7 @@ import java.util.Objects;
  */
 public class XAsserts {
 
-    private static final String EQUALS_MESSAGE_FORMAT = "%s: expected value %s, actual value %s";
+    private static final String EQUALS_MESSAGE_FORMAT = "%s: expected value <%s>, actual value <%s>";
 
     /**
      * Preconditional check for null objects.
