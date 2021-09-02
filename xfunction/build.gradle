@@ -28,6 +28,7 @@ javadoc {
     options.noTree = true;
     options.noIndex = true;
     options.noNavBar = true;
+    options.overview = "src/overview.html";
 }
 
 task java11doc(type: Javadoc) {
