@@ -19,11 +19,15 @@ module id.xfunction {
     requires java.logging;
     requires java.management;
     exports id.xfunction;
+    exports id.xfunction.cli;
     exports id.xfunction.concurrent;
     exports id.xfunction.function;
     exports id.xfunction.io;
+    exports id.xfunction.lang;
     exports id.xfunction.logging;
     exports id.xfunction.net;
-    exports id.xfunction.lang;
+    exports id.xfunction.nio.file;
     exports id.xfunction.text;
+    exports id.xfunction.util;
+    exports id.xfunction.util.stream;
 }
