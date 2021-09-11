@@ -15,6 +15,9 @@
  */
 package id.xfunction.nio.file;
 
+import java.nio.file.Path;
+import java.util.Optional;
+
 /**
  * Additions to standard java.nio.file.Paths
  */
@@ -36,5 +39,21 @@ public class XPaths {
             return new String[] {fileName, null};
         }
         return new String[] {fileName.substring(0, pos), fileName.substring(pos + 1)};
+    }
+    
+    /**
+     * <p>Append postfix into file name.
+     * <p>Postfix is appended to the file name excluding its extension:
+     * 
+     * <pre>{@code
+     * append(Paths.get("/tmp/a.png"), "-cropped")
+     * }</pre>
+     * 
+     * Will produce:  "/tmp/a-cropped.png"
+     */
+    public static Path append(Path path, String postfix) {
+        String[] fileName = splitFileName(path.getFileName().toString());
+        fileName[1] = Optional.ofNullable(fileName[1]).map(ext -> "." + ext).orElse("");
+        return path.resolveSibling(fileName[0] + postfix + fileName[1]);
     }
 }

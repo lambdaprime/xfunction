@@ -19,6 +19,7 @@ package id.xfunction.nio.file;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
@@ -32,4 +33,11 @@ public class XPathsTests {
         assertEquals("[file, ext]", Arrays.toString(XPaths.splitFileName("file.ext")));
         assertEquals("[file.ext, jpg]", Arrays.toString(XPaths.splitFileName("file.ext.jpg")));
     }
+    
+    @Test
+    public void test_append() throws IOException {
+        assertEquals("/tmp/a-cropped.png", XPaths.append(Paths.get("/tmp/a.png"), "-cropped").toString());
+        assertEquals("/tmp/a-cropped", XPaths.append(Paths.get("/tmp/a"), "-cropped").toString());
+    }
+    
 }
