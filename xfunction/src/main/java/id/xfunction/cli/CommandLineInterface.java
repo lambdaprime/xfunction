@@ -15,13 +15,17 @@
  */
 package id.xfunction.cli;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.nio.file.Path;
 import java.util.Scanner;
 
 import id.xfunction.concurrent.DaemonThreadFactory;
+import id.xfunction.io.CompositeOutputStream;
 
 /**
  * Set of functions to work with command line interface
@@ -202,5 +206,18 @@ public class CommandLineInterface {
      */
     public void printerr(Object obj) {
         printerr(obj.toString());
+    }
+    
+    /**
+     * Attach T pipe for all output streams (out, err) and forward it to the file
+     */
+    public void teeToFile(Path path) {
+        try {
+            CompositeOutputStream stream = new CompositeOutputStream(out, new FileOutputStream(path.toFile())); 
+            out = new PrintStream(stream);
+            err = new PrintStream(stream);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

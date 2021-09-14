@@ -21,6 +21,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import org.junit.jupiter.api.Test;
 
@@ -72,5 +75,15 @@ public class CommandLineInterfaceTest {
         CommandLineInterface cli = new CommandLineInterface(System.in, baos, baos);
         cli.print("12%d");
         assertEquals("12%d\n", baos.toString());
+    }
+    
+    @Test
+    public void test_teeToFile() throws IOException {
+        Path tempFile = Files.createTempFile("teeToFile", "");
+        CommandLineInterface cli = new CommandLineInterface();
+        cli.teeToFile(tempFile);
+        cli.print("Test");
+        cli.printerr("Error");
+        assertEquals("Test\nError\n", Files.readString(tempFile));
     }
 }
