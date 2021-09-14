@@ -16,7 +16,8 @@ sourceSets {
         java {
            srcDirs = [ 'src/main/java', 'src/main/java11' ]
            exclude { FileTreeElement details ->
-               details.file.canonicalPath.matches(".*/java/.*/HttpClientBuilder.java")
+               details.file.canonicalPath.matches(".*/java/.*/HttpClientBuilder.java") ||
+               details.file.canonicalPath.matches(".*/java/.*/XHttpClient.java")
            }
         }
     }
@@ -47,7 +48,7 @@ import java.nio.file.*;
 // Copies all files under java11 javadoc over files in original javadoc
 java11doc.doLast {
     def dstDir = destinationDir.toPath()
-    Files.walk(dstDir, 1)
+    Files.walk(dstDir)
         .skip(1)
         .filter {it.toFile().isDirectory()}
         .filter {!it.endsWith('jquery')}

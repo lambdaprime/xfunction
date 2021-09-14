@@ -20,8 +20,8 @@ package id.xfunction.net;
  * 
  * Requires Java 11 or higher
  */
-public class HttpClientBuilder {
+public class XHttpClient {
 
     // Requires Java 11 but this folder is for Java 8 code
-    private HttpClientBuilder() {}
+    private XHttpClient() {}
 }
