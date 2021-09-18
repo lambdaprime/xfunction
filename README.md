@@ -24,19 +24,10 @@ Or you can add dependency to it as follows:
 Gradle:
 
 ```
-repositories {
-    mavenCentral()
-    maven {
-        url 'http://portal2.atwebpages.com/repository/'
-    }
-}
-
 dependencies {
-    compile 'io.github.lambdaprime:id.xfunction:<VERSION>'
+    compile 'io.github.lambdaprime:id.xfunction:14.0'
 }
 ```
-
-Where VERSION should be version of the library you want to use.
 
 # Documentation
 

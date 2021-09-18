@@ -81,6 +81,17 @@ jar {
     }
 }
 
+import id.xfunction.text.Substitutor
+task updateVersion() {
+    if (version.contains("SNAPSHOT")) return;
+    println "Updating version to " + version
+    new Substitutor()
+        .withRegexpSupport()
+        .substitute(Paths.get("${project.rootDir}/README.md"), Map.of(
+            "io.github.lambdaprime:id.xfunction:[0-9.]+", "io.github.lambdaprime:id.xfunction:" + version
+        ));
+}
+
 task packageJavadoc(type: Copy) {
     from file("$projectDir/build/docs")
     into file("${project.rootDir}/docs")
@@ -97,7 +108,7 @@ task cleanRelease(type: Delete) {
 }
 
 assemble.dependsOn createRelease
-createRelease.dependsOn java11doc,javadoc,packageJavadoc
+createRelease.dependsOn java11doc,javadoc,packageJavadoc,updateVersion
 java11doc.dependsOn javadoc
 clean.dependsOn cleanRelease
 
@@ -112,4 +123,75 @@ publishing {
             artifact jar.archiveFile
         }
     }
+}
+
+if (project.hasProperty('publishToStagingRepo')) {
+
+  // this comes from https://central.sonatype.org/publish/publish-gradle/
+
+  apply plugin: 'signing'
+
+  task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from "README-javadoc.txt"
+  }
+
+  task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from "README-sources.txt"
+  }
+
+  artifacts {
+    archives javadocJar, sourcesJar
+  }
+  
+  signing {
+    sign configurations.archives
+  }
+  
+  apply plugin: 'maven'
+
+  uploadArchives {
+    repositories {
+      mavenDeployer {
+        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+        repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
+          authentication(userName: ossrhUsername, password: ossrhPassword)
+        }
+
+        snapshotRepository(url: "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
+          authentication(userName: ossrhUsername, password: ossrhPassword)
+        }
+
+        pom.project {
+          name 'id.xfunction'
+          artifactId 'id.xfunction'
+          packaging 'jar'
+          // optionally artifactId can be defined here
+          description 'Java library which provides set of extensions for standard Java APIs'
+          url 'https://github.com/lambdaprime/xfunction'
+
+          scm {
+            url 'https://github.com/lambdaprime/xfunction.git'
+          }
+
+          licenses {
+            license {
+              name 'The Apache License, Version 2.0'
+              url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            }
+          }
+
+          developers {
+            developer {
+              id 'lambdaprime'
+              email 'intid@protonmail.com'
+            }
+          }
+        }
+      }
+    }
+  }
+
 }

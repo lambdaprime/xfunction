@@ -1,0 +1,41 @@
+/*
+First we need subprojects to publish to staging repo with command:
+
+gradle uploadArchives -PpublishToStagingRepo=true -Psigning.secretKeyRingFile= -Psigning.password= -Psigning.keyId= -PossrhUsername= -PossrhPassword=
+
+Once it is done we can promote it to release repo:
+
+gradle closeAndReleaseRepository -PnexusUsername= -PnexusPassword=
+
+*/
+
+/*
+This is taken from https://github.com/Codearte/gradle-nexus-staging-plugin/
+It is used to publish from staging to release repo
+*/
+
+buildscript {
+    repositories {
+        mavenCentral()
+        //Needed only for SNAPSHOT versions
+        //maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
+    }
+    dependencies {
+        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.30.0"
+    }
+
+}
+
+  apply plugin: 'io.codearte.nexus-staging'
+
+  nexusStaging {
+    serverUrl = "https://s01.oss.sonatype.org/service/local/"
+    packageGroup = "io.github.lambdaprime"
+  }
+
+/*
+Now we include original build.gradle which will build subprojects
+as usual + let them sign and publish to staging repo
+*/
+apply from: '../build.gradle'
+

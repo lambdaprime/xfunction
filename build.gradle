@@ -1,9 +1,19 @@
 allprojects {
     repositories {
-        jcenter() 
+        mavenCentral()
     }
 }
 
 subprojects {
-    version = '13.0'
+    version = '14.0'
+}
+
+// include xfunction for updateVersion
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "io.github.lambdaprime:id.xfunction:14.0"
+    }
 }
