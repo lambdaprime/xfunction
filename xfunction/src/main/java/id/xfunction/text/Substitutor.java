@@ -50,7 +50,7 @@ public class Substitutor {
      */
     public List<String> substitute(List<String> text, Map<String, String> mapping) {
         return text.stream()
-            .map(l -> replace(l, mapping))
+            .map(l -> substitute(l, mapping))
             .collect(toList());
     }
     
@@ -64,14 +64,17 @@ public class Substitutor {
                 BufferedWriter w = new BufferedWriter(new FileWriter(tmp.toFile()))) {
             String l = null;
             while ((l = r.readLine()) != null) {
-                w.write(replace(l, mapping));
+                w.write(substitute(l, mapping));
                 w.write('\n');
             }
             Files.move(tmp, file, StandardCopyOption.REPLACE_EXISTING);
         }
     }
     
-    private String replace(String text, Map<String, String> mapping) {
+    /**
+     * Substitutes all values and return new string
+     */
+    public String substitute(String text, Map<String, String> mapping) {
         for (Entry<String, String> e: mapping.entrySet()) {
             if (hasRegexpSupport)
                 text = text.replaceAll(e.getKey(), e.getValue());
