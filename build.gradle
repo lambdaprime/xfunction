@@ -1,3 +1,8 @@
+// Requires gradle 7.2
+// gradle clean build
+// gradle clean test
+// gradle publishToMavenLocal
+
 allprojects {
     repositories {
         mavenCentral()
@@ -5,7 +10,7 @@ allprojects {
 }
 
 subprojects {
-    version = '14.0'
+    version = '15.0-SNAPSHOT'
 }
 
 // include xfunction for updateVersion

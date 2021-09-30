@@ -1,6 +1,3 @@
-// gradle clean build
-// gradle publishToMavenLocal
-
 plugins {
     id 'java'
 }
@@ -111,6 +108,7 @@ assemble.dependsOn createRelease
 createRelease.dependsOn java11doc,javadoc,packageJavadoc,updateVersion
 java11doc.dependsOn javadoc
 clean.dependsOn cleanRelease
+packageJavadoc.dependsOn javadoc, java11doc
 
 apply plugin: 'maven-publish'
 
@@ -149,12 +147,15 @@ if (project.hasProperty('publishToStagingRepo')) {
     sign configurations.archives
   }
   
-  apply plugin: 'maven'
+  // TODO new version of Gradle does not support this
+  //apply plugin: 'maven'
 
   uploadArchives {
     repositories {
       mavenDeployer {
-        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+        
+        // TODO new version of Gradle does not support this
+        //beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
         repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
           authentication(userName: ossrhUsername, password: ossrhPassword)
