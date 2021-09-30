@@ -20,11 +20,13 @@ import static java.util.stream.Collectors.joining;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
 import id.xfunction.io.IoUtils;
+import id.xfunction.lang.XRE;
 
 public class ResourceUtils {
     
@@ -39,9 +41,10 @@ public class ResourceUtils {
      * @param absolutePath absolute path to the resource in form "xxx/xxx/.../resource"
      */
     public Stream<String> readResourceAsStream(String absolutePath) {
+        InputStream in = ClassLoader.getSystemResourceAsStream(absolutePath);
+        if (in == null) throw new XRE("Resource %s is not found", absolutePath);
         try {
-            return new BufferedReader(new InputStreamReader(
-                ClassLoader.getSystemResourceAsStream(absolutePath))).lines();
+            return new BufferedReader(new InputStreamReader(in)).lines();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -57,9 +60,13 @@ public class ResourceUtils {
      * @param name resource name
      */
     public Stream<String> readResourceAsStream(Class<?> clazz, String name) {
+        InputStream in = clazz.getResourceAsStream(name);
+        if (in == null) {
+            // let's try absolute name with different classloader then
+            return readResourceAsStream(clazz.getPackage().getName().replace(".", "/") + "/" + name);
+        }
         try {
-            return new BufferedReader(new InputStreamReader(
-                clazz.getResourceAsStream(name))).lines();
+            return new BufferedReader(new InputStreamReader(in)).lines();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
