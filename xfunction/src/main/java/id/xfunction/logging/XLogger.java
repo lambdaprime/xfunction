@@ -26,10 +26,20 @@ import id.xfunction.function.Unchecked;
 
 /**
  * <p>Using JUL you have to specify location of logging.properties
- * file using -Djava.util.logging.config.file=ABSOLUTE_PATH
+ * file using -Djava.util.logging.config.file=ABSOLUTE_PATH where ABSOLUTE_PATH
+ * is a local file system path.
  * If you want to put it inside of your jar it may be a problem.
- * XLogger helps to overcome this. It will search for /logging.properties
- * in your jar and initialize JUL with it.</p>
+ * XLogger helps to overcome this.</p>
+ * 
+ * <ul>
+ * <li>If java.util.logging.config.file is set and it points to local file
+ * system file then XLogger will do nothing.
+ * <li>If it points to the resource file then it will load it and initialize
+ * JUL with it.
+ * <li>If java.util.logging.config.file is not set then it will search for resource
+ * /logging.properties and initialize JUL with it.
+ * <li>Otherwise it will do nothing
+ * </ul>
  * 
  * <p>Use it in same way as you would use Logger.</p>
  * <pre>{@code
@@ -52,7 +62,7 @@ public class XLogger extends Logger {
     }
 
     static {
-        load("logging.properties");
+        load(System.getProperty("java.util.logging.config.file", "logging.properties"));
         // JUL tries to find source class which sent log record
         // relying on stacktrace. Because we subclass Logger it would always
         // end up on XLogger as a source class. Here we ask it to ignore
