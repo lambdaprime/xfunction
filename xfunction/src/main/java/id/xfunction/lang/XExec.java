@@ -18,6 +18,7 @@ package id.xfunction.lang;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -72,6 +73,14 @@ public class XExec {
      */
     public XExec withDirectory(String workingDirectory) {
         this.workingDirectory = Optional.of(new File(workingDirectory));
+        return this;
+    }
+    
+    /**
+     * Sets the working directory for the process
+     */
+    public XExec withDirectory(Path workingDirectory) {
+        this.workingDirectory = Optional.of(workingDirectory.toAbsolutePath().toFile());
         return this;
     }
 
