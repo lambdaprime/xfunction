@@ -25,7 +25,7 @@ public class XCollections {
     /**
      * Check if two sets share one or more similar elements
      */
-    public static <T> boolean isIntersects(Set<T> s1, Set<T> s2) {
+    public static <T> boolean hasIntersection(Set<T> s1, Set<T> s2) {
         return s1.stream()
             .filter(v -> s2.contains(v))
             .findFirst()

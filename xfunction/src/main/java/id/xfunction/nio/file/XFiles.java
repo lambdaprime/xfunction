@@ -22,6 +22,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import id.xfunction.function.Unchecked;
 
@@ -65,5 +67,25 @@ public class XFiles {
         RecursiveCopyVisitor visitor = new RecursiveCopyVisitor(src.toPath(), dst.toPath(),
             Unchecked.wrapAccept(Files::copy));
         Files.walkFileTree(src.toPath(), visitor);
+    }
+    
+    /**
+     * Checks if content of folder A exists in folder B
+     * @param a folder A
+     * @param b folder B
+     * @throws IOException
+     */
+    public boolean containsAll(Path a, Path b) throws IOException {
+        return !Files.list(a)
+            .map(Unchecked.wrapApply(expectedFile -> {
+                String expected = Files.lines(expectedFile)
+                        .collect(Collectors.joining("\n"));
+                String actual = Files.lines(b.resolve(a.getFileName().toString()))
+                        .collect(Collectors.joining("\n"));
+                return expected.equals(actual);
+            }))
+            .filter(Predicate.isEqual(Boolean.FALSE))
+            .findFirst()
+            .isPresent();
     }
 }

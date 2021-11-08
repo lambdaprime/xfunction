@@ -32,9 +32,9 @@ public class XCollectionsTests {
     public void test_isIntersects() {
         Set<Integer> s1 = Stream.of(1, 2, 3).collect(toSet());
         Set<Integer> s2 = Stream.of(1, 4, 5).collect(toSet());
-        Assertions.assertEquals(true, XCollections.isIntersects(s1, s2));
+        Assertions.assertEquals(true, XCollections.hasIntersection(s1, s2));
         
         s2 = Stream.of(4, 5).collect(toSet());
-        Assertions.assertEquals(false, XCollections.isIntersects(s1, s2));
+        Assertions.assertEquals(false, XCollections.hasIntersection(s1, s2));
     }
 }
