@@ -28,6 +28,8 @@ import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.stream.Stream;
 
+import id.xfunction.lang.XRE;
+
 /**
  * Set of functions to work with JSON format
  */
@@ -68,12 +70,95 @@ public class XJson {
                     .map(XJson::quote)
                     .collect(joining(", "));
                 vstr = "[" + vstr + "]";
+            } else if (v.getClass().isArray()) {
+                Class<?> type = v.getClass().getComponentType();
+                if (type == int.class)
+                    vstr = asJsonArray((int[])v);
+                else if (type == byte.class)
+                    vstr = asJsonArray((byte[])v);
+                else if (type == double.class)
+                    vstr = asJsonArray((double[])v);
+                else if (type == boolean.class)
+                    vstr = asJsonArray((boolean[])v);
+                else if (type == long.class)
+                    vstr = asJsonArray((long[])v);
+                else if (!type.isPrimitive())
+                    vstr = asJsonArray((Object[])v);
+                else
+                    throw new XRE("Type %s is not supported", type);
+                vstr = "[" + vstr + "]";
             }
             buf.add("\"" + k + "\": " + vstr);
         }
         return "{ " + buf.toString() + " }";
     }
     
+    private static String asJsonArray(byte[] a) {
+        StringBuilder buf = new StringBuilder();
+        for (byte i: a) {
+            buf.append("\"" + Byte.toString(i) + "\", ");
+        }
+        if (buf.length() != 0) {
+            buf.setLength(buf.length() - 2);
+        }
+        return buf.toString();
+    }
+
+    private static String asJsonArray(Object[] a) {
+        StringBuilder buf = new StringBuilder();
+        for (Object i: a) {
+            buf.append(quote(Objects.toString(i)) + ", ");
+        }
+        if (buf.length() != 0) {
+            buf.setLength(buf.length() - 2);
+        }
+        return buf.toString();
+    }
+
+    private static String asJsonArray(long[] a) {
+        StringBuilder buf = new StringBuilder();
+        for (long i: a) {
+            buf.append("\"" + Long.toString(i) + "\", ");
+        }
+        if (buf.length() != 0) {
+            buf.setLength(buf.length() - 2);
+        }
+        return buf.toString();
+    }
+
+    private static String asJsonArray(boolean[] a) {
+        StringBuilder buf = new StringBuilder();
+        for (boolean i: a) {
+            buf.append("\"" + Boolean.toString(i) + "\", ");
+        }
+        if (buf.length() != 0) {
+            buf.setLength(buf.length() - 2);
+        }
+        return buf.toString();
+    }
+
+    private static String asJsonArray(double[] a) {
+        StringBuilder buf = new StringBuilder();
+        for (double i: a) {
+            buf.append("\"" + Double.toString(i) + "\", ");
+        }
+        if (buf.length() != 0) {
+            buf.setLength(buf.length() - 2);
+        }
+        return buf.toString();
+    }
+
+    private static String asJsonArray(int[] a) {
+        StringBuilder buf = new StringBuilder();
+        for (int i: a) {
+            buf.append("\"" + Integer.toString(i) + "\", ");
+        }
+        if (buf.length() != 0) {
+            buf.setLength(buf.length() - 2);
+        }
+        return buf.toString();
+    }
+
     private static String quote(String value) {
         if (value.isEmpty() || value.charAt(0) != '{')
             return XUtils.quote(value);

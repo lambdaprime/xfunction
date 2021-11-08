@@ -105,4 +105,20 @@ public class XJsonTests {
             XJson.asString(
                 "k5", "v5"))));
     }
+    
+    @Test
+    public void test_asJson_array() {
+        assertEquals(resourceUtils.readResource(getClass(), "json-array"), XJson.asString(
+            "obj1", new Obj(),
+            "obj2", new Obj(),
+            "k3", new int[] {1, 2, 3}));
+    }
+    
+    @Test
+    public void test_asJson_array_objects() {
+        assertEquals(resourceUtils.readResource(getClass(), "json-array"), XJson.asString(
+            "obj1", new Obj(),
+            "obj2", new Obj(),
+            "k3", new String[] {"1", "2", "3"}));
+    }
 }
