@@ -19,12 +19,15 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.stream.Stream;
 
@@ -35,6 +38,8 @@ import id.xfunction.lang.XRE;
  */
 public class XJson {
     
+    private static Optional<NumberFormat> format = Optional.empty();
+
     /**
      * <p>Build a JSON from a given pair of objects (k1, v1, k2, v2, ...).
      * String for each object is obtained by calling toString on the object itself.</p>
@@ -57,7 +62,7 @@ public class XJson {
         for (int i = 0; i < pairs.length; i += 2) {
             Object k = pairs[i];
             Object v = pairs[i + 1];
-            String vstr = v.toString();
+            String vstr = jsonToString(v);
             if (vstr == null)
                 vstr = "";
             vstr = quote(vstr);
@@ -66,7 +71,7 @@ public class XJson {
             } else if (v instanceof Collection) {
                 Collection<?> c = (Collection<?>) v;
                 vstr = c.stream()
-                    .map(Objects::toString)
+                    .map(XJson::jsonToString)
                     .map(XJson::quote)
                     .collect(joining(", "));
                 vstr = "[" + vstr + "]";
@@ -93,10 +98,34 @@ public class XJson {
         return "{ " + buf.toString() + " }";
     }
     
+    private static String jsonToString(Object v) {
+        if (v instanceof Number && format.isPresent()) {
+            return format.get().format(v);
+        }
+        return Objects.toString(v);
+    }
+
+    /**
+     * Round all numbers in output JSON to N decimal places.
+     * By default it is equal to -1 so numbers are not rounded and included into JSON as is. 
+     */
+    public static void  setLimitDecimalPlaces(int n) {
+        if (n == -1) {
+            format = Optional.empty();
+            return;
+        }
+        NumberFormat fmt = (NumberFormat) NumberFormat.getInstance().clone();
+        if (fmt instanceof DecimalFormat) {
+            fmt.setGroupingUsed(false);
+            ((DecimalFormat) fmt).setMaximumFractionDigits(n);
+            format = Optional.of(fmt);
+        }
+    }
+    
     private static String asJsonArray(byte[] a) {
         StringBuilder buf = new StringBuilder();
         for (byte i: a) {
-            buf.append("\"" + Byte.toString(i) + "\", ");
+            buf.append("\"" + jsonToString(i) + "\", ");
         }
         if (buf.length() != 0) {
             buf.setLength(buf.length() - 2);
@@ -107,7 +136,7 @@ public class XJson {
     private static String asJsonArray(Object[] a) {
         StringBuilder buf = new StringBuilder();
         for (Object i: a) {
-            buf.append(quote(Objects.toString(i)) + ", ");
+            buf.append(quote(jsonToString(i)) + ", ");
         }
         if (buf.length() != 0) {
             buf.setLength(buf.length() - 2);
@@ -118,7 +147,7 @@ public class XJson {
     private static String asJsonArray(long[] a) {
         StringBuilder buf = new StringBuilder();
         for (long i: a) {
-            buf.append("\"" + Long.toString(i) + "\", ");
+            buf.append("\"" + jsonToString(i) + "\", ");
         }
         if (buf.length() != 0) {
             buf.setLength(buf.length() - 2);
@@ -129,7 +158,7 @@ public class XJson {
     private static String asJsonArray(boolean[] a) {
         StringBuilder buf = new StringBuilder();
         for (boolean i: a) {
-            buf.append("\"" + Boolean.toString(i) + "\", ");
+            buf.append("\"" + jsonToString(i) + "\", ");
         }
         if (buf.length() != 0) {
             buf.setLength(buf.length() - 2);
@@ -140,7 +169,7 @@ public class XJson {
     private static String asJsonArray(double[] a) {
         StringBuilder buf = new StringBuilder();
         for (double i: a) {
-            buf.append("\"" + Double.toString(i) + "\", ");
+            buf.append("\"" + jsonToString(i) + "\", ");
         }
         if (buf.length() != 0) {
             buf.setLength(buf.length() - 2);
@@ -151,7 +180,7 @@ public class XJson {
     private static String asJsonArray(int[] a) {
         StringBuilder buf = new StringBuilder();
         for (int i: a) {
-            buf.append("\"" + Integer.toString(i) + "\", ");
+            buf.append("\"" + jsonToString(i) + "\", ");
         }
         if (buf.length() != 0) {
             buf.setLength(buf.length() - 2);
@@ -173,7 +202,7 @@ public class XJson {
      */
     public static <K, V> String asString(Map<K, V> m) {
         return asString(m.entrySet().stream()
-            .collect(toMap(e -> e.getKey().toString(), Entry::getValue))
+            .collect(toMap(e -> jsonToString(e.getKey()), Entry::getValue))
             .entrySet().stream()
             .sorted(Entry.comparingByKey())
             .flatMap(e -> Stream.<Object>of(e.getKey(), e.getValue()))

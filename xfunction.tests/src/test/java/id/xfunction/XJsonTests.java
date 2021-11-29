@@ -121,4 +121,22 @@ public class XJsonTests {
             "obj2", new Obj(),
             "k3", new String[] {"1", "2", "3"}));
     }
+    
+    @Test
+    public void test_asJson_rounding() {
+        String nonRounded = resourceUtils.readResource(getClass(), "json-list-decimals");
+        String rounded = resourceUtils.readResource(getClass(), "json-list-decimals-rounded");
+        Object[] testData = {
+            "k1", 123.12321345,
+            "k2", 0.314,
+            "k3", List.of(0.12345, 1.54321, 1234.657899999)
+        };
+        assertEquals(nonRounded, XJson.asString(testData));
+        
+        XJson.setLimitDecimalPlaces(2);
+        assertEquals(rounded, XJson.asString(testData));
+
+        XJson.setLimitDecimalPlaces(-1);
+        assertEquals(nonRounded, XJson.asString(testData));
+    }
 }
