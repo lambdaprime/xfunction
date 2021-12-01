@@ -39,6 +39,7 @@ import id.xfunction.lang.XRE;
 public class XJson {
     
     private static Optional<NumberFormat> format = Optional.empty();
+    private static boolean isNegativeZeroDisabled;
 
     /**
      * <p>Build a JSON from a given pair of objects (k1, v1, k2, v2, ...).
@@ -99,8 +100,12 @@ public class XJson {
     }
     
     private static String jsonToString(Object v) {
-        if (v instanceof Number && format.isPresent()) {
-            return format.get().format(v);
+        if (v instanceof Number) {
+            Number num = (Number) v;
+            if (isNegativeZeroDisabled && Objects.equals(num, -0.0))
+                v = 0.0;
+            if (format.isPresent())
+                return format.get().format(v);
         }
         return Objects.toString(v);
     }
@@ -120,6 +125,14 @@ public class XJson {
             ((DecimalFormat) fmt).setMaximumFractionDigits(n);
             format = Optional.of(fmt);
         }
+    }
+    
+    /**
+     * Java allows negative zero. With this method you may disable it in the final
+     * JSON so that it will be replaced with positive zero instead.
+     */
+    public static void  setNegativeZero(boolean isEnabled) {
+        isNegativeZeroDisabled = !isEnabled;
     }
     
     private static String asJsonArray(byte[] a) {

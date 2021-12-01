@@ -129,7 +129,8 @@ public class XJsonTests {
         Object[] testData = {
             "k1", 123.12321345,
             "k2", 0.314,
-            "k3", List.of(0.12345, 1.54321, 1234.657899999)
+            "k3", 0.0000,
+            "k4", List.of(0.12345, 1.54321, 0.0000, 1234.657899999)
         };
         assertEquals(nonRounded, XJson.asString(testData));
         
@@ -138,5 +139,22 @@ public class XJsonTests {
 
         XJson.setLimitDecimalPlaces(-1);
         assertEquals(nonRounded, XJson.asString(testData));
+    }
+
+    @Test
+    public void test_setNegativeZero() {
+        String zeroes = resourceUtils.readResource(getClass(), "json-list-zeroes");
+        Object[] testData = {
+            "k1", -0.0000,
+            "k2", 0.0000,
+            "k3", 0.0001,
+            "k4", -0.0001,
+            "k5", -0,
+            "k6", 0,
+            "k7", List.of(-0.0000, 0.0000, 0.0001, -0.0001, -0, 0)
+        };
+        XJson.setNegativeZero(false);
+        assertEquals(zeroes, XJson.asString(testData));        
+        XJson.setNegativeZero(true);
     }
 }
