@@ -124,26 +124,27 @@ public class XJsonTests {
     
     @Test
     public void test_asJson_rounding() {
-        String nonRounded = resourceUtils.readResource(getClass(), "json-list-decimals");
         String rounded = resourceUtils.readResource(getClass(), "json-list-decimals-rounded");
         Object[] testData = {
             "k1", 123.12321345,
             "k2", 0.314,
             "k3", 0.0000,
-            "k4", List.of(0.12345, 1.54321, 0.0000, 1234.657899999)
+            "k4", List.of(0.12345, 1.54321, 0.0000, 1234.657899999),
+            "k5", 123456789
         };
-        assertEquals(nonRounded, XJson.asString(testData));
-        
+        String before = XJson.asString(testData);
+
         XJson.setLimitDecimalPlaces(2);
         assertEquals(rounded, XJson.asString(testData));
 
         XJson.setLimitDecimalPlaces(-1);
-        assertEquals(nonRounded, XJson.asString(testData));
+        assertEquals(before, XJson.asString(testData));
     }
 
     @Test
     public void test_setNegativeZero() {
         String zeroes = resourceUtils.readResource(getClass(), "json-list-zeroes");
+        String zeroesRounded = resourceUtils.readResource(getClass(), "json-list-zeroes-rounded");
         Object[] testData = {
             "k1", -0.0000,
             "k2", 0.0000,
@@ -151,10 +152,16 @@ public class XJsonTests {
             "k4", -0.0001,
             "k5", -0,
             "k6", 0,
-            "k7", List.of(-0.0000, 0.0000, 0.0001, -0.0001, -0, 0)
+            "k7", -0.00003,
+            "k8", List.of(-0.0000, 0.0000, 0.0001, -0.0001, -0, 0, -0.00003),
+            "k9", new double[] {-0.0000, 0.0000, 0.0001, -0.0001, -0.00003,
+                /* since it is double array next two ints will be doubles */ -0, 0}
         };
         XJson.setNegativeZero(false);
-        assertEquals(zeroes, XJson.asString(testData));        
+        assertEquals(zeroes, XJson.asString(testData));
+        XJson.setLimitDecimalPlaces(2);
+        assertEquals(zeroesRounded, XJson.asString(testData));
+        XJson.setLimitDecimalPlaces(-1);
         XJson.setNegativeZero(true);
     }
 }

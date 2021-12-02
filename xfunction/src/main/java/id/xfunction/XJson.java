@@ -19,7 +19,6 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Collection;
@@ -27,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.stream.Stream;
 
@@ -38,9 +36,15 @@ import id.xfunction.lang.XRE;
  */
 public class XJson {
     
-    private static Optional<NumberFormat> format = Optional.empty();
+    private static final int MAX_FRACTION_LEN = 10;
+    private static NumberFormat format = (NumberFormat) NumberFormat.getInstance().clone();
     private static boolean isNegativeZeroDisabled;
 
+    static {
+        format.setMaximumFractionDigits(MAX_FRACTION_LEN);
+        format.setGroupingUsed(false);
+    }
+    
     /**
      * <p>Build a JSON from a given pair of objects (k1, v1, k2, v2, ...).
      * String for each object is obtained by calling toString on the object itself.</p>
@@ -101,11 +105,10 @@ public class XJson {
     
     private static String jsonToString(Object v) {
         if (v instanceof Number) {
-            Number num = (Number) v;
-            if (isNegativeZeroDisabled && Objects.equals(num, -0.0))
-                v = 0.0;
-            if (format.isPresent())
-                return format.get().format(v);
+            String r = format.format(v);
+            if (isNegativeZeroDisabled && Objects.equals(r, "-0"))
+                r = "0";
+            return r;
         }
         return Objects.toString(v);
     }
@@ -115,16 +118,7 @@ public class XJson {
      * By default it is equal to -1 so numbers are not rounded and included into JSON as is. 
      */
     public static void  setLimitDecimalPlaces(int n) {
-        if (n == -1) {
-            format = Optional.empty();
-            return;
-        }
-        NumberFormat fmt = (NumberFormat) NumberFormat.getInstance().clone();
-        if (fmt instanceof DecimalFormat) {
-            fmt.setGroupingUsed(false);
-            ((DecimalFormat) fmt).setMaximumFractionDigits(n);
-            format = Optional.of(fmt);
-        }
+        format.setMaximumFractionDigits(n == -1? MAX_FRACTION_LEN: n);
     }
     
     /**
