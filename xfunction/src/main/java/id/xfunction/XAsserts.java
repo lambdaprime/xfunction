@@ -41,6 +41,22 @@ public class XAsserts {
     }
 
     /**
+     * Preconditional check for null objects.
+     * @throws AssertionError with a message if obj is not null
+     */
+    public static void assertNull(Object obj, String message) throws AssertionError {
+        if (obj != null) throw new AssertionError(message);
+    }
+
+    /**
+     * Preconditional check for null objects.
+     * @throws AssertionError if obj is not null
+     */
+    public static void assertNull(Object obj) throws AssertionError {
+        assertNull(obj, "");
+    }
+
+    /**
      * Preconditional check.
      * @throws AssertionError with a message if b is false
      */
