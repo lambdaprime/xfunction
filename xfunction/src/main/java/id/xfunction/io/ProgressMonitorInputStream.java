@@ -23,13 +23,13 @@ import java.io.InputStream;
 import java.nio.file.Path;
 
 /**
- * Allows to monitor {@link FileInputStream} read progress
+ * Allows to monitor {@link InputStream} read progress
  */
 public class ProgressMonitorInputStream extends InputStream {
 
     private long length;
     private InputStream in;
-    private int read;
+    private long totalBytesRead;
 
     public ProgressMonitorInputStream(Path file) throws FileNotFoundException {
         File f = file.toFile();
@@ -44,14 +44,28 @@ public class ProgressMonitorInputStream extends InputStream {
 
     @Override
     public int read() throws IOException {
-        read++;
+        totalBytesRead++;
         return in.read();
     }
 
     /**
      * Returns in % total amount of data which was read from the stream already 
      */
-    public int getTotalPercentRead() {
-        return (int) (read / (length / 100)) ;
+    public int getPercentRead() {
+        return (int) (totalBytesRead / (length / 100)) ;
+    }
+
+    /**
+     * Number of bytes which was read already
+     */
+    public long getTotalBytesRead() {
+        return totalBytesRead;
+    }
+    
+    /**
+     * Total number of bytes
+     */
+    public long getTotalBytes() {
+        return length;
     }
 }
