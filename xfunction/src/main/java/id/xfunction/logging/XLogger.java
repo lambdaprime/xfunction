@@ -48,39 +48,49 @@ import id.xfunction.function.Unchecked;
  * }</pre>
  * 
  * <p>This class also enhance Logger with methods accepting varargs
- * instead of Object[] and which use getName as the source class.
+ * instead of Object[].
  * It means that you don't need to provide source class name in each
  * call. Same for info logging methods.</p>
  */
 public class XLogger extends Logger {
 
+    /* 
+     * Subclassing Logger requires us to obtain instance from LogManager and
+     * delegate isLoggable, log to it
+     */
     private Logger logger;
+    private String className;
 
-    protected XLogger(Logger logger) {
-        super(logger.getName(), logger.getResourceBundleName());
-        this.logger = logger;
+    protected XLogger(String className) {
+        super(className, null);
+        this.className = className;
+        logger = Logger.getLogger(className);
     }
 
+    protected XLogger(String className, int hashCode) {
+        this(className + "@" + hashCode);
+    }
+    
     static {
         load(System.getProperty("java.util.logging.config.file", "logging.properties"));
-        // JUL tries to find source class which sent log record
-        // relying on stacktrace. Because we subclass Logger it would always
-        // end up on XLogger as a source class. Here we ask it to ignore
-        // XLogger package so that source class will be found correctly.
-        String propName = "jdk.logger.packages";
-        String value = System.getProperty(propName, "");
-        if (!value.isEmpty())
-            value +=  ", ";
-        value += XLogger.class.getCanonicalName();
-        System.setProperty(propName, value);
     }
 
     /**
-     * <p>Returns Logger with given class name.</p>
+     * Returns Logger with given class name as a logger name.
      */
     public static XLogger getLogger(Class<?> cls) {
-        XLogger logger = new XLogger(Logger.getLogger(cls.getName()));
-        return logger;
+        return new XLogger(cls.getName());
+    }
+
+    /**
+     * Returns Logger with given object class name as a logger name.
+     * It also stores object hashCode as unique ID and includes
+     * it as part of the logging source class name
+     */
+    public static XLogger getLogger(Object obj) {
+        Class<?> cls = obj.getClass();
+        if (cls.isAnonymousClass()) cls = cls.getSuperclass();
+        return new XLogger(cls.getName(), obj.hashCode());
     }
 
     /**
@@ -101,19 +111,20 @@ public class XLogger extends Logger {
     
     @Override
     public void log(LogRecord record) {
+        record.setSourceClassName(className);
         logger.log(record);
     }
-    
+
     public void entering(String sourceMethod) {
-        super.entering(getName(), sourceMethod);
+        super.entering(className, sourceMethod);
     }
     
     public void entering(String sourceMethod, Object...params) {
-        super.entering(getName(), sourceMethod, params);
+        super.entering(className, sourceMethod, params);
     }
     
     public void exiting(String sourceMethod) {
-        super.exiting(getName(), sourceMethod);
+        super.exiting(className, sourceMethod);
     }
     
     /**
@@ -123,7 +134,7 @@ public class XLogger extends Logger {
      * further to Logger.
      */
     public void exiting(String sourceMethod, Object result) {
-        super.exiting(getName(), sourceMethod, Objects.toString(result));
+        super.exiting(className, sourceMethod, Objects.toString(result));
     }
     
     public void info(String msg) {
