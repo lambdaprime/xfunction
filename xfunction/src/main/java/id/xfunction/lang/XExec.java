@@ -20,7 +20,9 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -34,6 +36,7 @@ public class XExec {
     private String[] cmd;
     private Stream<String> input;
     private Optional<File> workingDirectory = Optional.empty();
+    private Map<String, String> vars = Collections.emptyMap();
 
     /**
      * Constructor which accepts the command to run.
@@ -85,6 +88,14 @@ public class XExec {
     }
 
     /**
+     * Adds following variables into environment
+     */
+    public XExec withEnvironmentVariables(Map<String, String> vars) {
+        this.vars  = vars;
+        return this;
+    }
+    
+    /**
      * Run the command with given input if any
      */
     public XProcess run() {
@@ -107,6 +118,7 @@ public class XExec {
         ProcessBuilder pb = new ProcessBuilder(cmd);
         if (workingDirectory.isPresent())
             pb.directory(workingDirectory.get());
+        if (!vars.isEmpty()) pb.environment().putAll(vars);
         return pb.start();
     }
 

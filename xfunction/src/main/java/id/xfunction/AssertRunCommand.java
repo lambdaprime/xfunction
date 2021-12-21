@@ -15,12 +15,11 @@
  */
 package id.xfunction;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import id.xfunction.ResourceUtils;
-import id.xfunction.XAsserts;
 import id.xfunction.lang.XExec;
 import id.xfunction.lang.XProcess;
 import id.xfunction.text.WildcardMatcher;
@@ -90,6 +89,14 @@ public class AssertRunCommand {
      */
     public AssertRunCommand withWildcardMatching() {
         isWildcardMatching = true;
+        return this;
+    }
+    
+    /**
+     * Adds following variables into environment
+     */
+    public AssertRunCommand withEnvironmentVariables(Map<String, String> vars) {
+        exec.withEnvironmentVariables(vars);
         return this;
     }
     
