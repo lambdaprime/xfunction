@@ -17,6 +17,7 @@ package id.xfunction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -45,6 +46,18 @@ public class XJsonTests {
             "k3", List.of("sg", "dfg", "dsfg")));
     }
 
+    @Test
+    public void test_asJson_null() {
+        List<String> s = new ArrayList<>();
+        s.add("sasa");
+        s.add(null);
+        s.add("hh");
+        assertEquals(resourceUtils.readResource(getClass(), "json-null"), XJson.asString(
+            "k1", null,
+            "k2", "ggg",
+            "k3", s));
+    }
+    
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Test
     public void test_asJson_map() {

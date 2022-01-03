@@ -67,6 +67,7 @@ public class XJson {
         for (int i = 0; i < pairs.length; i += 2) {
             Object k = pairs[i];
             Object v = pairs[i + 1];
+            if (v == null) continue;
             String vstr = jsonToString(v);
             if (vstr == null)
                 vstr = "";
