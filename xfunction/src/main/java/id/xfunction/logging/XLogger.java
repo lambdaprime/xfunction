@@ -153,6 +153,14 @@ public class XLogger extends Logger {
         super.log(Level.SEVERE, msg, param);
     }
 
+    public void severe(String msg, Throwable t) {
+        super.log(Level.SEVERE, msg, t);
+    }
+
+    public void severe(Throwable t) {
+        super.log(Level.SEVERE, t.getMessage(), t);
+    }
+
     public void fine(String msg, Object...param) {
         super.log(Level.FINE, msg, param);
     }
