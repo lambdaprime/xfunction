@@ -37,9 +37,18 @@ public class XJsonStringBuilder {
 
     }
     
-    public XJsonStringBuilder append(final String fieldName, final Object fieldValue) {
+    public XJsonStringBuilder append(String fieldName, Object fieldValue) {
         pairs.add(fieldName);
         pairs.add(fieldValue);
+        return this;
+    }
+
+    public XJsonStringBuilder append(Object...pairs) {
+        XAsserts.assertTrue(pairs.length % 2 == 0, "Key-value missmatch");
+        for (int i = 0; i < pairs.length; i += 2) {
+            if (pairs[i] == null) continue;
+            append(pairs[i].toString(), pairs[i + 1]);
+        }
         return this;
     }
 
