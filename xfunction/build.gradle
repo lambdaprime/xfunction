@@ -33,6 +33,8 @@ javadoc {
     options.noIndex = true;
     options.noNavBar = true;
     options.overview = "src/overview.html";
+    // ignore missing @return, @param etc
+    options.addBooleanOption('Xdoclint:all,-missing', true)
 }
 
 task java11doc(type: Javadoc) {
@@ -45,6 +47,8 @@ task java11doc(type: Javadoc) {
     options.noTree = true;
     options.noIndex = true;
     options.noNavBar = true;
+    // ignore missing @return, @param etc
+    options.addBooleanOption('Xdoclint:all,-missing', true)
 }
 
 import java.nio.file.*;

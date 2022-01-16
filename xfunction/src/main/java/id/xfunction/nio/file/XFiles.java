@@ -56,7 +56,6 @@ public class XFiles {
      * Copies directory recursively with all files and sub-directories inside.
      * 
      * @param source file or directory to copy from
-     * @throws IOException 
      */
     public static void copyRecursively(Path source, Path destination) throws IOException {
         File src = source.toFile();
@@ -73,7 +72,6 @@ public class XFiles {
      * Checks if content of folder A exists in folder B
      * @param a folder A
      * @param b folder B
-     * @throws IOException
      */
     public boolean containsAll(Path a, Path b) throws IOException {
         return !Files.list(a)

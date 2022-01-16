@@ -206,8 +206,6 @@ public class XProcess {
      * <p>Waits for process to complete and returns code safely wrapping all checked exceptions
      * to RuntimeException.</p>
      * <p>Make sure to use flush methods if you ignore output/stderr.</p>
-     * 
-     * @throws RuntimeException
      */
     public int await() {
         executor.shutdown();

@@ -25,7 +25,7 @@ package id.xfunction.text;
  * <p>That way you don't need to worry to escape any symbols in your
  * template like in case when using regexps.</p>
  * 
- * <p>For example given template "lol*lol":<p>
+ * <p>For example given template "lol*lol":</p>
  * 
  * <ul>
  * <li>lolasdlol - match</li>

@@ -29,7 +29,6 @@ public class XUtils {
     /**
      * Launches background thread which prints JVM memory consumption
      * after given period of time.
-     * @param delayMillis
      */
     public static void printMemoryConsumption(long delayMillis) {
         ForkJoinPool.commonPool().submit(() -> {
@@ -51,7 +50,6 @@ public class XUtils {
     /**
      * Calculates md5 sum for input string
      * @return md5 sum
-     * @throws Exception
      */
     public static String md5Sum(String string) throws Exception {
         byte[] bytesOfMessage = string.getBytes();
@@ -63,7 +61,6 @@ public class XUtils {
     /**
      * Calculates md5 sum for a file
      * @return md5 sum
-     * @throws Exception
      */
     public static String md5Sum(File f) throws Exception {
         XAsserts.assertTrue(f.isFile(), "Argument " + f + " is not a file");
