@@ -110,7 +110,7 @@ java11doc.dependsOn javadoc
 clean.dependsOn cleanRelease
 packageJavadoc.dependsOn javadoc, java11doc
 
-if (project.hasProperty('publishToStagingRepo')) {
+if (project.hasProperty('publish')) {
 
   // update version only during publishing
   task updateVersion() {
@@ -135,7 +135,7 @@ if (project.hasProperty('publishToStagingRepo')) {
   }
 
   task sourcesJar(type: Jar) {
-    classifier = 'sources'
+    archiveClassifier = 'sources'
     from "README-sources.txt"
   }
 
@@ -149,13 +149,13 @@ if (project.hasProperty('publishToStagingRepo')) {
   publishing {
     publications {
       mavenJava(MavenPublication) {
-        artifactId = 'ICE'
+        artifactId = 'id.xfunction'
         groupId = 'io.github.lambdaprime'
         from components.java
         pom {
-          name 'id.xfunction'
-          description 'Java library which provides set of extensions for standard Java APIs'
-          url 'https://github.com/lambdaprime/xfunction'
+          name = 'id.xfunction'
+          description = 'Java library which provides set of extensions for standard Java APIs'
+          url = 'https://github.com/lambdaprime/xfunction'
 
           licenses {
             license {
@@ -166,13 +166,13 @@ if (project.hasProperty('publishToStagingRepo')) {
 
           developers {
             developer {
-              id 'lambdaprime'
-              email 'intid@protonmail.com'
+              id = 'lambdaprime'
+              email = 'intid@protonmail.com'
             }
           }
           
           scm {
-            url 'https://github.com/lambdaprime/xfunction.git'
+            url = 'https://github.com/lambdaprime/xfunction.git'
           }
         }
       }

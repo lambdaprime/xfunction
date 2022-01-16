@@ -18,9 +18,7 @@ For signing add:
 allprojects {
     repositories {
         mavenCentral()
+        mavenLocal()
     }
 }
 
-subprojects {
-    version = '15.0-SNAPSHOT'
-}
