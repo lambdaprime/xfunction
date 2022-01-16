@@ -31,7 +31,7 @@ public class XFilesTests {
     @Test
     public void test_copyRecursively() throws IOException {
         Path tmpDir = Files.createTempDirectory("test");
-        XFiles.copyRecursively(Paths.get("../docs"), tmpDir);
+        XFiles.copyRecursively(Paths.get("src/test/resources/a"), tmpDir);
         assertTrue(Files.list(tmpDir).count() > 0);
         XFiles.deleteRecursively(tmpDir);
         Assertions.assertEquals(false, tmpDir.toFile().exists());

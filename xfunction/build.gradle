@@ -49,6 +49,7 @@ task java11doc(type: Javadoc) {
     options.noNavBar = true;
     // ignore missing @return, @param etc
     options.addBooleanOption('Xdoclint:all,-missing', true)
+    outputs.dir(javadoc.destinationDir)
 }
 
 import java.nio.file.*;
@@ -65,6 +66,7 @@ java11doc.doLast {
         .filter {!it.endsWith('package-summary.html')}
         .filter {!it.endsWith('package-tree.html')}
         .each{ Path p -> Files.copy(p, javadoc.destinationDir.toPath().resolve(dstDir.relativize(p)), StandardCopyOption.REPLACE_EXISTING) }
+    println "Copied Javadocc 11 to ${javadoc.destinationDir}"
     destinationDir.deleteDir()
 }
 
@@ -89,11 +91,6 @@ jar {
     }
 }
 
-task packageJavadoc(type: Copy) {
-    from file("$projectDir/build/docs")
-    into file("${project.rootDir}/docs")
-}
-
 task createRelease(type: Copy) {
     def out = 'release'
     from jar.archiveFile
@@ -105,10 +102,9 @@ task cleanRelease(type: Delete) {
 }
 
 assemble.dependsOn createRelease
-createRelease.dependsOn java11doc,javadoc,packageJavadoc
+createRelease.dependsOn javadoc,java11doc
 java11doc.dependsOn javadoc
 clean.dependsOn cleanRelease
-packageJavadoc.dependsOn javadoc, java11doc
 
 if (project.hasProperty('publish')) {
 
