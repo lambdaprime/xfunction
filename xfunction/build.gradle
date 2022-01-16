@@ -1,12 +1,18 @@
+// include xfunction for updateVersion
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "io.github.lambdaprime:id.xfunction:14.0"
+    }
+}
+
 plugins {
     id 'java'
 }
 
 apply plugin : 'eclipse'
-
-repositories {
-    mavenCentral()
-}
 
 sourceSets {
     java11 {
@@ -74,19 +80,9 @@ jar {
         from sourceSets.java11.output
     }
     manifest { 
-        attributes 'Multi-Release': 'true' 
+        attributes 'Multi-Release': 'true',
+            'Implementation-Version': "${rootProject.version}"
     }
-}
-
-import id.xfunction.text.Substitutor
-task updateVersion() {
-    if (version.contains("SNAPSHOT")) return;
-    println "Updating version to " + version
-    new Substitutor()
-        .withRegexpSupport()
-        .substitute(Paths.get("${project.rootDir}/README.md"), Map.of(
-            "io.github.lambdaprime:id.xfunction:[0-9.]+", "io.github.lambdaprime:id.xfunction:" + version
-        ));
 }
 
 task packageJavadoc(type: Copy) {
@@ -105,29 +101,29 @@ task cleanRelease(type: Delete) {
 }
 
 assemble.dependsOn createRelease
-createRelease.dependsOn java11doc,javadoc,packageJavadoc,updateVersion
+createRelease.dependsOn java11doc,javadoc,packageJavadoc
 java11doc.dependsOn javadoc
 clean.dependsOn cleanRelease
 packageJavadoc.dependsOn javadoc, java11doc
 
-apply plugin: 'maven-publish'
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            artifactId = 'id.xfunction'
-            group = "io.github.lambdaprime"
-            version = "${version}"
-            artifact jar.archiveFile
-        }
-    }
-}
-
 if (project.hasProperty('publishToStagingRepo')) {
 
-  // this comes from https://central.sonatype.org/publish/publish-gradle/
+  // update version only during publishing
+  task updateVersion() {
+      def version = rootProject.version;
+      if (version.contains("SNAPSHOT")) return;
+      println "Updating version to " + version
+      new id.xfunction.text.Substitutor()
+          .withRegexpSupport()
+          .substitute(java.nio.file.Paths.get("${project.rootDir}/README.md"), Map.of(
+              "io.github.lambdaprime:id.xfunction:[0-9.]+", "io.github.lambdaprime:id.xfunction:" + version
+          ));
+  }
+  createRelease.dependsOn updateVersion
 
-  apply plugin: 'signing'
+  // Initially it was taken from https://central.sonatype.org/publish/publish-gradle/
+  // but since Gradle removed this plugin https://docs.gradle.org/7.0/userguide/upgrading_version_6.html#removal_of_the_legacy_maven_plugin
+  // it was rewritten for new one
 
   task javadocJar(type: Jar) {
     classifier = 'javadoc'
@@ -139,48 +135,28 @@ if (project.hasProperty('publishToStagingRepo')) {
     from "README-sources.txt"
   }
 
-  artifacts {
-    archives javadocJar, sourcesJar
+  java {
+    withJavadocJar()
+    withSourcesJar()
   }
   
-  signing {
-    sign configurations.archives
-  }
-  
-  // TODO new version of Gradle does not support this
-  //apply plugin: 'maven'
+  apply plugin: 'maven-publish'
 
-  uploadArchives {
-    repositories {
-      mavenDeployer {
-        
-        // TODO new version of Gradle does not support this
-        //beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-        repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
-          authentication(userName: ossrhUsername, password: ossrhPassword)
-        }
-
-        snapshotRepository(url: "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
-          authentication(userName: ossrhUsername, password: ossrhPassword)
-        }
-
-        pom.project {
+  publishing {
+    publications {
+      mavenJava(MavenPublication) {
+        artifactId = 'ICE'
+        groupId = 'io.github.lambdaprime'
+        from components.java
+        pom {
           name 'id.xfunction'
-          artifactId 'id.xfunction'
-          packaging 'jar'
-          // optionally artifactId can be defined here
           description 'Java library which provides set of extensions for standard Java APIs'
           url 'https://github.com/lambdaprime/xfunction'
 
-          scm {
-            url 'https://github.com/lambdaprime/xfunction.git'
-          }
-
           licenses {
             license {
-              name 'The Apache License, Version 2.0'
-              url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+              name = 'The Apache License, Version 2.0'
+              url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
             }
           }
 
@@ -190,9 +166,29 @@ if (project.hasProperty('publishToStagingRepo')) {
               email 'intid@protonmail.com'
             }
           }
+          
+          scm {
+            url 'https://github.com/lambdaprime/xfunction.git'
+          }
         }
+      }
+    }
+    repositories {
+      maven {
+        credentials {
+          username ossrhUsername
+          password ossrhPassword
+        }
+        url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
       }
     }
   }
 
+  if (project.hasProperty('signing.secretKeyRingFile')) {
+    apply plugin: 'signing'
+
+    signing {
+      sign publishing.publications.mavenJava
+    }
+  }
 }

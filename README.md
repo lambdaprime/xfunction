@@ -9,15 +9,13 @@
 - prefix trie collection
 - ...
 
-lambdaprime <intid@protonmail.com>
-
 # Requirements
 
-Java 8
+Java 8+
 
 # Download
 
-You can download **xfunction** from <https://github.com/lambdaprime/xfunction/releases>
+[Release versions](https://github.com/lambdaprime/xfunction/releases)
 
 Or you can add dependency to it as follows:
 
@@ -25,10 +23,14 @@ Gradle:
 
 ```
 dependencies {
-    compile 'io.github.lambdaprime:id.xfunction:14.0'
+    compile 'io.github.lambdaprime:id.xfunction:15.0'
 }
 ```
 
 # Documentation
 
-Javadoc is available here <http://portal2.atwebpages.com/xfunction>
+[Documentation](http://portal2.atwebpages.com/xfunction)
+
+# Contributors
+
+lambdaprime <intid@protonmail.com>
