@@ -25,6 +25,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import id.xfunction.function.Unchecked;
@@ -85,6 +86,7 @@ public class XProcess {
      */
     public XProcess flushStdout(boolean ignore) {
         consumeStdout();
+        if (!process.isAlive()) return this;
         executor.execute(() -> {
             if (ignore) {
                 stdout.forEach(l -> {});
@@ -100,9 +102,18 @@ public class XProcess {
      * This call is async.
      */
     public XProcess forwardStdout() {
+        return forwardStdout(System.out::println);
+    }
+
+    /**
+     * Consumes stdout stream and forwards it to consumer.
+     * This call is async.
+     */
+    public XProcess forwardStdout(Consumer<String> consumer) {
         consumeStdout();
+        if (!process.isAlive()) return this;
         executor.execute(() -> {
-            stdout.forEach(System.out::println);
+            stdout.forEach(consumer);
         });
         return this;
     }
@@ -126,6 +137,7 @@ public class XProcess {
      */
     public XProcess flushStderr(boolean ignore) {
         consumeStderr();
+        if (!process.isAlive()) return this;
         executor.execute(() -> {
             if (ignore) {
                 stderr.forEach(l -> {});
@@ -142,6 +154,7 @@ public class XProcess {
      */
     public XProcess forwardStderr() {
         consumeStderr();
+        if (!process.isAlive()) return this;
         executor.execute(() -> {
             stderr.forEach(System.err::println);
         });
