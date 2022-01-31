@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package id.xfunction;
+package id.xfunction.util;
 
 import static java.util.stream.Collectors.joining;
 
@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.function.Predicate;
+
+import id.xfunction.XAsserts;
 
 /**
  * <p>Set which keeps all elements in prefix trie data structure.</p>

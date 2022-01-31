@@ -21,7 +21,7 @@ import java.util.logging.LogRecord;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import id.xfunction.PrefixTrieSet;
+import id.xfunction.util.PrefixTrieSet;
 
 /**
  * <p>Log filter based on logger name prefixes.</p>
