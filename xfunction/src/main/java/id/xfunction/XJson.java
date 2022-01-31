@@ -22,6 +22,7 @@ import static java.util.stream.Collectors.toMap;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -208,13 +209,23 @@ public class XJson {
      * 
      * <p>All pairs will be processed in lexicographical order of their keys.</p>
      */
-    public static <K, V> String asString(Map<K, V> m) {
-        return asString(m.entrySet().stream()
-            .collect(toMap(e -> jsonToString(e.getKey()), Entry::getValue))
-            .entrySet().stream()
-            .sorted(Entry.comparingByKey())
-            .flatMap(e -> Stream.<Object>of(e.getKey(), e.getValue()))
-            .toArray());
+    public static <V> String asString(Map<?, ?> m) {
+        if (m instanceof LinkedHashMap) {
+            Object[] pairs = new Object[m.size() * 2];
+            int i = 0;
+            for (Entry<?, ?> e: m.entrySet()) {
+                pairs[i++] = jsonToString(e.getKey());
+                pairs[i++] = e.getValue();
+            }
+            return asString(pairs);
+        } else {
+            return asString(m.entrySet().stream()
+                .collect(toMap(e -> jsonToString(e.getKey()), Entry::getValue))
+                .entrySet().stream()
+                .sorted(Entry.comparingByKey())
+                .flatMap(e -> Stream.<Object>of(e.getKey(), e.getValue()))
+                .toArray());
+        }
     }
     
     /**
