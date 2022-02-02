@@ -26,6 +26,9 @@ public class XByteTests {
         assertEquals("68656c6c6f20776f726c64", XByte.toHex("hello world".getBytes()));
         assertEquals("68 65 6c 6c 6f 20 77 6f 72 6c 64", XByte.toHexPairs("hello world".getBytes()));
         assertEquals("00 00 00 7b", XByte.toHexPairs(123));
+        
+        assertEquals(0xc0, Byte.toUnsignedInt(XByte.reverseBits((byte) 0x03)));
+        assertEquals(0b01010000, Byte.toUnsignedInt(XByte.reverseBits((byte) 0b00001010)));
     }
 
 }

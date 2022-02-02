@@ -369,4 +369,14 @@ public class XByte {
         }
         return res;
     }
+    
+    /**
+     * Reverse bits in the byte
+     */
+    public static byte reverseBits(byte b) {
+        b = (byte)(((b & 0xaa) >> 1) | ((b & 0x55) << 1));
+        b = (byte)(((b & 0xcc) >> 2) | ((b & 0x33) << 2));
+        b = (byte)(((b & 0xf0) >> 4) | ((b & 0x0f) << 4));
+        return b;
+    }
 }
