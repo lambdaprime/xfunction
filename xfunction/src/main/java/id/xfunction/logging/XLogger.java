@@ -83,6 +83,13 @@ public class XLogger extends Logger {
     }
 
     /**
+     * Returns Logger with given logger name.
+     */
+    public static XLogger getLogger(String name) {
+        return new XLogger(name);
+    }
+
+    /**
      * Returns Logger with given object class name as a logger name.
      * It also stores object hashCode as unique ID and includes
      * it as part of the logging source class name
