@@ -29,6 +29,10 @@ public class XByteTests {
         
         assertEquals(0xc0, Byte.toUnsignedInt(XByte.reverseBits((byte) 0x03)));
         assertEquals(0b01010000, Byte.toUnsignedInt(XByte.reverseBits((byte) 0b00001010)));
+
+        assertEquals(0xc0, Integer.toUnsignedLong(XByte.reverseBytes(0x03)));
+        assertEquals(0b11000000_01010000, Integer.toUnsignedLong(XByte.reverseBytes(0b00000011_00001010)));
+        assertEquals(0b01110000_11000000_01010000, Integer.toUnsignedLong(XByte.reverseBytes(0b00001110_00000011_00001010)));
     }
 
 }

@@ -38,6 +38,9 @@ public class IntBitSet {
     private int[] array;
     private int len;
 
+    /**
+     * @param len number of bits which are going to be stored
+     */
     public IntBitSet(int len) {
         this.len = len;
         this.array = new int[(len + LEN) / LEN];
@@ -83,7 +86,10 @@ public class IntBitSet {
         array[idx] = n;
     }
 
-    public int[] toIntArray() {
+    /**
+     * @return internal int array
+     */
+    public int[] intArray() {
         return array;
     }
 

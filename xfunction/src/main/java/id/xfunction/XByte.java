@@ -379,4 +379,16 @@ public class XByte {
         b = (byte)(((b & 0xf0) >> 4) | ((b & 0x0f) << 4));
         return b;
     }
+
+    /**
+     * Reverse bits in the bytes of the int.
+     * 
+     * <p>Example: 0b00000011_00001010 into 0b11000000_01010000 
+     */
+    public static int reverseBytes(int i) {
+        i = ((i & 0xaaaaaaaa) >> 1) | ((i & 0x55555555) << 1);
+        i = ((i & 0xcccccccc) >> 2) | ((i & 0x33333333) << 2);
+        i = ((i & 0xf0f0f0f0) >> 4) | ((i & 0x0f0f0f0f) << 4);
+        return i;
+    }
 }
