@@ -25,7 +25,7 @@ public class XAssertsTests {
 
     @Test
     public void test_assertTrue() {
-        Assertions.assertThrows(AssertionError.class, () -> XAsserts.assertTrue(false));
+        Assertions.assertThrows(XAssertException.class, () -> XAsserts.assertTrue(false));
     }
 
     @Test
@@ -35,7 +35,7 @@ public class XAssertsTests {
 
     @Test
     public void test_assertNotNull() {
-        Assertions.assertThrows(AssertionError.class, () -> XAsserts.assertNotNull(null));
+        Assertions.assertThrows(XAssertException.class, () -> XAsserts.assertNotNull(null));
     }
 
     @Test
@@ -46,6 +46,6 @@ public class XAssertsTests {
     @Test
     public void test_assertEquals() {
         XAsserts.assertEquals(null, null);
-        Assertions.assertThrows(AssertionError.class, () -> XAsserts.assertEquals(null, "test"));
+        Assertions.assertThrows(XAssertException.class, () -> XAsserts.assertEquals(null, "test"));
     }
 }

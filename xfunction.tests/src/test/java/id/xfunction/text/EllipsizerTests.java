@@ -20,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
+import id.xfunction.XAssertException;
+
 public class EllipsizerTests {
 
     @Test
@@ -50,6 +52,6 @@ public class EllipsizerTests {
         assertEquals("aaa...ccc", ellipsizer.ellipsizeMiddle("aaaaabbbbcccc"));
         assertEquals("...bbcccc", ellipsizer.ellipsizeHead("aaaaabbbbcccc"));
         
-        assertThrows(AssertionError.class, () -> new Ellipsizer(4));
+        assertThrows(XAssertException.class, () -> new Ellipsizer(4));
     }
 }

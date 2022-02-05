@@ -20,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import id.xfunction.XAssertException;
+
 public class LongNumberSequenceTest {
 
     @Test
@@ -31,7 +33,7 @@ public class LongNumberSequenceTest {
     @Test
     public void test_negative() {
         LongNumberSequence seq = new LongNumberSequence(3);
-        Assertions.assertThrows(AssertionError.class, () -> seq.add(-1));
+        Assertions.assertThrows(XAssertException.class, () -> seq.add(-1));
     }
 
     @Test

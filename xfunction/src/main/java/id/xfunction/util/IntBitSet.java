@@ -47,8 +47,8 @@ public class IntBitSet {
     }
 
     public void flip(int fromIndex, int toIndex) {
-        XAsserts.assertTrue(fromIndex < len, "Out of range");
-        XAsserts.assertTrue(toIndex <= len, "Out of range");
+        XAsserts.assertLess(fromIndex, len, "Out of range");
+        XAsserts.assertLessOrEqual(toIndex, len, "Out of range");
         if (fromIndex == toIndex) return;
         int idxA = index(fromIndex);
         int len = toIndex - fromIndex;
@@ -57,9 +57,9 @@ public class IntBitSet {
             return;
         }
         int idxB = index(fromIndex + len - 1);
-        XAsserts.assertTrue(idxA <= idxB, "Negative value");
-        XAsserts.assertTrue(idxA < array.length, "Out of range");
-        XAsserts.assertTrue(idxB < array.length, "Out of range");
+        XAsserts.assertLessOrEqual(idxA, idxB, "Negative value");
+        XAsserts.assertLess(idxA, array.length, "Out of range");
+        XAsserts.assertLess(idxB, array.length, "Out of range");
         if (idxA == idxB) {
             array[idxA] = flip(array[idxA], fromIndex % LEN, toIndex % LEN);
             return;
@@ -79,7 +79,7 @@ public class IntBitSet {
     }
 
     public void flip(int i) {
-        XAsserts.assertTrue(i < len, "Out of range");
+        XAsserts.assertLess(i, len, "Out of range");
         int idx = index(i);
         int n = array[idx];
         n ^= 1 << (i % LEN);

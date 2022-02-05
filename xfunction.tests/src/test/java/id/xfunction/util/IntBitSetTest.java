@@ -20,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import id.xfunction.XAssertException;
+
 public class IntBitSetTest {
 
     @Test
@@ -84,7 +86,7 @@ public class IntBitSetTest {
     @Test
     public void test_4_words() {
         IntBitSet set = new IntBitSet(128);
-        Assertions.assertThrows(AssertionError.class, () -> set.flip(128));
+        Assertions.assertThrows(XAssertException.class, () -> set.flip(128));
         
         set.flip(127);
         assertEquals(""
