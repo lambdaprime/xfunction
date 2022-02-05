@@ -15,6 +15,8 @@
  */
 package id.xfunction.logging;
 
+import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Filter;
 import java.util.logging.LogManager;
 import java.util.logging.LogRecord;
@@ -24,40 +26,52 @@ import java.util.stream.Collectors;
 import id.xfunction.util.PrefixTrieSet;
 
 /**
- * <p>Log filter based on logger name prefixes.</p>
+ * <p>Log filter for {@link java.util.logging} based on logger name prefixes.</p>
  * 
- * <p>It will ignore all log records which are coming from the non white listed
- * loggers.</p>
+ * <p>It will ignore all log records which are not satisfying its filtering list
+ * of prefixes.</p>
  * 
- * <p>To use this filter you just need to enable it in logging.properties and
- * then white list prefixes of loggers which you are interested in:</p>
+ * <p>To use this filter you need to enable it in logging.properties and
+ * then specify list of logger name prefixes which
+ * you are interested in:</p>
  * 
  * <pre>{@code
  * java.util.logging.ConsoleHandler.filter = id.xfunction.logging.LoggerNameFilter
  * id.xfunction.logging.filter = id, sun.net
  * }</pre>
  * 
+ * <p>It allows to exclude specific logger names by providing their complete names:
+ * 
+ * <pre>{@code
+ * id.xfunction.logging.excludedLoggers = id.HelloWorld
+ * }</pre>
+ * 
+ * <p>This may be useful in case you don't want to ignore logs from all classes
+ * with specific prefix (ex. id), except for the one class (id.HelloWorld).
+ * 
  */
 public class LoggerNameFilter implements Filter {
 
     private PrefixTrieSet namePrefixes;
+    private Set<String> excludedLoggers;
 
     public LoggerNameFilter() {
-        String prop = LogManager.getLogManager().getProperty("id.xfunction.logging.filter");
-        if (prop == null) {
-            namePrefixes = new PrefixTrieSet();
-        } else {
-            namePrefixes = Pattern.compile(",").splitAsStream(prop)
-                    .map(String::trim)
-                    .collect(Collectors.toCollection(PrefixTrieSet::new));
-        }
+        namePrefixes = Pattern.compile(",").splitAsStream(Optional.ofNullable(
+            LogManager.getLogManager().getProperty("id.xfunction.logging.filter")).orElse(""))
+            .map(String::trim)
+            .collect(Collectors.toCollection(PrefixTrieSet::new));
+        excludedLoggers = Pattern.compile(",").splitAsStream(Optional.ofNullable(
+            LogManager.getLogManager().getProperty("id.xfunction.logging.excludedLoggers")).orElse(""))
+            .map(String::trim)
+            .collect(Collectors.toSet());
     }
 
     @Override
     public boolean isLoggable(LogRecord record) {
-        if (namePrefixes.isEmpty()) return false;
         String name = record.getLoggerName();
         if (name == null) return false;
+        if (namePrefixes.isEmpty()) return false;
+        if (excludedLoggers.contains(name)) return false;
         return namePrefixes.prefixMatches(name) != 0;
     }
 
