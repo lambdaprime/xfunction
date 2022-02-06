@@ -21,6 +21,7 @@ module id.xfunction {
     exports id.xfunction;
     exports id.xfunction.cli;
     exports id.xfunction.concurrent;
+    exports id.xfunction.concurrent.flow;
     exports id.xfunction.function;
     exports id.xfunction.io;
     exports id.xfunction.lang;

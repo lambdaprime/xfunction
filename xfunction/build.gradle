@@ -20,7 +20,8 @@ sourceSets {
            srcDirs = [ 'src/main/java', 'src/main/java11' ]
            exclude { FileTreeElement details ->
                details.file.canonicalPath.matches(".*/java/.*/HttpClientBuilder.java") ||
-               details.file.canonicalPath.matches(".*/java/.*/XHttpClient.java")
+               details.file.canonicalPath.matches(".*/java/.*/XHttpClient.java") ||
+               details.file.canonicalPath.matches(".*/java/.*/MergeProcessor.java")
            }
         }
     }
@@ -41,6 +42,7 @@ task java11doc(type: Javadoc) {
     source = files('src/main/java11') {
         exclude '**/module-info.java'
     }
+    source('src/main/java');
     destinationDir = new File(destinationDir.getParent(), "java11doc")
     options.noTimestamp = true;
     options.noQualifiers = ["all"];
