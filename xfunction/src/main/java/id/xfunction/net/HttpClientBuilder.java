@@ -22,6 +22,12 @@ package id.xfunction.net;
  */
 public class HttpClientBuilder {
 
-    // Requires Java 11 but this folder is for Java 8 code
-    private HttpClientBuilder() {}
+    /*
+     * Stub class to satisfy multi-release jar requirement:
+     * 
+     * "The public API exported by the classes in a multi-release JAR
+     * file must be exactly the same across versions"
+     * 
+     * See https://docs.oracle.com/en/java/javase/11/docs/specs/jar/jar.html#multi-release-jar-files
+     */
 }
