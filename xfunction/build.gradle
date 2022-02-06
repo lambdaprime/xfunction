@@ -14,83 +14,20 @@ plugins {
 
 apply plugin : 'eclipse'
 
-sourceSets {
-    java11 {
-        java {
-           srcDirs = [ 'src/main/java', 'src/main/java11' ]
-           exclude { FileTreeElement details ->
-               details.file.canonicalPath.matches(".*/java/.*/HttpClientBuilder.java") ||
-               details.file.canonicalPath.matches(".*/java/.*/XHttpClient.java") ||
-               details.file.canonicalPath.matches(".*/java/.*/flow/*")
-           }
-        }
-    }
-}
-
-javadoc {
-    options.noTimestamp = true;
-    options.noQualifiers = ["all"];
-    options.noTree = true;
-    options.noIndex = true;
-    options.noNavBar = true;
-    options.overview = "src/overview.html";
-    // ignore missing @return, @param etc
-    options.addBooleanOption('Xdoclint:all,-missing', true)
-}
-
-task java11doc(type: Javadoc) {
-    source = files('src/main/java11') {
-        exclude '**/module-info.java'
-    }
-    source('src/main/java');
-    destinationDir = new File(destinationDir.getParent(), "java11doc")
-    options.noTimestamp = true;
-    options.noQualifiers = ["all"];
-    options.noTree = true;
-    options.noIndex = true;
-    options.noNavBar = true;
-    // ignore missing @return, @param etc
-    options.addBooleanOption('Xdoclint:all,-missing', true)
-    outputs.dir(javadoc.destinationDir)
-}
-
-import java.nio.file.*;
-// Copies all files under java11 javadoc over files in original javadoc
-java11doc.doLast {
-    def dstDir = destinationDir.toPath()
-    Files.walk(dstDir)
-        .skip(1)
-        .filter {it.toFile().isDirectory()}
-        .filter {!it.endsWith('jquery')}
-        .filter {!it.endsWith('resources')}
-        .flatMap{p -> Files.walk(p, Integer.MAX_VALUE)}
-        .filter {!it.toFile().isDirectory()}
-        .filter {!it.endsWith('package-summary.html')}
-        .filter {!it.endsWith('package-tree.html')}
-        .each{ Path p -> Files.copy(p, javadoc.destinationDir.toPath().resolve(dstDir.relativize(p)), StandardCopyOption.REPLACE_EXISTING) }
-    println "Copied Javadocc 11 to ${javadoc.destinationDir}"
-    destinationDir.deleteDir()
-}
-
 compileJava {
     sourceCompatibility = '1.8'
     targetCompatibility = '1.8'
     options.compilerArgs << '--release' << '8'
 }
 
-compileJava11Java {
-    sourceCompatibility = 11
-    targetCompatibility = 11
+jar {
+    manifest { 
+        attributes 'Implementation-Version': "${rootProject.version}"
+    }
 }
 
-jar {
-    into('META-INF/versions/11') {
-        from sourceSets.java11.output
-    }
-    manifest { 
-        attributes 'Multi-Release': 'true',
-            'Implementation-Version': "${rootProject.version}"
-    }
+configurations {
+   jar.archiveName = "xfunction-jdk8-${version}.${jar.extension}"
 }
 
 task createRelease(type: Copy) {
@@ -104,8 +41,6 @@ task cleanRelease(type: Delete) {
 }
 
 assemble.dependsOn createRelease
-createRelease.dependsOn javadoc,java11doc
-java11doc.dependsOn javadoc
 clean.dependsOn cleanRelease
 
 if (project.hasProperty('publish')) {
@@ -118,7 +53,7 @@ if (project.hasProperty('publish')) {
       new id.xfunction.text.Substitutor()
           .withRegexpSupport()
           .substitute(java.nio.file.Paths.get("${project.rootDir}/README.md"), Map.of(
-              "io.github.lambdaprime:id.xfunction:[0-9.]+", "io.github.lambdaprime:id.xfunction:" + version
+              "io.github.lambdaprime:id.xfunction-jdk8:[0-9.]+", "io.github.lambdaprime:id.xfunction-jdk8:" + version
           ));
   }
   createRelease.dependsOn updateVersion
@@ -147,11 +82,11 @@ if (project.hasProperty('publish')) {
   publishing {
     publications {
       mavenJava(MavenPublication) {
-        artifactId = 'id.xfunction'
+        artifactId = 'id.xfunction-jdk8'
         groupId = 'io.github.lambdaprime'
         from components.java
         pom {
-          name = 'id.xfunction'
+          name = 'id.xfunction-jdk8'
           description = 'Java library which provides set of extensions for standard Java APIs'
           url = 'https://github.com/lambdaprime/xfunction'
 

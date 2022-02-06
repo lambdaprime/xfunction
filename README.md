@@ -1,3 +1,11 @@
+This is xfunction-jdk8 branch which contains xfunction library compatible with Java 8.
+Maintaining multi-release jar was discarded since it does not work in situations when you want to create
+a class which extends class from newer version of Java (for example XSubscriber extends Flow.Subscriber which
+is not available in Java 8). This comes [from multi-release jar
+requirements](https://docs.oracle.com/en/java/javase/11/docs/specs/jar/jar.html#multi-release-jar-files):
+`The public API exported by the classes in a multi-release JAR file must be exactly the same across versions`.
+
+
 **xfunction** - Java library which provides set of extensions for standard Java APIs:
 
 - ThrowingRunnable, ThrowingSupplier, ThrowingFunction and others
