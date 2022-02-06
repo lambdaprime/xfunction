@@ -22,7 +22,4 @@ targetCompatibility = '11'
 
 test {
     useJUnitPlatform()
-    filter {
-        exclude '**/module-info.class'
-    }
 }
