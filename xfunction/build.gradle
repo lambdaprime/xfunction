@@ -21,7 +21,7 @@ sourceSets {
            exclude { FileTreeElement details ->
                details.file.canonicalPath.matches(".*/java/.*/HttpClientBuilder.java") ||
                details.file.canonicalPath.matches(".*/java/.*/XHttpClient.java") ||
-               details.file.canonicalPath.matches(".*/java/.*/MergeProcessor.java")
+               details.file.canonicalPath.matches(".*/java/.*/flow/*")
            }
         }
     }
