@@ -14,19 +14,6 @@ plugins {
 
 apply plugin : 'eclipse'
 
-sourceSets {
-    java11 {
-        java {
-           srcDirs = [ 'src/main/java', 'src/main/java11' ]
-           exclude { FileTreeElement details ->
-               details.file.canonicalPath.matches(".*/java/.*/HttpClientBuilder.java") ||
-               details.file.canonicalPath.matches(".*/java/.*/XHttpClient.java") ||
-               details.file.canonicalPath.matches(".*/java/.*/flow/*")
-           }
-        }
-    }
-}
-
 javadoc {
     options.noTimestamp = true;
     options.noQualifiers = ["all"];
@@ -38,58 +25,14 @@ javadoc {
     options.addBooleanOption('Xdoclint:all,-missing', true)
 }
 
-task java11doc(type: Javadoc) {
-    source = files('src/main/java11') {
-        exclude '**/module-info.java'
-    }
-    source('src/main/java');
-    destinationDir = new File(destinationDir.getParent(), "java11doc")
-    options.noTimestamp = true;
-    options.noQualifiers = ["all"];
-    options.noTree = true;
-    options.noIndex = true;
-    options.noNavBar = true;
-    // ignore missing @return, @param etc
-    options.addBooleanOption('Xdoclint:all,-missing', true)
-    outputs.dir(javadoc.destinationDir)
-}
-
-import java.nio.file.*;
-// Copies all files under java11 javadoc over files in original javadoc
-java11doc.doLast {
-    def dstDir = destinationDir.toPath()
-    Files.walk(dstDir)
-        .skip(1)
-        .filter {it.toFile().isDirectory()}
-        .filter {!it.endsWith('jquery')}
-        .filter {!it.endsWith('resources')}
-        .flatMap{p -> Files.walk(p, Integer.MAX_VALUE)}
-        .filter {!it.toFile().isDirectory()}
-        .filter {!it.endsWith('package-summary.html')}
-        .filter {!it.endsWith('package-tree.html')}
-        .each{ Path p -> Files.copy(p, javadoc.destinationDir.toPath().resolve(dstDir.relativize(p)), StandardCopyOption.REPLACE_EXISTING) }
-    println "Copied Javadocc 11 to ${javadoc.destinationDir}"
-    destinationDir.deleteDir()
-}
-
 compileJava {
-    sourceCompatibility = '1.8'
-    targetCompatibility = '1.8'
-    options.compilerArgs << '--release' << '8'
-}
-
-compileJava11Java {
     sourceCompatibility = 11
     targetCompatibility = 11
 }
 
 jar {
-    into('META-INF/versions/11') {
-        from sourceSets.java11.output
-    }
     manifest { 
-        attributes 'Multi-Release': 'true',
-            'Implementation-Version': "${rootProject.version}"
+        attributes 'Implementation-Version': "${rootProject.version}"
     }
 }
 
@@ -104,8 +47,7 @@ task cleanRelease(type: Delete) {
 }
 
 assemble.dependsOn createRelease
-createRelease.dependsOn javadoc,java11doc
-java11doc.dependsOn javadoc
+createRelease.dependsOn javadoc
 clean.dependsOn cleanRelease
 
 if (project.hasProperty('publish')) {

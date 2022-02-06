@@ -15,19 +15,78 @@
  */
 package id.xfunction.net;
 
+import java.net.http.HttpClient;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLParameters;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
 /**
- * Provides additional features for HttpClient.Builder
+ * Provides additional features for HttpClient.Builder.
  * 
- * Requires Java 11 or higher
+ * Requires Java 11 or higher.
  */
+// Implementing HttpClient.Builder may require to recompile each time 
+// when new method would be added
 public class HttpClientBuilder {
 
-    /*
-     * Stub class to satisfy multi-release jar requirement:
-     * 
-     * "The public API exported by the classes in a multi-release JAR
-     * file must be exactly the same across versions"
-     * 
-     * See https://docs.oracle.com/en/java/javase/11/docs/specs/jar/jar.html#multi-release-jar-files
+    private static final X509TrustManager TRUST_MANAGER = new X509TrustManager() {     
+        public java.security.cert.X509Certificate[] getAcceptedIssuers() { 
+            return new X509Certificate[0];
+        } 
+        public void checkClientTrusted( 
+                java.security.cert.X509Certificate[] certs, String authType) {
+        } 
+        public void checkServerTrusted( 
+                java.security.cert.X509Certificate[] certs, String authType) {
+        }
+    };
+
+    private final HttpClient.Builder builder;
+
+    public HttpClientBuilder() {
+        this(HttpClient.newBuilder());
+    }
+
+    public HttpClientBuilder(HttpClient.Builder builder) {
+        this.builder = builder;
+    }
+
+    /**
+     * Makes HttpClient to ignore SSL certificates validation
      */
+    public HttpClientBuilder insecure() {
+        TrustManager[] trustAllCerts = new TrustManager[] { 
+            TRUST_MANAGER
+        }; 
+        try {
+            var sc = SSLContext.getInstance("SSL"); 
+            sc.init(null, trustAllCerts, new java.security.SecureRandom());
+            builder.sslContext(sc);
+            return this;
+        } catch (KeyManagementException | NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } 
+    }
+
+    /**
+     * Adds to HttpClient TLS1.0 support
+     */
+    public HttpClientBuilder tlsv1() {
+        var p = new SSLParameters();
+        p.setProtocols(new String[] { "TLSv1", "TLSv1.3", "TLSv1.2" });
+        builder.sslParameters(p);
+        return this;
+    }
+
+    /**
+     * Return the original HttpClient.Builder from which you can create HttpClient
+     */
+    public HttpClient.Builder get() {
+        return builder;
+    }
 }

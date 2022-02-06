@@ -15,17 +15,70 @@
  */
 package id.xfunction.concurrent.flow;
 
-/**
- * Available only for Java 11 or higher
- */
-public class XSubscriber<T> {
+import java.util.Optional;
+import java.util.concurrent.Flow.Subscriber;
+import java.util.concurrent.Flow.Subscription;
 
-    /*
-     * Stub class to satisfy multi-release jar requirement:
-     * 
-     * "The public API exported by the classes in a multi-release JAR
-     * file must be exactly the same across versions"
-     * 
-     * See https://docs.oracle.com/en/java/javase/11/docs/specs/jar/jar.html#multi-release-jar-files
+import id.xfunction.XAssertException;
+import id.xfunction.XAsserts;
+
+/**
+ * Simple implementation for {@link Subscriber} interface which can be subscribed
+ * only once.
+ */
+public class XSubscriber<T> implements Subscriber<T> {
+
+    private int initNumOfMessages = 1;
+    protected Subscription subscription;
+    
+    /**
+     * Allows to set how many messages to request once this subscriber will
+     * be first subscribed to some topic. Default number is one.
      */
+    public XSubscriber<T> withInitialRequest(int numOfMessages) {
+        initNumOfMessages = numOfMessages;
+        return this;
+    }
+    
+    /**
+     * Saves subscription and requests {@link #withInitialRequest(int)} number of items.
+     * @throws XAssertException if subscriber is already subscribed
+     */
+    @Override
+    public void onSubscribe(Subscription subscription) throws XAssertException {
+        XAsserts.assertNull(this.subscription, "Already subscribed");
+        this.subscription = subscription;
+        this.subscription.request(initNumOfMessages);
+    }
+
+    /**
+     * Empty
+     */
+    @Override
+    public void onNext(T item) {
+        
+    }
+
+    /**
+     * Prints stack trace for the given exception to stderr
+     */
+    @Override
+    public void onError(Throwable throwable) {
+        throwable.printStackTrace();
+    }
+
+    /**
+     * Empty
+     */
+    @Override
+    public void onComplete() {
+        
+    }
+
+    /**
+     * Returns subscription if subscriber is already subscribed
+     */
+    public Optional<Subscription> getSubscription() {
+        return Optional.ofNullable(subscription);
+    }
 }
