@@ -27,6 +27,14 @@ dependencies {
 }
 ```
 
+In case you still using Java 8:
+
+```
+dependencies {
+    implementation 'io.github.lambdaprime:id.xfunction-jdk8:15.0'
+}
+```
+
 # Documentation
 
 [Documentation](http://portal2.atwebpages.com/xfunction)
