@@ -359,7 +359,7 @@ public class XByte {
     }
 
     /**
-     * Java does not allow you to specify byte literals.
+     * Java does not allow you to specify byte literals in form of 0xff (which is int literal in Java).
      * This methods accepts integer literals and cast them to bytes.
      */
     public static byte[] castToByteArray(int...values) {

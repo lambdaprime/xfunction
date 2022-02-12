@@ -25,6 +25,7 @@ module id.xfunction {
     exports id.xfunction.function;
     exports id.xfunction.io;
     exports id.xfunction.lang;
+    exports id.xfunction.lang.invoke;
     exports id.xfunction.logging;
     exports id.xfunction.net;
     exports id.xfunction.nio.file;
