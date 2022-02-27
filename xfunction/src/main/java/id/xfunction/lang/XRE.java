@@ -16,17 +16,23 @@
 package id.xfunction.lang;
 
 /**
- * <p>An alias for XRuntimeException which is very useful in Java scripting.</p>
+ * <p>
+ * An alias for XRuntimeException which is very useful in Java scripting.
+ * </p>
  * 
- * <pre>{@code
+ * <pre>
+ * {@code
  * throw new XRE("Message");
- * }</pre>
+ * }
+ * </pre>
  * 
  * Instead super long:
  * 
- * <pre>{@code
+ * <pre>
+ * {@code
  * throw new XRuntimeException("Message");
- * }</pre>
+ * }
+ * </pre>
  *
  */
 public class XRE extends XRuntimeException {
@@ -36,16 +42,17 @@ public class XRE extends XRuntimeException {
     public XRE() {
         super();
     }
-    
+
     public XRE(String message) {
-        super(message);
+        super(XRuntimeException.class.getName() + ": " + message);
     }
 
-    public XRE(String fmt, Object...objs) {
-        super(fmt, objs);
+    public XRE(String fmt, Object... objs) {
+        super(XRuntimeException.class.getName() + ": " + fmt, objs);
     }
-    
+
     public XRE(Throwable t) {
         super(t);
     }
+
 }

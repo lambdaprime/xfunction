@@ -29,6 +29,6 @@ public class XRuntimeExceptionTest {
         RuntimeException ex = Assertions.assertThrows(XRE.class, () -> {
             throw new XRE("msg %s %d", "a1", 3);
         });
-        assertEquals("msg a1 3", ex.getMessage());
+        assertEquals("id.xfunction.lang.XRuntimeException: msg a1 3", ex.getMessage());
     }
 }
