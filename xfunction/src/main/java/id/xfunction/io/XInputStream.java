@@ -24,13 +24,15 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * <p>Creates an InputStream from different types of inputs.</p>
+ * <p>
+ * Creates an InputStream from different types of inputs.
+ * </p>
  * 
  */
 public class XInputStream extends InputStream {
 
     private Iterator<Integer> iterator;
-    
+
     /**
      * From list of integers.
      */
@@ -39,23 +41,32 @@ public class XInputStream extends InputStream {
     }
 
     /**
-     * <p>From HEX string.</p>
-     * <p>Each byte needs to be encoded with 2 symbols (padded with 0) and separated with comma.</p>
-     * <p>Example:</p>
-     * <pre>{@code
+     * <p>
+     * From HEX string.
+     * </p>
+     * <p>
+     * Each byte needs to be encoded with 2 symbols (padded with 0) and separated
+     * with comma.
+     * </p>
+     * <p>
+     * Example:
+     * </p>
+     * 
+     * <pre>
+     * {@code
      * new XInputStream("68, 65, 6c, 6c, 6f")
-     * }</pre>
+     * }
+     * </pre>
      */
     public XInputStream(String hex) {
-        this(Pattern.compile(",").splitAsStream(hex)
-            .map(String::trim)
-            .mapToInt(b -> Integer.valueOf(b, 16))
-            .boxed()
-            .collect(toList()));
+        this(Pattern.compile("\\s|,|\\n").splitAsStream(hex).map(String::trim).filter(s -> !s.isEmpty())
+            .mapToInt(b -> Integer.valueOf(b, 16)).boxed().collect(toList()));
     }
 
     @Override
     public int read() throws IOException {
+        if (!iterator.hasNext())
+            return -1;
         return iterator.next();
     }
 }

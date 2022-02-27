@@ -25,11 +25,12 @@ public class XInputStreamTest {
 
     @Test
     public void test() throws Exception {
-        try (XInputStream out = new XInputStream("68, 65, 6c, 6c, 6f")) {
+        try (XInputStream out = new XInputStream("68,   65 6c\n, 6c\n6f")) {
             byte[] buf = new byte[5];
             out.read(buf);
             assertEquals("hello", new String(buf));
+            assertEquals(-1, out.read());
         }
     }
-    
+
 }
