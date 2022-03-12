@@ -1,6 +1,8 @@
 /*
  * Copyright 2022 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,11 +19,10 @@ package id.xfunction.tests.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import id.xfunction.XAssertException;
 import id.xfunction.util.LongNumberSequence;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class LongNumberSequenceTest {
 

@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,13 +19,12 @@ package id.xfunction;
 
 import java.util.Objects;
 
-/**
- * Set of assertions
- */
+/** Set of assertions */
 public class XAsserts {
 
     /**
      * Preconditional check for null objects.
+     *
      * @throws XAssertException with a message if obj is null
      */
     public static void assertNotNull(Object obj, String message) throws XAssertException {
@@ -32,6 +33,7 @@ public class XAsserts {
 
     /**
      * Preconditional check for null objects.
+     *
      * @throws XAssertException if obj is null
      */
     public static void assertNotNull(Object obj) throws XAssertException {
@@ -40,6 +42,7 @@ public class XAsserts {
 
     /**
      * Preconditional check for null objects.
+     *
      * @throws XAssertException with a message if obj is not null
      */
     public static void assertNull(Object obj, String message) throws XAssertException {
@@ -48,6 +51,7 @@ public class XAsserts {
 
     /**
      * Preconditional check for null objects.
+     *
      * @throws XAssertException if obj is not null
      */
     public static void assertNull(Object obj) throws XAssertException {
@@ -56,6 +60,7 @@ public class XAsserts {
 
     /**
      * Preconditional check.
+     *
      * @throws XAssertException with a message if b is false
      */
     public static void assertTrue(boolean b, String message) throws XAssertException {
@@ -64,6 +69,7 @@ public class XAsserts {
 
     /**
      * Preconditional check.
+     *
      * @throws XAssertException if b is false
      */
     public static void assertTrue(boolean b) throws XAssertException {
@@ -72,6 +78,7 @@ public class XAsserts {
 
     /**
      * Preconditional check for equality.
+     *
      * @throws XAssertException if two values are not equal
      */
     public static void assertEquals(long expected, long actual) throws XAssertException {
@@ -80,39 +87,47 @@ public class XAsserts {
 
     /**
      * Preconditional check for equality.
+     *
      * @throws XAssertException if two values are not equal
      */
     public static void assertEquals(double expected, double actual) throws XAssertException {
         if (expected != actual) throw new XAssertException(expected, actual);
     }
-    
+
     /**
      * Preconditional check for equality.
+     *
      * @throws XAssertException if two values are not equal
      */
     public static <T> void assertEquals(T expected, T actual) throws XAssertException {
-        assertTrue(Objects.equals(expected, actual), String.format("expected value %s, actual value %s",
-            expected, actual));
+        assertTrue(
+                Objects.equals(expected, actual),
+                String.format("expected value %s, actual value %s", expected, actual));
     }
 
     /**
      * Preconditional check for equality with custom additional message
+     *
      * @throws XAssertException if two values are not equal
      */
-    public static void assertEquals(long expected, long actual, String msg) throws XAssertException {
+    public static void assertEquals(long expected, long actual, String msg)
+            throws XAssertException {
         if (expected != actual) throw new XAssertException(msg, expected, actual);
     }
 
     /**
      * Preconditional check for equality with custom additional message
+     *
      * @throws XAssertException if two values are not equal
      */
-    public static void assertEquals(double expected, double actual, String msg) throws XAssertException {
+    public static void assertEquals(double expected, double actual, String msg)
+            throws XAssertException {
         if (expected != actual) throw new XAssertException(msg, expected, actual);
     }
-    
+
     /**
      * Preconditional check for equality with custom additional message
+     *
      * @throws XAssertException if two values are not equal
      */
     public static <T> void assertEquals(T expected, T actual, String msg) throws XAssertException {
@@ -121,17 +136,25 @@ public class XAsserts {
 
     /**
      * Preconditional check for equality.
+     *
      * @throws XAssertException if two values are not equal
      */
-    public static void assertLess(long lesser, long greater, String message) throws XAssertException {
-        if (lesser >= greater) throw new XAssertException("%s: Value <%s> should be less <%s>", message, lesser, greater);
+    public static void assertLess(long lesser, long greater, String message)
+            throws XAssertException {
+        if (lesser >= greater)
+            throw new XAssertException(
+                    "%s: Value <%s> should be less <%s>", message, lesser, greater);
     }
 
     /**
      * Preconditional check for equality.
+     *
      * @throws XAssertException if two values are not equal
      */
-    public static void assertLessOrEqual(long lesser, long greater, String message) throws XAssertException {
-        if (lesser > greater) throw new XAssertException("%s: Value <%s> should be less or equal <%s>", message, lesser, greater);
+    public static void assertLessOrEqual(long lesser, long greater, String message)
+            throws XAssertException {
+        if (lesser > greater)
+            throw new XAssertException(
+                    "%s: Value <%s> should be less or equal <%s>", message, lesser, greater);
     }
 }

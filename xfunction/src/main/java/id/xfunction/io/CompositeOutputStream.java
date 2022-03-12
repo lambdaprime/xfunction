@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,18 +20,15 @@ package id.xfunction.io;
 import java.io.IOException;
 import java.io.OutputStream;
 
-/**
- * <p>Composite stream forwards all output to all streams it consist of.
- * </p>
- */
+/** Composite stream forwards all output to all streams it consist of. */
 public class CompositeOutputStream extends OutputStream {
 
     private OutputStream[] streams;
-    
+
     public CompositeOutputStream(OutputStream... out) {
         streams = out;
     }
-    
+
     @Override
     public void write(int b) throws IOException {
         for (int i = 0; i < streams.length; i++) {
@@ -43,7 +42,7 @@ public class CompositeOutputStream extends OutputStream {
             streams[i].close();
         }
     }
-    
+
     @Override
     public void flush() throws IOException {
         for (int i = 0; i < streams.length; i++) {

@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,18 +17,16 @@
  */
 package id.xfunction.tests.concurrent;
 
+import static java.util.stream.IntStream.range;
+
+import id.xfunction.concurrent.BlockingExecutorService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-
-import static java.util.stream.IntStream.range;
-
-import id.xfunction.concurrent.BlockingExecutorService;
 
 public class BlockingExecutorServiceTest {
 
@@ -44,8 +44,7 @@ public class BlockingExecutorServiceTest {
     public void test_different_params(int numOfThreads, int capacity, int total) throws Exception {
         AtomicInteger c = new AtomicInteger();
         ExecutorService executor = new BlockingExecutorService(numOfThreads, capacity);
-        range(0, total).forEach(i ->
-            executor.submit(() -> c.incrementAndGet()));
+        range(0, total).forEach(i -> executor.submit(() -> c.incrementAndGet()));
         executor.shutdown();
         executor.awaitTermination(Integer.MAX_VALUE, TimeUnit.DAYS);
         Assertions.assertEquals(total, c.get());

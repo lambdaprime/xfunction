@@ -1,6 +1,8 @@
 /*
  * Copyright 2022 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,34 +17,32 @@
  */
 package id.xfunction.tests.concurrent.flow;
 
+import id.xfunction.concurrent.flow.SimpleSubscriber;
+import id.xfunction.concurrent.flow.TransformProcessor;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.SubmissionPublisher;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import id.xfunction.concurrent.flow.SimpleSubscriber;
-import id.xfunction.concurrent.flow.TransformProcessor;
 
 public class TransformProcessorTest {
 
-    /**
-     * 1 -> Pub -> T (changes to "1") -> Sub
-     */
+    /** 1 -> Pub -> T (changes to "1") -> Sub */
     @Test
     public void test_transform_subscriber() throws Exception {
         var proc = new TransformProcessor<Integer, String>(i -> i.toString());
         var pub = new SubmissionPublisher<Integer>(Executors.newSingleThreadExecutor(), 10);
         var future = new CompletableFuture<String>();
-        proc.subscribe(new SimpleSubscriber<>() {
-            @Override
-            public void onNext(String item) {
-                future.complete(item);
-            }
-        });
+        proc.subscribe(
+                new SimpleSubscriber<>() {
+                    @Override
+                    public void onNext(String item) {
+                        future.complete(item);
+                    }
+                });
         pub.subscribe(proc);
         var data = 1234;
         pub.submit(data);
         Assertions.assertEquals(future.get(), Integer.toString(data));
     }
-
 }

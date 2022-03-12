@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,14 +15,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package id.xfunction.tests;
-
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 
 import id.xfunction.XAssertException;
 import id.xfunction.XAsserts;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class XAssertsTests {
 
@@ -43,7 +43,7 @@ public class XAssertsTests {
     public void test_assertNotNull_happy() {
         XAsserts.assertNotNull("test");
     }
-    
+
     @Test
     public void test_assertEquals() {
         XAsserts.assertEquals(null, null);

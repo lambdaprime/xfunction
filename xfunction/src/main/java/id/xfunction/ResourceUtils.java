@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,6 +19,8 @@ package id.xfunction;
 
 import static java.util.stream.Collectors.joining;
 
+import id.xfunction.io.IoUtils;
+import id.xfunction.lang.XRE;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,19 +29,16 @@ import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
-import id.xfunction.io.IoUtils;
-import id.xfunction.lang.XRE;
-
 public class ResourceUtils {
-    
+
     private IoUtils ioUtils = new IoUtils();
-    
+
     /**
      * Reads given resource file and returns its content as a stream of lines.
-     * 
-     * If you try to read resource from the module you need to "open" that module
-     * to xfunction, otherwise Java will throw NPE.
-     * 
+     *
+     * <p>If you try to read resource from the module you need to "open" that module to xfunction,
+     * otherwise Java will throw NPE.
+     *
      * @param absolutePath absolute path to the resource in form "xxx/xxx/.../resource"
      */
     public Stream<String> readResourceAsStream(String absolutePath) {
@@ -52,10 +53,10 @@ public class ResourceUtils {
 
     /**
      * Reads given resource file and returns its content as a stream of lines
-     * 
-     * If you try to read resource from the module you need to "open" that module
-     * to xfunction, otherwise Java will throw NPE.
-     * 
+     *
+     * <p>If you try to read resource from the module you need to "open" that module to xfunction,
+     * otherwise Java will throw NPE.
+     *
      * @param clazz class in which package resource is located
      * @param name resource name
      */
@@ -63,7 +64,8 @@ public class ResourceUtils {
         InputStream in = clazz.getResourceAsStream(name);
         if (in == null) {
             // let's try absolute name with different classloader then
-            return readResourceAsStream(clazz.getPackage().getName().replace(".", "/") + "/" + name);
+            return readResourceAsStream(
+                    clazz.getPackage().getName().replace(".", "/") + "/" + name);
         }
         try {
             return new BufferedReader(new InputStreamReader(in)).lines();
@@ -74,44 +76,40 @@ public class ResourceUtils {
 
     /**
      * Reads given resource file and returns its content as a string
-     * 
-     * If you try to read resource from the module you need to "open" that module
-     * to xfunction, otherwise Java will throw NPE.
-     * 
+     *
+     * <p>If you try to read resource from the module you need to "open" that module to xfunction,
+     * otherwise Java will throw NPE.
+     *
      * @param absolutePath absolute path to the resource in form "xxx/xxx/.../resource"
      */
     public String readResource(String absolutePath) {
-        return readResourceAsStream(absolutePath)
-                .collect(joining("\n"));
+        return readResourceAsStream(absolutePath).collect(joining("\n"));
     }
 
     /**
      * Reads given resource file and returns its content as a string
-     * 
-     * If you try to read resource from the module you need to "open" that module
-     * to xfunction, otherwise Java will throw NPE.
-     * 
+     *
+     * <p>If you try to read resource from the module you need to "open" that module to xfunction,
+     * otherwise Java will throw NPE.
+     *
      * @param clazz class in which package resource is located
      * @param name resource name
      */
     public String readResource(Class<?> clazz, String name) {
-        return readResourceAsStream(clazz, name)
-                .collect(joining("\n"));
+        return readResourceAsStream(clazz, name).collect(joining("\n"));
     }
 
     /**
-     * Extracts resource to the following destination.
-     * If file does not exist it will be created.
-     * If it exist - overwritten.
+     * Extracts resource to the following destination. If file does not exist it will be created. If
+     * it exist - overwritten.
      */
     public void extractResource(String absoluteResourcePath, Path destination) {
         extractResource(absoluteResourcePath, destination.toFile());
     }
-    
+
     /**
-     * Extracts resource to the following destination.
-     * If file does not exist it will be created.
-     * If it exist - overwritten.
+     * Extracts resource to the following destination. If file does not exist it will be created. If
+     * it exist - overwritten.
      */
     public void extractResource(String absoluteResourcePath, File destination) {
         try {

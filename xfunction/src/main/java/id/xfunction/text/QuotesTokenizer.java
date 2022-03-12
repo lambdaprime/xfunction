@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -19,20 +21,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>Splits the string on tokens. Tokens are separated with whitespace or tabs.</p>
- * 
- * <p>For example: "a b c" -&gt; "a", "b", "c"</p>
- * 
- * <p>Any part of substring which is enclosed in quotes considered to be a single token.</p>
- * 
- * <p>For example: "a \"b c\"" -&gt; "a", "b c"</p>
- * 
- * <p>Backslash can be used to escape or cancel the quotes.</p>
- * 
- * <p>For example: "a \"b \\\"c\\\" d\"" -&gt; a", "b \"c\" d"</p>
- * 
- * <p>You can use this class if you need to split command line string on list of arguments.</p>
- * 
+ * Splits the string on tokens. Tokens are separated with whitespace or tabs.
+ *
+ * <p>For example: "a b c" -&gt; "a", "b", "c"
+ *
+ * <p>Any part of substring which is enclosed in quotes considered to be a single token.
+ *
+ * <p>For example: "a \"b c\"" -&gt; "a", "b c"
+ *
+ * <p>Backslash can be used to escape or cancel the quotes.
+ *
+ * <p>For example: "a \"b \\\"c\\\" d\"" -&gt; a", "b \"c\" d"
+ *
+ * <p>You can use this class if you need to split command line string on list of arguments.
  */
 public class QuotesTokenizer {
 
@@ -50,8 +51,7 @@ public class QuotesTokenizer {
             // symbol or not
             if (ch == '\\') {
                 t++;
-                if (isMasked)
-                    buf.append(ch);
+                if (isMasked) buf.append(ch);
                 continue;
             }
             // since it is not \ - reset the counter

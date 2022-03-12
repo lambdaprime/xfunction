@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -25,7 +27,6 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
-
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -34,20 +35,15 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-/**
- * Set of functions to process XML
- */
+/** Set of functions to process XML */
 public class Xml {
 
-    /**
-     * Run XPath query to a given file and return results as a list
-     */
+    /** Run XPath query to a given file and return results as a list */
     public static List<String> query(Path xml, String xpath) {
         List<String> out = new ArrayList<>();
         Consumer<Node> visitor = saveVisitor(out);
@@ -59,9 +55,7 @@ public class Xml {
         }
     }
 
-    /**
-     * Run XPath query to a given XML string and return results as a list
-     */
+    /** Run XPath query to a given XML string and return results as a list */
     public static List<String> query(String xml, String xpath) {
         List<String> out = new ArrayList<>();
         Consumer<Node> visitor = saveVisitor(out);
@@ -71,6 +65,7 @@ public class Xml {
 
     /**
      * Replace all elements which satisfy given XPath expression.
+     *
      * @param xml input file where to perform the replace
      * @param xpath XPath expression
      * @param value new value to replace with
@@ -78,7 +73,12 @@ public class Xml {
     public static void replace(Path xml, String xpath, String value) {
         try {
             Consumer<Node> visitor = replaceVisitor(value);
-            String str = asString(xpath_(new InputSource(new FileInputStream(xml.toFile())), xpath, visitor));
+            String str =
+                    asString(
+                            xpath_(
+                                    new InputSource(new FileInputStream(xml.toFile())),
+                                    xpath,
+                                    visitor));
             Files.write(xml, str.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -87,6 +87,7 @@ public class Xml {
 
     /**
      * Replace all elements which satisfy given XPath expression.
+     *
      * @param xml input string where to perform the replace
      * @param xpath XPath expression
      * @param value new value to replace with
@@ -100,16 +101,19 @@ public class Xml {
         for (int i = 0; i < l.getLength(); i++) {
             Node n = l.item(i);
             switch (n.getNodeType()) {
-            case Node.ELEMENT_NODE: {
-                parseNodeList(n.getChildNodes(), visitor);
-                break;
+                case Node.ELEMENT_NODE:
+                    {
+                        parseNodeList(n.getChildNodes(), visitor);
+                        break;
+                    }
+                case Node.ATTRIBUTE_NODE:
+                case Node.TEXT_NODE:
+                    {
+                        String value = n.getNodeValue();
+                        if (value.trim().isEmpty()) continue;
+                        visitor.accept(n);
+                    }
             }
-            case Node.ATTRIBUTE_NODE:
-            case Node.TEXT_NODE: {
-                String value = n.getNodeValue();
-                if (value.trim().isEmpty()) continue;
-                visitor.accept(n);
-            }}
         }
     }
 
@@ -141,8 +145,11 @@ public class Xml {
     private static Document xpath_(InputSource src, String xpath, Consumer<Node> visitor) {
         try {
             Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(src);
-            NodeList l = (NodeList) XPathFactory.newInstance().newXPath()
-                  .evaluate(xpath, doc, XPathConstants.NODESET);
+            NodeList l =
+                    (NodeList)
+                            XPathFactory.newInstance()
+                                    .newXPath()
+                                    .evaluate(xpath, doc, XPathConstants.NODESET);
             parseNodeList(l, visitor);
 
             return doc;
@@ -150,5 +157,4 @@ public class Xml {
             throw new RuntimeException(e);
         }
     }
-
 }

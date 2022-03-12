@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,10 +20,9 @@ package id.xfunction.tests.text;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.jupiter.api.Test;
-
 import id.xfunction.XAssertException;
 import id.xfunction.text.Ellipsizer;
+import org.junit.jupiter.api.Test;
 
 public class EllipsizerTests {
 
@@ -36,11 +37,11 @@ public class EllipsizerTests {
         assertEquals("aaaaa", ellipsizer.ellipsizeHead("aaaaa"));
         assertEquals("...aa", ellipsizer.ellipsizeHead("aaaaaa"));
         assertEquals("...aa", ellipsizer.ellipsizeHead("aaaaaaa"));
-        
+
         ellipsizer = new Ellipsizer(6);
         assertEquals("aa...b", ellipsizer.ellipsizeMiddle("aaaaabb"));
         assertEquals("...abb", ellipsizer.ellipsizeHead("...abb"));
-        
+
         ellipsizer = new Ellipsizer(7);
         assertEquals("aa...cc", ellipsizer.ellipsizeMiddle("aaaaabbbbcccc"));
         assertEquals("...cccc", ellipsizer.ellipsizeHead("aaaaabbbbcccc"));
@@ -48,11 +49,11 @@ public class EllipsizerTests {
         ellipsizer = new Ellipsizer(8);
         assertEquals("aaa...cc", ellipsizer.ellipsizeMiddle("aaaaabbbbcccc"));
         assertEquals("...bcccc", ellipsizer.ellipsizeHead("aaaaabbbbcccc"));
-        
+
         ellipsizer = new Ellipsizer(9);
         assertEquals("aaa...ccc", ellipsizer.ellipsizeMiddle("aaaaabbbbcccc"));
         assertEquals("...bbcccc", ellipsizer.ellipsizeHead("aaaaabbbbcccc"));
-        
+
         assertThrows(XAssertException.class, () -> new Ellipsizer(4));
     }
 }

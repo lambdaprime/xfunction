@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -21,9 +23,7 @@ import java.io.OutputStream;
 
 public class IoUtils {
 
-    /**
-     * Pipes input stream to output stream
-     */
+    /** Pipes input stream to output stream */
     public void transferTo(InputStream in, OutputStream out) throws IOException {
         byte[] buf = new byte[1024];
         int len = 0;

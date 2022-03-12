@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,24 +18,21 @@
 package id.xfunction.text;
 
 /**
- * <p>Match text with a wildcards (called template) with any other
- * text.</p>
- * 
- * <p>This matcher supports only one possible wildcard symbol which
- * is '*'.</p>
- * 
- * <p>That way you don't need to worry to escape any symbols in your
- * template like in case when using regexps.</p>
- * 
- * <p>For example given template "lol*lol":</p>
- * 
+ * Match text with a wildcards (called template) with any other text.
+ *
+ * <p>This matcher supports only one possible wildcard symbol which is '*'.
+ *
+ * <p>That way you don't need to worry to escape any symbols in your template like in case when
+ * using regexps.
+ *
+ * <p>For example given template "lol*lol":
+ *
  * <ul>
- * <li>lolasdlol - match</li>
- * <li>looooollol - does not match</li>
+ *   <li>lolasdlol - match
+ *   <li>looooollol - does not match
  * </ul>
- * 
- * <p>Worst case complexity is O(n^m)</p>
- * 
+ *
+ * <p>Worst case complexity is O(n^m)
  */
 public class WildcardMatcher {
 
@@ -43,9 +42,7 @@ public class WildcardMatcher {
         this.template = template;
     }
 
-    /**
-     * Check if given text matches current template.
-     */
+    /** Check if given text matches current template. */
     public boolean matches(String str) {
         return matches(str, 0, 0);
     }

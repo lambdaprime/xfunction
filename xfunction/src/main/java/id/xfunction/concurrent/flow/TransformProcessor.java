@@ -1,6 +1,8 @@
 /*
  * Copyright 2022 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,26 +17,23 @@
  */
 package id.xfunction.concurrent.flow;
 
+import id.xfunction.XAsserts;
 import java.util.concurrent.Flow.Processor;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;
 import java.util.function.Function;
-import id.xfunction.XAsserts;
 
 /**
- * Processor which can be used to transform publisher messages into different
- * type.
- * 
- * <p>
- * Supports only one subscriber.
- * 
- * <p>
- * Example of transforming integer to String:
- * 
+ * Processor which can be used to transform publisher messages into different type.
+ *
+ * <p>Supports only one subscriber.
+ *
+ * <p>Example of transforming integer to String:
+ *
  * <pre>
  * 1 -&gt; Publisher -&gt; Transformer (changes to "1") -&gt; Subscriber
  * </pre>
- * 
+ *
  * @param <T> input type
  * @param <R> output type
  */
@@ -50,7 +49,8 @@ public class TransformProcessor<T, R> implements Processor<T, R> {
 
     @Override
     public void onSubscribe(Subscription subscription) {
-        XAsserts.assertNotNull(this.subscriber, "Transformer must have subscriber which is subscribed to it");
+        XAsserts.assertNotNull(
+                this.subscriber, "Transformer must have subscriber which is subscribed to it");
         XAsserts.assertNull(this.subscription, "Already subscribed");
         this.subscription = subscription;
         subscriber.onSubscribe(subscription);
@@ -76,5 +76,4 @@ public class TransformProcessor<T, R> implements Processor<T, R> {
         XAsserts.assertNull(this.subscriber, "Already has subscriber");
         this.subscriber = subscriber;
     }
-
 }

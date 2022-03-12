@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -25,34 +27,32 @@ import java.util.function.Supplier;
 /**
  * This class allows you to execute functions which throw checked exceptions in a way if they were
  * throwing unchecked RuntimeException.
- * 
- * For example given method which throws checked Exception:
- * 
+ *
+ * <p>For example given method which throws checked Exception:
+ *
  * <pre>{@code
  * int m() throws Exception {
  *     return 0;
  * }
  * }</pre>
- * 
+ *
  * Instead of writing:
- * 
+ *
  * <pre>{@code
  * try { m(); } catch (Exception e) { throw new RuntimeException(e); }
  * }</pre>
- * 
+ *
  * You can use this class:
- * 
+ *
  * <pre>{@code
  * getInt(this::m);
  * }</pre>
- * 
  */
 public class Unchecked {
 
     /**
-     * Executes given supplier and catch all checked exceptions.
-     * If checked exception is thrown it is wrapped into unchecked RuntimeException and is
-     * thrown further. 
+     * Executes given supplier and catch all checked exceptions. If checked exception is thrown it
+     * is wrapped into unchecked RuntimeException and is thrown further.
      */
     public static <R, E extends Exception> R get(ThrowingSupplier<R, E> s) {
         try {
@@ -65,9 +65,8 @@ public class Unchecked {
     }
 
     /**
-     * Executes given int supplier and catch all checked exceptions.
-     * If checked exception is thrown it is wrapped into unchecked RuntimeException and is
-     * thrown further. 
+     * Executes given int supplier and catch all checked exceptions. If checked exception is thrown
+     * it is wrapped into unchecked RuntimeException and is thrown further.
      */
     public static <E extends Exception> int getInt(ThrowingIntSupplier<E> s) {
         try {
@@ -80,9 +79,8 @@ public class Unchecked {
     }
 
     /**
-     * Executes given boolean supplier and catch all checked exceptions.
-     * If checked exception is thrown it is wrapped into unchecked RuntimeException and is
-     * thrown further. 
+     * Executes given boolean supplier and catch all checked exceptions. If checked exception is
+     * thrown it is wrapped into unchecked RuntimeException and is thrown further.
      */
     public static <E extends Exception> boolean getBoolean(ThrowingBooleanSupplier<E> s) {
         try {
@@ -95,9 +93,8 @@ public class Unchecked {
     }
 
     /**
-     * Executes given runnable and catch all checked exceptions.
-     * If checked exception is thrown it is wrapped into unchecked RuntimeException and is
-     * thrown further. 
+     * Executes given runnable and catch all checked exceptions. If checked exception is thrown it
+     * is wrapped into unchecked RuntimeException and is thrown further.
      */
     public static <E extends Exception> void run(ThrowingRunnable<E> s) {
         try {
@@ -110,9 +107,8 @@ public class Unchecked {
     }
 
     /**
-     * Executes given function with a given argument and catch all checked exceptions.
-     * If checked exception is thrown it is wrapped into unchecked RuntimeException and is
-     * thrown further. 
+     * Executes given function with a given argument and catch all checked exceptions. If checked
+     * exception is thrown it is wrapped into unchecked RuntimeException and is thrown further.
      */
     public static <A, R, E extends Exception> R apply(ThrowingFunction<A, R, E> s, A a) {
         try {
@@ -125,9 +121,8 @@ public class Unchecked {
     }
 
     /**
-     * Executes given consumer with a given argument and catch all checked exceptions.
-     * If checked exception is thrown it is wrapped into unchecked RuntimeException and is
-     * thrown further. 
+     * Executes given consumer with a given argument and catch all checked exceptions. If checked
+     * exception is thrown it is wrapped into unchecked RuntimeException and is thrown further.
      */
     public static <T, E extends Exception> void accept(ThrowingConsumer<T, E> c, T t) {
         try {
@@ -140,11 +135,11 @@ public class Unchecked {
     }
 
     /**
-     * Executes given biconsumer with a given arguments and catch all checked exceptions.
-     * If checked exception is thrown it is wrapped into unchecked RuntimeException and is
-     * thrown further. 
+     * Executes given biconsumer with a given arguments and catch all checked exceptions. If checked
+     * exception is thrown it is wrapped into unchecked RuntimeException and is thrown further.
      */
-    public static <T1, T2, E extends Exception> void accept(ThrowingBiConsumer<T1, T2, E> c, T1 t1, T2 t2) {
+    public static <T1, T2, E extends Exception> void accept(
+            ThrowingBiConsumer<T1, T2, E> c, T1 t1, T2 t2) {
         try {
             c.accept(t1, t2);
         } catch (RuntimeException ex) {
@@ -155,9 +150,8 @@ public class Unchecked {
     }
 
     /**
-     * Executes given consumer with a given argument and catch all checked exceptions.
-     * If checked exception is thrown it is wrapped into unchecked RuntimeException and is
-     * thrown further. 
+     * Executes given consumer with a given argument and catch all checked exceptions. If checked
+     * exception is thrown it is wrapped into unchecked RuntimeException and is thrown further.
      */
     public static <E extends Exception> void acceptInt(ThrowingIntConsumer<E> c, int t) {
         try {
@@ -170,50 +164,52 @@ public class Unchecked {
     }
 
     /**
-     * Accepts ThrowingRunnable which throws checked exception and converts it to
-     * runnable which throws unchecked one
+     * Accepts ThrowingRunnable which throws checked exception and converts it to runnable which
+     * throws unchecked one
      */
     public static <E extends Exception> Runnable wrapRun(ThrowingRunnable<E> r) {
         return () -> run(r);
     }
 
     /**
-     * Accepts ThrowingSupplier which throws checked exception and converts it to
-     * Supplier which throws unchecked one
+     * Accepts ThrowingSupplier which throws checked exception and converts it to Supplier which
+     * throws unchecked one
      */
     public static <R, E extends Exception> Supplier<R> wrapGet(ThrowingSupplier<R, E> s) {
         return () -> get(s);
     }
 
     /**
-     * Accepts ThrowingIntSupplier which throws checked exception and converts it to
-     * IntSupplier which throws unchecked one
+     * Accepts ThrowingIntSupplier which throws checked exception and converts it to IntSupplier
+     * which throws unchecked one
      */
     public static <E extends Exception> IntSupplier wrapGetInt(ThrowingIntSupplier<E> s) {
         return () -> getInt(s);
     }
 
     /**
-     * Accepts ThrowingFunction which throws checked exception and converts it to
-     * Function which throws unchecked one
+     * Accepts ThrowingFunction which throws checked exception and converts it to Function which
+     * throws unchecked one
      */
-    public static <A, R, E extends Exception> Function<A, R> wrapApply(ThrowingFunction<A, R, E> f) {
+    public static <A, R, E extends Exception> Function<A, R> wrapApply(
+            ThrowingFunction<A, R, E> f) {
         return (A a) -> apply(f, a);
     }
 
     /**
-     * Accepts ThrowingConsumer which throws checked exception and converts it to
-     * Consumer which throws unchecked one
+     * Accepts ThrowingConsumer which throws checked exception and converts it to Consumer which
+     * throws unchecked one
      */
     public static <T, E extends Exception> Consumer<T> wrapAccept(ThrowingConsumer<T, E> c) {
         return (T t) -> accept(c, t);
     }
 
     /**
-     * Accepts ThrowingConsumer which throws any exception and converts it to
-     * Consumer which will catch them and suppress into baseException
+     * Accepts ThrowingConsumer which throws any exception and converts it to Consumer which will
+     * catch them and suppress into baseException
      */
-    public static <T, E extends Exception> Consumer<T> wrapAccept(ThrowingConsumer<T, E> c, Exception baseException) {
+    public static <T, E extends Exception> Consumer<T> wrapAccept(
+            ThrowingConsumer<T, E> c, Exception baseException) {
         return (T t) -> {
             try {
                 c.accept(t);
@@ -224,19 +220,19 @@ public class Unchecked {
     }
 
     /**
-     * Accepts ThrowingConsumer which throws checked exception and converts it to
-     * Consumer which throws unchecked one
+     * Accepts ThrowingConsumer which throws checked exception and converts it to Consumer which
+     * throws unchecked one
      */
-    public static <T1, T2, E extends Exception> BiConsumer<T1, T2> wrapAccept(ThrowingBiConsumer<T1, T2, E> c) {
+    public static <T1, T2, E extends Exception> BiConsumer<T1, T2> wrapAccept(
+            ThrowingBiConsumer<T1, T2, E> c) {
         return (T1 t1, T2 t2) -> accept(c, t1, t2);
     }
 
     /**
-     * Accepts ThrowingConsumer which throws checked exception and converts it to
-     * Consumer which throws unchecked one
+     * Accepts ThrowingConsumer which throws checked exception and converts it to Consumer which
+     * throws unchecked one
      */
     public static <E extends Exception> IntConsumer wrapAcceptInt(ThrowingIntConsumer<E> c) {
         return (int t) -> acceptInt(c, t);
     }
 }
-

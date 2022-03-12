@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,6 +17,7 @@
  */
 package id.xfunction.tests.logging;
 
+import id.xfunction.logging.LoggerNameFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,11 +27,8 @@ import java.nio.file.StandardOpenOption;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.LogRecord;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import id.xfunction.logging.LoggerNameFilter;
 
 public class LoggerNameFilterTests {
 
@@ -44,8 +44,8 @@ public class LoggerNameFilterTests {
     @Test
     public void test_allow_whitelisted() throws IOException {
         Path config = Paths.get("/tmp/log");
-        Files.writeString(config, "id.xfunction.logging.filter = id.kk, sun.net",
-            StandardOpenOption.CREATE);
+        Files.writeString(
+                config, "id.xfunction.logging.filter = id.kk, sun.net", StandardOpenOption.CREATE);
         LogManager.getLogManager().readConfiguration(new FileInputStream(config.toString()));
         LoggerNameFilter filter = new LoggerNameFilter();
         LogRecord record1 = new LogRecord(Level.INFO, "gg");

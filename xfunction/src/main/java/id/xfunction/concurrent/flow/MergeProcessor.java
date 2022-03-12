@@ -1,6 +1,8 @@
 /*
  * Copyright 2022 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,6 +17,7 @@
  */
 package id.xfunction.concurrent.flow;
 
+import id.xfunction.logging.XLogger;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
@@ -25,33 +28,28 @@ import java.util.concurrent.SubmissionPublisher;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import id.xfunction.logging.XLogger;
-
 /**
- * Merge multiple subscriptions for different publishers
- * into one.
- * 
- * <p>This processor manages multiple subscribers which can be created with {@link #newSubscriber()}.
- *  It will manage all the subscriptions from them and will deliver all messages
- * it receives to its own subscriber. It supports only one subscriber at a time.
- * 
- * <p>This processor stops only when there is no more active publishers
- * (all of them either issued {@link Subscriber#onComplete()} or {@link Subscriber#onError(Throwable)})
- * and it:
- * 
- * <ul>
- * <li>issues {@link Subscriber#onComplete()} only when all publishers
- * to which this processor subscribed issued {@link Subscriber#onComplete()}.
- * <li>if at least one of the publishers issued {@link Subscriber#onError(Throwable)} then this
- * processor will issue {@link Subscriber#onError(Throwable)} instead of {@link Subscriber#onComplete()}
- * with all the exceptions suppressed inside
- * </ul>
+ * Merge multiple subscriptions for different publishers into one.
  *
+ * <p>This processor manages multiple subscribers which can be created with {@link
+ * #newSubscriber()}. It will manage all the subscriptions from them and will deliver all messages
+ * it receives to its own subscriber. It supports only one subscriber at a time.
+ *
+ * <p>This processor stops only when there is no more active publishers (all of them either issued
+ * {@link Subscriber#onComplete()} or {@link Subscriber#onError(Throwable)}) and it:
+ *
+ * <ul>
+ *   <li>issues {@link Subscriber#onComplete()} only when all publishers to which this processor
+ *       subscribed issued {@link Subscriber#onComplete()}.
+ *   <li>if at least one of the publishers issued {@link Subscriber#onError(Throwable)} then this
+ *       processor will issue {@link Subscriber#onError(Throwable)} instead of {@link
+ *       Subscriber#onComplete()} with all the exceptions suppressed inside
+ * </ul>
  */
 public class MergeProcessor<T> extends SubmissionPublisher<T> {
     private AtomicInteger numOfActiveSubscriptions = new AtomicInteger();
     private List<Throwable> failed = new CopyOnWriteArrayList<>();
-    
+
     public MergeProcessor() {
         // By default SubmissionPublisher is using commonPool which has some limited
         // number of threads and can be quickly depleted.
@@ -63,11 +61,11 @@ public class MergeProcessor<T> extends SubmissionPublisher<T> {
         // To prevent this we use separate pool for MergeProcessor itself.
         super(Executors.newCachedThreadPool(), 32);
     }
-    
+
     /**
-     * Create a new subscriber which can be subscribed to some publisher.
-     * All items which are received by this subscriber will be merged into internal
-     * queue and delivered to this processor subscriber. 
+     * Create a new subscriber which can be subscribed to some publisher. All items which are
+     * received by this subscriber will be merged into internal queue and delivered to this
+     * processor subscriber.
      */
     public Subscriber<T> newSubscriber() {
         return new Subscriber<T>() {
@@ -112,7 +110,7 @@ public class MergeProcessor<T> extends SubmissionPublisher<T> {
                     }
                 }
             }
-            
+
             private boolean noSubscribers() {
                 if (!isClosed()) return false;
                 if (getNumberOfSubscribers() != 0) return false;
@@ -121,16 +119,18 @@ public class MergeProcessor<T> extends SubmissionPublisher<T> {
                 close();
                 return true;
             }
-
         };
     }
 
     public int getNumOfActiveSubscriptions() {
         return numOfActiveSubscriptions.get();
     }
-    
+
     private Exception aggregateExceptions() {
-        Exception exception = new Exception("Some of the publishers terminated with errors (see suppressed exceptions)");
+        Exception exception =
+                new Exception(
+                        "Some of the publishers terminated with errors (see suppressed"
+                                + " exceptions)");
         failed.forEach(exception::addSuppressed);
         return exception;
     }
@@ -141,8 +141,9 @@ public class MergeProcessor<T> extends SubmissionPublisher<T> {
         ExecutorService executor = (ExecutorService) getExecutor();
         executor.shutdown();
         try {
-            executor.awaitTermination(Integer.parseInt(System.getProperty("awaitMergeProcessorInSecs",
-                    "5")), TimeUnit.SECONDS);
+            executor.awaitTermination(
+                    Integer.parseInt(System.getProperty("awaitMergeProcessorInSecs", "5")),
+                    TimeUnit.SECONDS);
         } catch (Exception e) {
             e.printStackTrace();
         }

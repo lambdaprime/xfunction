@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,14 +18,13 @@
 package id.xfunction.lang;
 
 /**
- * <p>RuntimeException which allows to specify formatted messages.</p>
- * 
- * <p>Example:</p>
- * 
+ * RuntimeException which allows to specify formatted messages.
+ *
+ * <p>Example:
+ *
  * <pre>{@code
  * throw new XRuntimeException("Command %s failed: %s", cmd, error);
  * }</pre>
- *
  */
 public class XRuntimeException extends RuntimeException {
 
@@ -32,15 +33,15 @@ public class XRuntimeException extends RuntimeException {
     public XRuntimeException() {
         super();
     }
-    
+
     public XRuntimeException(String message) {
         super(message);
     }
 
-    public XRuntimeException(String fmt, Object...objs) {
+    public XRuntimeException(String fmt, Object... objs) {
         super(String.format(fmt, objs));
     }
-    
+
     public XRuntimeException(Throwable t) {
         super(t);
     }

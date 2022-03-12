@@ -1,6 +1,8 @@
 /*
  * Copyright 2021 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,18 +15,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package id.xfunction.tests.nio.file;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import id.xfunction.nio.file.XPaths;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Arrays;
-
 import org.junit.jupiter.api.Test;
-
-import id.xfunction.nio.file.XPaths;
 
 public class XPathsTests {
 
@@ -35,11 +34,12 @@ public class XPathsTests {
         assertEquals("[file, ext]", Arrays.toString(XPaths.splitFileName("file.ext")));
         assertEquals("[file.ext, jpg]", Arrays.toString(XPaths.splitFileName("file.ext.jpg")));
     }
-    
+
     @Test
     public void test_append() throws IOException {
-        assertEquals("/tmp/a-cropped.png", XPaths.append(Paths.get("/tmp/a.png"), "-cropped").toString());
+        assertEquals(
+                "/tmp/a-cropped.png",
+                XPaths.append(Paths.get("/tmp/a.png"), "-cropped").toString());
         assertEquals("/tmp/a-cropped", XPaths.append(Paths.get("/tmp/a"), "-cropped").toString());
     }
-    
 }

@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,6 +19,7 @@ package id.xfunction.util;
 
 import static java.util.stream.Collectors.joining;
 
+import id.xfunction.XAsserts;
 import java.util.AbstractMap;
 import java.util.AbstractSet;
 import java.util.Collection;
@@ -28,37 +31,34 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.function.Predicate;
 
-import id.xfunction.XAsserts;
-
 /**
- * <p>Set which keeps all elements in prefix trie data structure.</p>
- * 
+ * Set which keeps all elements in prefix trie data structure.
+ *
  * <pre>{@code
- *                        *
- *                      /   \
- *                    h/    t\
- *                    *       *
- *                  e/        e\
- *                  *           *
- *                l/            e\
- *                *               *
- *              l/ \            \0|
- *              /  p\             *
- *             *     *
- *           o/    \0|
- *           *       *
- *         \0|
- *           *
+ *                *
+ *              /   \
+ *            h/    t\
+ *            *       *
+ *          e/        e\
+ *          *           *
+ *        l/            e\
+ *        *               *
+ *      l/ \            \0|
+ *      /  p\             *
+ *     *     *
+ *   o/    \0|
+ *   *       *
+ * \0|
+ *   *
  * }</pre>
- *           
- * <p>Items stored in sorted order.</p>
- * 
- * <p>It implements all methods of Set collection interface except remove.</p>
- * 
- * <p>Complexity is O(L) where L is length of the item.</p>
- * 
- * <p>This collection is not thread safe.</p>
- * 
+ *
+ * <p>Items stored in sorted order.
+ *
+ * <p>It implements all methods of Set collection interface except remove.
+ *
+ * <p>Complexity is O(L) where L is length of the item.
+ *
+ * <p>This collection is not thread safe.
  */
 public class PrefixTrieSet extends AbstractSet<String> {
 
@@ -109,8 +109,8 @@ public class PrefixTrieSet extends AbstractSet<String> {
     }
 
     /**
-     * Returns length of the longest item from the current trie
-     * which is a prefix of a given string. If no such item exist returns 0
+     * Returns length of the longest item from the current trie which is a prefix of a given string.
+     * If no such item exist returns 0
      */
     public int prefixMatches(String str) {
         return prefixMatches(root, str.toCharArray(), 0);
@@ -122,7 +122,7 @@ public class PrefixTrieSet extends AbstractSet<String> {
         if (next == null) return 0;
         if (next.childs.containsKey('\0')) return 1;
         int ret = prefixMatches(next, a, i + 1);
-        return ret == 0? 0: ret + 1;
+        return ret == 0 ? 0 : ret + 1;
     }
 
     // based on DFS
@@ -135,20 +135,18 @@ public class PrefixTrieSet extends AbstractSet<String> {
 
     private Node add(Node cur, char[] a, int i) {
         if (i == a.length) return null;
-        if (cur == null)
-            cur = new Node();
+        if (cur == null) cur = new Node();
         Node n = cur.childs.get(a[i]);
-        if (!cur.childs.containsKey(a[i]))
-            isAdded = true;
+        if (!cur.childs.containsKey(a[i])) isAdded = true;
         cur.childs.put(a[i], add(n, a, i + 1));
         return cur;
     }
 
     private static class Node {
-        
+
         // leaf node contains pair <\0, null>
         Map<Character, Node> childs = new TreeMap<>();
-        
+
         @Override
         public String toString() {
             return childs.entrySet().stream()
@@ -159,7 +157,8 @@ public class PrefixTrieSet extends AbstractSet<String> {
     }
 
     private static class PrefixTrieIterator implements Iterator<String> {
-        private static final Entry<Character, Node> DELIM = new AbstractMap.SimpleEntry<>('\0', new Node());
+        private static final Entry<Character, Node> DELIM =
+                new AbstractMap.SimpleEntry<>('\0', new Node());
         private StringBuilder buf = new StringBuilder();
         private Deque<Entry<Character, Node>> path = new LinkedList<>();
 
@@ -194,5 +193,4 @@ public class PrefixTrieSet extends AbstractSet<String> {
             return ret;
         }
     }
-
 }

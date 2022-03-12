@@ -1,6 +1,8 @@
 /*
  * Copyright 2022 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,12 +19,10 @@ package id.xfunction.tests.lang.invoke;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import id.xfunction.lang.invoke.MethodCaller;
 import java.util.ArrayList;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import id.xfunction.lang.invoke.MethodCaller;
 
 public class MethodCallerTest {
 
@@ -32,7 +32,7 @@ public class MethodCallerTest {
         Assertions.assertThrows(NoSuchMethodException.class, () -> caller.call("sadf"));
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     @Test
     public void test_happy() throws Throwable {
         var list = new ArrayList();

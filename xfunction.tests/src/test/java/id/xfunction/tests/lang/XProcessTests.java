@@ -1,6 +1,8 @@
 /*
  * Copyright 2020 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,11 +19,10 @@ package id.xfunction.tests.lang;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import id.xfunction.lang.XExec;
 import id.xfunction.lang.XProcess;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class XProcessTests {
 
@@ -50,10 +51,11 @@ public class XProcessTests {
         proc.flushStderr(false).await();
         proc.stderrAsString();
         proc.stderrAsString();
-        assertEquals("pwd: invalid option -- 'z'\nTry 'pwd --help' for more information.",
-            proc.stderrAsString());
+        assertEquals(
+                "pwd: invalid option -- 'z'\nTry 'pwd --help' for more information.",
+                proc.stderrAsString());
     }
-    
+
     @Test
     public void test_await_not_hangs() throws Exception {
         XExec xe = new XExec("printf \"%120000d\" 12");
@@ -66,12 +68,11 @@ public class XProcessTests {
         XProcess proc = new XExec("echo", "test").run();
         proc.forward().await();
     }
-    
+
     @Test
     public void test_forward_and_flush_together() {
         XProcess proc = new XExec("echo", "test").run();
         proc.flush(false);
-        Assertions.assertThrows(IllegalStateException.class, () ->
-            proc.forward());
+        Assertions.assertThrows(IllegalStateException.class, () -> proc.forward());
     }
 }

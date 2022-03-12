@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,6 +19,7 @@ package id.xfunction.lang;
 
 import static java.util.stream.Collectors.joining;
 
+import id.xfunction.function.Unchecked;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Optional;
@@ -28,15 +31,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import id.xfunction.function.Unchecked;
-
 /**
- * <p>Wraps standard java.lang.Process class with convenient methods.</p>
- * 
- * <p>Some commands may block until you start reading their
- * stdout or stderr. This may be problem when you just want
- * to run a command ignoring its output. Use flush methods
- * in that case.</p> 
+ * Wraps standard java.lang.Process class with convenient methods.
+ *
+ * <p>Some commands may block until you start reading their stdout or stderr. This may be problem
+ * when you just want to run a command ignoring its output. Use flush methods in that case.
  */
 public class XProcess {
     private Process process;
@@ -51,15 +50,11 @@ public class XProcess {
 
     public XProcess(Process process) {
         this.process = process;
-        this.stdout = new BufferedReader(
-            new InputStreamReader(process.getInputStream())).lines();
-        this.stderr = new BufferedReader(
-            new InputStreamReader(process.getErrorStream())).lines();
+        this.stdout = new BufferedReader(new InputStreamReader(process.getInputStream())).lines();
+        this.stderr = new BufferedReader(new InputStreamReader(process.getErrorStream())).lines();
     }
 
-    /**
-     * This ctor supposed to be used in tests when you want to mock results of XExec
-     */
+    /** This ctor supposed to be used in tests when you want to mock results of XExec */
     public XProcess(Process process, Stream<String> stdout, Stream<String> stderr, int code) {
         this.process = process;
         this.stdout = stdout;
@@ -68,11 +63,10 @@ public class XProcess {
     }
 
     /**
-     * Returns standard output as a string.
-     * This call will consume stdout stream meaning that you can call
-     * it only once. If you want to call it multiple times make sure to
-     * flush stdout first and wait until process will finish.
-     * 
+     * Returns standard output as a string. This call will consume stdout stream meaning that you
+     * can call it only once. If you want to call it multiple times make sure to flush stdout first
+     * and wait until process will finish.
+     *
      * @see flushStdout await
      * @throws IllegalStateException if called more than once
      */
@@ -80,50 +74,42 @@ public class XProcess {
         return stdoutAsString.orElseGet(() -> stdout.collect(joining("\n")));
     }
 
-    /**
-     * Consumes stdout stream into internal buffer or ignores it.
-     * This call is async.
-     */
+    /** Consumes stdout stream into internal buffer or ignores it. This call is async. */
     public XProcess flushStdout(boolean ignore) {
         consumeStdout();
         if (!process.isAlive()) return this;
-        executor.execute(() -> {
-            if (ignore) {
-                stdout.forEach(l -> {});
-            } else {
-                stdoutAsString = Optional.of(stdout.collect(joining("\n")));
-            }
-        });
+        executor.execute(
+                () -> {
+                    if (ignore) {
+                        stdout.forEach(l -> {});
+                    } else {
+                        stdoutAsString = Optional.of(stdout.collect(joining("\n")));
+                    }
+                });
         return this;
     }
 
-    /**
-     * Consumes stdout stream and forwards it to System.out
-     * This call is async.
-     */
+    /** Consumes stdout stream and forwards it to System.out This call is async. */
     public XProcess forwardStdout() {
         return forwardStdout(System.out::println);
     }
 
-    /**
-     * Consumes stdout stream and forwards it to consumer.
-     * This call is async.
-     */
+    /** Consumes stdout stream and forwards it to consumer. This call is async. */
     public XProcess forwardStdout(Consumer<String> consumer) {
         consumeStdout();
         if (!process.isAlive()) return this;
-        executor.execute(() -> {
-            stdout.forEach(consumer);
-        });
+        executor.execute(
+                () -> {
+                    stdout.forEach(consumer);
+                });
         return this;
     }
 
     /**
-     * Returns standard error output as a string.
-     * This call will consume stderr stream meaning that you can call
-     * it only once. If you want to call it multiple times make sure to
-     * flush stderr first.
-     * 
+     * Returns standard error output as a string. This call will consume stderr stream meaning that
+     * you can call it only once. If you want to call it multiple times make sure to flush stderr
+     * first.
+     *
      * @see flushStderr
      * @throws IllegalStateException if called more than once
      */
@@ -131,39 +117,35 @@ public class XProcess {
         return stderrAsString.orElseGet(() -> stderr.collect(joining("\n")));
     }
 
-    /**
-     * Consumes stderr stream into internal buffer asynchronously.
-     * This call is async.
-     */
+    /** Consumes stderr stream into internal buffer asynchronously. This call is async. */
     public XProcess flushStderr(boolean ignore) {
         consumeStderr();
         if (!process.isAlive()) return this;
-        executor.execute(() -> {
-            if (ignore) {
-                stderr.forEach(l -> {});
-            } else {
-                stderrAsString = Optional.of(stderr.collect(joining("\n")));
-            }
-        });
+        executor.execute(
+                () -> {
+                    if (ignore) {
+                        stderr.forEach(l -> {});
+                    } else {
+                        stderrAsString = Optional.of(stderr.collect(joining("\n")));
+                    }
+                });
         return this;
     }
 
-    /**
-     * Consumes stderr stream and forwards it to System.err
-     * This call is async.
-     */
+    /** Consumes stderr stream and forwards it to System.err This call is async. */
     public XProcess forwardStderr() {
         consumeStderr();
         if (!process.isAlive()) return this;
-        executor.execute(() -> {
-            stderr.forEach(System.err::println);
-        });
+        executor.execute(
+                () -> {
+                    stderr.forEach(System.err::println);
+                });
         return this;
     }
 
     /**
      * Flushes stdout and stderr.
-     * 
+     *
      * @see flushStderr
      * @see flushStdout
      */
@@ -175,7 +157,7 @@ public class XProcess {
 
     /**
      * Forwards stdout and stderr to System.out and System.err respectively.
-     * 
+     *
      * @see forwardStderr
      * @see forwardStdout
      */
@@ -191,6 +173,7 @@ public class XProcess {
 
     /**
      * After you consume this stream it will not be longer valid.
+     *
      * @see flushStdout
      */
     public Stream<String> stdout() {
@@ -199,15 +182,14 @@ public class XProcess {
 
     /**
      * After you consume this stream it will not be longer valid.
+     *
      * @see flushStderr
      */
     public Stream<String> stderr() {
         return stderr;
     }
 
-    /**
-     * @return process return code
-     */
+    /** @return process return code */
     public Future<Integer> code() {
         if (!code.isPresent()) {
             code = Optional.of(CompletableFuture.supplyAsync(Unchecked.wrapGet(process::waitFor)));
@@ -216,9 +198,10 @@ public class XProcess {
     }
 
     /**
-     * <p>Waits for process to complete and returns code safely wrapping all checked exceptions
-     * to RuntimeException.</p>
-     * <p>Make sure to use flush methods if you ignore output/stderr.</p>
+     * Waits for process to complete and returns code safely wrapping all checked exceptions to
+     * RuntimeException.
+     *
+     * <p>Make sure to use flush methods if you ignore output/stderr.
      */
     public int await() {
         executor.shutdown();
@@ -229,16 +212,14 @@ public class XProcess {
         }
         return Unchecked.getInt(code()::get);
     }
-    
+
     private void consumeStdout() {
-        if (isStdoutConsumed)
-            throw new IllegalStateException("Stdout has consumer already");
+        if (isStdoutConsumed) throw new IllegalStateException("Stdout has consumer already");
         isStdoutConsumed = true;
     }
-    
+
     private void consumeStderr() {
-        if (isStderrConsumed)
-            throw new IllegalStateException("Stderr has consumer already");
+        if (isStderrConsumed) throw new IllegalStateException("Stderr has consumer already");
         isStderrConsumed = true;
     }
 }

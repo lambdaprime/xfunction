@@ -1,6 +1,8 @@
 /*
  * Copyright 2021 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -22,9 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 
-/**
- * Allows to monitor {@link InputStream} read progress
- */
+/** Allows to monitor {@link InputStream} read progress */
 public class ProgressMonitorInputStream extends InputStream {
 
     private long length;
@@ -48,23 +48,17 @@ public class ProgressMonitorInputStream extends InputStream {
         return in.read();
     }
 
-    /**
-     * Returns in % total amount of data which was read from the stream already 
-     */
+    /** Returns in % total amount of data which was read from the stream already */
     public int getPercentRead() {
-        return (int) (totalBytesRead / (length / 100)) ;
+        return (int) (totalBytesRead / (length / 100));
     }
 
-    /**
-     * Number of bytes which was read already
-     */
+    /** Number of bytes which was read already */
     public long getTotalBytesRead() {
         return totalBytesRead;
     }
-    
-    /**
-     * Total number of bytes
-     */
+
+    /** Total number of bytes */
     public long getTotalBytes() {
         return length;
     }

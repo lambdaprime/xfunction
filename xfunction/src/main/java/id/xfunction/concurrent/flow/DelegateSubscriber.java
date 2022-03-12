@@ -1,6 +1,8 @@
 /*
  * Copyright 2022 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,19 +17,17 @@
  */
 package id.xfunction.concurrent.flow;
 
+import id.xfunction.XAssertException;
+import id.xfunction.XAsserts;
 import java.util.Optional;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;
 
-import id.xfunction.XAssertException;
-import id.xfunction.XAsserts;
-
 /**
  * Subscriber which wraps original subscriber and delegates all calls to it.
- * 
- * <p>
- * It allows to override behavior of the original subscriber without redefining
- * all methods of it but only those which are of the interest.
+ *
+ * <p>It allows to override behavior of the original subscriber without redefining all methods of it
+ * but only those which are of the interest.
  */
 public class DelegateSubscriber<T> implements Subscriber<T> {
 
@@ -60,9 +60,7 @@ public class DelegateSubscriber<T> implements Subscriber<T> {
         subscriber.onComplete();
     }
 
-    /**
-     * Returns subscription if subscriber is already subscribed
-     */
+    /** Returns subscription if subscriber is already subscribed */
     public Optional<Subscription> getSubscription() {
         return Optional.ofNullable(subscription);
     }

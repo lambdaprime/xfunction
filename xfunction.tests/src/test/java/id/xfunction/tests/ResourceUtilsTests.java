@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,64 +20,56 @@ package id.xfunction.tests;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import id.xfunction.ResourceUtils;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import id.xfunction.ResourceUtils;
 
 public class ResourceUtilsTests {
 
     private ResourceUtils resourceUtils;
-    
+
     @BeforeEach
     public void setup() {
         resourceUtils = new ResourceUtils();
     }
-    
+
     @Test
     public void test_readResourceAsStream() {
-        List<String> actual = resourceUtils.readResourceAsStream("testFile")
-            .collect(toList());
-        assertEquals("[line 1, line 2]",
-            actual.toString());
+        List<String> actual = resourceUtils.readResourceAsStream("testFile").collect(toList());
+        assertEquals("[line 1, line 2]", actual.toString());
     }
 
     @Test
     public void test_readResourceAsStream_with_class() {
-        List<String> actual = resourceUtils.readResourceAsStream(this.getClass(), "testFile2")
-            .collect(toList());
-        assertEquals("[line 1, line 2]",
-            actual.toString());
+        List<String> actual =
+                resourceUtils.readResourceAsStream(this.getClass(), "testFile2").collect(toList());
+        assertEquals("[line 1, line 2]", actual.toString());
     }
 
     @Test
     public void test_readResource() {
         String actual = resourceUtils.readResource("testFile");
-        assertEquals("line 1\nline 2",
-            actual.toString());
+        assertEquals("line 1\nline 2", actual.toString());
     }
 
     @Test
     public void test_readResource_with_class() {
         String actual = resourceUtils.readResource(this.getClass(), "testFile2");
-        assertEquals("line 1\nline 2",
-            actual.toString());
+        assertEquals("line 1\nline 2", actual.toString());
     }
-    
+
     @Test
     public void test_extractResource() throws IOException {
         Path out = Files.createTempFile("resource", "");
         resourceUtils.extractResource("testFile", out);
         assertEquals(13, Files.size(out));
-        
+
         Files.delete(out);
         resourceUtils.extractResource("testFile", out);
-        assertEquals(13, Files.size(out));        
+        assertEquals(13, Files.size(out));
     }
-
 }

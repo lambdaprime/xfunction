@@ -1,6 +1,8 @@
 /*
  * Copyright 2020 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -19,15 +21,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import id.xfunction.cli.CommandLineInterface;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
 import org.junit.jupiter.api.Test;
-
-import id.xfunction.cli.CommandLineInterface;
 
 public class CommandLineInterfaceTest {
 
@@ -50,9 +50,14 @@ public class CommandLineInterfaceTest {
         String msg = "test?";
         boolean actual = cli.askConfirm(msg);
         assertFalse(actual);
-        assertEquals(msg + "\nPlease confirm [yes/no]: Please confirm [yes/no]: Please confirm [yes/no]: ", baos.toString());
+        assertEquals(
+                msg
+                        + "\n"
+                        + "Please confirm [yes/no]: Please confirm [yes/no]: Please confirm"
+                        + " [yes/no]: ",
+                baos.toString());
     }
-    
+
     @Test
     public void test_print() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -60,7 +65,7 @@ public class CommandLineInterfaceTest {
         cli.print(12);
         assertEquals("12\n", baos.toString());
     }
-    
+
     @Test
     public void test_print_string() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -68,7 +73,7 @@ public class CommandLineInterfaceTest {
         cli.print("12");
         assertEquals("12\n", baos.toString());
     }
-    
+
     @Test
     public void test_print_string_with_special_char() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -76,7 +81,7 @@ public class CommandLineInterfaceTest {
         cli.print("12%d");
         assertEquals("12%d\n", baos.toString());
     }
-    
+
     @Test
     public void test_teeToFile() throws IOException {
         Path tempFile = Files.createTempFile("teeToFile", "");

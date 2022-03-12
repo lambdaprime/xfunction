@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,9 +19,8 @@ package id.xfunction.tests.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Test;
-
 import id.xfunction.io.XInputStream;
+import org.junit.jupiter.api.Test;
 
 public class XInputStreamTest {
 
@@ -32,5 +33,4 @@ public class XInputStreamTest {
             assertEquals(-1, out.read());
         }
     }
-
 }

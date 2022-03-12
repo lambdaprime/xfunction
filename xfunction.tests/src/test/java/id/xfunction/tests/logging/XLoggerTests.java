@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,19 +15,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package id.xfunction.tests.logging;
 
+import id.xfunction.logging.XLogger;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import id.xfunction.logging.XLogger;
 
 public class XLoggerTests {
 
@@ -37,8 +36,9 @@ public class XLoggerTests {
         file.toFile().delete();
         logger.info("test");
         Assertions.assertTrue(file.toFile().exists());
-        Assertions.assertEquals("java.util.logging.FileHandler",
-            LogManager.getLogManager().getProperty("handlers"));
+        Assertions.assertEquals(
+                "java.util.logging.FileHandler",
+                LogManager.getLogManager().getProperty("handlers"));
     }
 
     @Test

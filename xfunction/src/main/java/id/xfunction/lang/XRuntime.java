@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,15 +19,12 @@ package id.xfunction.lang;
 
 import id.xfunction.function.ThrowingRunnable;
 
-/**
- * Additions to standard java.lang.Runtime
- */
+/** Additions to standard java.lang.Runtime */
 public class XRuntime {
 
     /**
-     * <p>Registers shutdown hook on Runtime.getRuntime().
-     * Equivalent to:</p>
-     * 
+     * Registers shutdown hook on Runtime.getRuntime(). Equivalent to:
+     *
      * <pre>{@code
      * Runtime.getRuntime().addShutdownHook(new Thread() {
      *     public void run() {
@@ -37,28 +36,28 @@ public class XRuntime {
      *     }
      * });
      * }</pre>
-     * 
-     * <p>But much shorter:</p>
-     * 
+     *
+     * <p>But much shorter:
+     *
      * <pre>{@code
      * XRuntime.addShutdownHook(() -> {
      *     // code
      * })
      * }</pre>
-     * 
      */
     public static Thread addShutdownHook(ThrowingRunnable<Exception> hook) {
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    hook.run();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        Runtime.getRuntime().addShutdownHook(thread );
+        Thread thread =
+                new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            hook.run();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+        Runtime.getRuntime().addShutdownHook(thread);
         return thread;
     }
 }

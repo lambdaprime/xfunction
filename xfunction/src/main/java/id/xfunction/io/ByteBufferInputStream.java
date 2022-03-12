@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -22,15 +24,14 @@ import java.nio.ByteBuffer;
 public class ByteBufferInputStream extends InputStream {
 
     private ByteBuffer buf;
-    
+
     public ByteBufferInputStream(ByteBuffer buf) {
         this.buf = buf;
     }
-    
+
     @Override
     public int read() throws IOException {
         if (!buf.hasRemaining()) return -1;
         return Byte.toUnsignedInt(buf.get());
     }
-
 }

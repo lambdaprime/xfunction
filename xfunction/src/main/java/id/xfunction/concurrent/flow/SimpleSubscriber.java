@@ -1,6 +1,8 @@
 /*
  * Copyright 2022 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,33 +17,30 @@
  */
 package id.xfunction.concurrent.flow;
 
+import id.xfunction.XAssertException;
+import id.xfunction.XAsserts;
 import java.util.Optional;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;
 
-import id.xfunction.XAssertException;
-import id.xfunction.XAsserts;
-
-/**
- * Simple implementation for {@link Subscriber} interface which can be subscribed
- * only once.
- */
+/** Simple implementation for {@link Subscriber} interface which can be subscribed only once. */
 public class SimpleSubscriber<T> implements Subscriber<T> {
 
     private int initNumOfMessages = 1;
     protected Subscription subscription;
-    
+
     /**
-     * Allows to set how many messages to request once this subscriber will
-     * be first subscribed to some topic. Default number is one.
+     * Allows to set how many messages to request once this subscriber will be first subscribed to
+     * some topic. Default number is one.
      */
     public SimpleSubscriber<T> withInitialRequest(int numOfMessages) {
         initNumOfMessages = numOfMessages;
         return this;
     }
-    
+
     /**
      * Saves subscription and requests {@link #withInitialRequest(int)} number of items.
+     *
      * @throws XAssertException if subscriber is already subscribed
      */
     @Override
@@ -51,33 +50,21 @@ public class SimpleSubscriber<T> implements Subscriber<T> {
         this.subscription.request(initNumOfMessages);
     }
 
-    /**
-     * Empty
-     */
+    /** Empty */
     @Override
-    public void onNext(T item) {
-        
-    }
+    public void onNext(T item) {}
 
-    /**
-     * Prints stack trace for the given exception to stderr
-     */
+    /** Prints stack trace for the given exception to stderr */
     @Override
     public void onError(Throwable throwable) {
         throwable.printStackTrace();
     }
 
-    /**
-     * Empty
-     */
+    /** Empty */
     @Override
-    public void onComplete() {
-        
-    }
+    public void onComplete() {}
 
-    /**
-     * Returns subscription if subscriber is already subscribed
-     */
+    /** Returns subscription if subscriber is already subscribed */
     public Optional<Subscription> getSubscription() {
         return Optional.ofNullable(subscription);
     }

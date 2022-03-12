@@ -1,6 +1,8 @@
 /*
  * Copyright 2020 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,17 +19,19 @@ package id.xfunction.cli;
 
 import java.util.Properties;
 
-/**
- * <p>Set of methods for parsing command line arguments.</p>
- */
+/** Set of methods for parsing command line arguments. */
 public class ArgsUtils {
 
     /**
-     * <p>Collects options with their arguments into Properties object.</p>
-     * <p>Each option may have zero or one argument.</p>
-     * <p>If option has no argument then it is added to Properties with an empty string as a value.</p>
-     * <p>Each option should start from -, or --.</p>
-     * <p>Options may accept arguments in one of the following ways: -option arg, -option=arg</p> 
+     * Collects options with their arguments into Properties object.
+     *
+     * <p>Each option may have zero or one argument.
+     *
+     * <p>If option has no argument then it is added to Properties with an empty string as a value.
+     *
+     * <p>Each option should start from -, or --.
+     *
+     * <p>Options may accept arguments in one of the following ways: -option arg, -option=arg
      */
     public Properties collectOptions(String[] args) throws ArgumentParsingException {
         Properties props = new Properties();
@@ -52,7 +56,7 @@ public class ArgsUtils {
                 curOption = arg;
                 continue;
             }
-            props.put(arg.subSequence(0, pos), arg.substring(pos + 1)); 
+            props.put(arg.subSequence(0, pos), arg.substring(pos + 1));
         }
         if (curOption != null) {
             props.put(curOption, "");

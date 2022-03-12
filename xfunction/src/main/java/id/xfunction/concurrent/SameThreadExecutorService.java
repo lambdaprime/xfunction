@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -20,13 +22,11 @@ import java.util.List;
 import java.util.concurrent.AbstractExecutorService;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Executes all tasks on same thread which submits them.
- */
+/** Executes all tasks on same thread which submits them. */
 public class SameThreadExecutorService extends AbstractExecutorService {
 
     private boolean isShutdown;
-    
+
     @Override
     public void shutdown() {
         isShutdown = true;
@@ -57,5 +57,4 @@ public class SameThreadExecutorService extends AbstractExecutorService {
         if (isShutdown) return;
         command.run();
     }
-
 }

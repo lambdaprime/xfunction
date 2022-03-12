@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,15 +19,13 @@ package id.xfunction.lang;
 
 import id.xfunction.function.Unchecked;
 
-/**
- * Additions to standard java.lang.Thread
- */
+/** Additions to standard java.lang.Thread */
 public class XThread {
 
     /**
-     * <p>Standard way to sleep in Java is pretty verbose because it throws
-     * checked exception which you need to handle:</p>
-     * 
+     * Standard way to sleep in Java is pretty verbose because it throws checked exception which you
+     * need to handle:
+     *
      * <pre>{@code
      * try {
      *     Thread.sleep(1000);
@@ -33,14 +33,13 @@ public class XThread {
      *     throw new RuntimeException(e);
      * }
      * }</pre>
-     * 
-     * <p>When you write scripts in Java you probably want it to fit in one
-     * line and wrap any thrown exception to unchecked.</p>
-     * 
+     *
+     * <p>When you write scripts in Java you probably want it to fit in one line and wrap any thrown
+     * exception to unchecked.
+     *
      * <pre>{@code
      * XThread.sleep(1000);
      * }</pre>
-     * 
      */
     public static void sleep(long msec) {
         Unchecked.run(() -> Thread.sleep(msec));
