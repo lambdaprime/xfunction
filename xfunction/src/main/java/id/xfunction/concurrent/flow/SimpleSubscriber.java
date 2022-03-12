@@ -26,7 +26,7 @@ import id.xfunction.XAsserts;
  * Simple implementation for {@link Subscriber} interface which can be subscribed
  * only once.
  */
-public class XSubscriber<T> implements Subscriber<T> {
+public class SimpleSubscriber<T> implements Subscriber<T> {
 
     private int initNumOfMessages = 1;
     protected Subscription subscription;
@@ -35,7 +35,7 @@ public class XSubscriber<T> implements Subscriber<T> {
      * Allows to set how many messages to request once this subscriber will
      * be first subscribed to some topic. Default number is one.
      */
-    public XSubscriber<T> withInitialRequest(int numOfMessages) {
+    public SimpleSubscriber<T> withInitialRequest(int numOfMessages) {
         initNumOfMessages = numOfMessages;
         return this;
     }
