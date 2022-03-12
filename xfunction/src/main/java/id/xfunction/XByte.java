@@ -37,8 +37,7 @@ public class XByte {
 
     /**
      * <p>
-     * Returns a string representation of the byte array as a sequence of numbers
-     * base 16.
+     * Returns a string representation of the byte array as a hexadecimal string.
      * </p>
      * 
      * <p>
@@ -72,10 +71,18 @@ public class XByte {
         return hex;
     }
 
+    public static byte[] fromHex(String hex) {
+        var out = new byte[hex.length() / 2];
+        for (int i = 0; i < hex.length(); i += 2) {
+            out[i / 2] = Integer.valueOf("" + hex.charAt(i) + hex.charAt(i + 1), 16).byteValue();
+        }
+        return out;
+    }
+
     /**
      * <p>
-     * Returns a string representation of the byte array as a sequence of pairs of
-     * numbers base 16.
+     * Works same way as {@link #toHex(byte...)} except it formats the resulting
+     * string as pairs of bytes separated with white spaces
      * </p>
      * 
      * <p>
@@ -92,7 +99,7 @@ public class XByte {
      * Will return string "68 65 6c 6c 6f 20 77 6f 72 6c 64".
      * </p>
      */
-    public static String toHexPairs(byte[] a) {
+    public static String toHexPairs(byte... a) {
         String hex = toHex(a);
         StringBuilder buf = new StringBuilder();
         for (int i = 0; i < hex.length(); i += 2) {
@@ -106,7 +113,7 @@ public class XByte {
 
     /**
      * <p>
-     * Converts int to pairs of numbers base 16.
+     * Converts int to hexadecimal pairs string.
      * </p>
      * 
      * <p>
@@ -130,7 +137,7 @@ public class XByte {
 
     /**
      * <p>
-     * Returns a string representation of the given byte base 16.
+     * Returns a hexadecimal pair string representation of the given byte.
      * </p>
      * 
      * <p>
