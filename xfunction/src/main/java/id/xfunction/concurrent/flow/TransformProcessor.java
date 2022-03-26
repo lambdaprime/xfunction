@@ -17,7 +17,10 @@
  */
 package id.xfunction.concurrent.flow;
 
+import static java.util.stream.Collectors.joining;
+
 import id.xfunction.XAsserts;
+import java.util.Arrays;
 import java.util.concurrent.Flow.Processor;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;
@@ -42,16 +45,26 @@ public class TransformProcessor<T, R> implements Processor<T, R> {
     private Subscription subscription;
     private Subscriber<? super R> subscriber;
     private Function<T, R> transformer;
+    private String ctorStackTrace;
 
     public TransformProcessor(Function<T, R> transformer) {
         this.transformer = transformer;
+        // debugging subscriber issues may be difficult since they operate
+        // usually on different threads so stacktrace for them not very useful
+        // here we store stacktrace from where it was created initially and
+        // include it as a hint
+        ctorStackTrace =
+                Arrays.stream(new Exception().getStackTrace())
+                        .map(StackTraceElement::toString)
+                        .collect(joining("\n"));
     }
 
     @Override
     public void onSubscribe(Subscription subscription) {
         XAsserts.assertNotNull(
                 this.subscriber, "Transformer must have subscriber which is subscribed to it");
-        XAsserts.assertNull(this.subscription, "Already subscribed");
+        XAsserts.assertNull(
+                this.subscription, "Already subscribed. Created from " + ctorStackTrace);
         this.subscription = subscription;
         subscriber.onSubscribe(subscription);
     }

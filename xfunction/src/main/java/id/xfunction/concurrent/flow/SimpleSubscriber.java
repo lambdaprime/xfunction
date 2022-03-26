@@ -17,8 +17,11 @@
  */
 package id.xfunction.concurrent.flow;
 
+import static java.util.stream.Collectors.joining;
+
 import id.xfunction.XAssertException;
 import id.xfunction.XAsserts;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;
@@ -28,6 +31,18 @@ public class SimpleSubscriber<T> implements Subscriber<T> {
 
     private int initNumOfMessages = 1;
     protected Subscription subscription;
+    private String ctorStackTrace;
+
+    public SimpleSubscriber() {
+        // debugging subscriber issues may be difficult since they operate
+        // usually on different threads so stacktrace for them not very useful
+        // here we store stacktrace from where it was created initially and
+        // include it as a hint
+        ctorStackTrace =
+                Arrays.stream(new Exception().getStackTrace())
+                        .map(StackTraceElement::toString)
+                        .collect(joining("\n"));
+    }
 
     /**
      * Allows to set how many messages to request once this subscriber will be first subscribed to
@@ -45,7 +60,8 @@ public class SimpleSubscriber<T> implements Subscriber<T> {
      */
     @Override
     public void onSubscribe(Subscription subscription) throws XAssertException {
-        XAsserts.assertNull(this.subscription, "Already subscribed");
+        XAsserts.assertNull(
+                this.subscription, "Already subscribed. Created from " + ctorStackTrace);
         this.subscription = subscription;
         this.subscription.request(initNumOfMessages);
     }
