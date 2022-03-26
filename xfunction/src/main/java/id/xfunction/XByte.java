@@ -18,6 +18,7 @@
 package id.xfunction;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 public class XByte {
 
@@ -98,6 +99,16 @@ public class XByte {
         return buf.toString();
     }
 
+    /** Opposite to {@link XByte#toHexPairs(byte...)} */
+    public static byte[] fromHexPairs(String hex) {
+        var array =
+                Arrays.stream(hex.split("\\s+"))
+                        .filter(s -> !s.isEmpty())
+                        .mapToInt(s -> Integer.valueOf(s, 16))
+                        .toArray();
+        return castToByteArray(array);
+    }
+
     /**
      * Converts int to hexadecimal pairs string.
      *
@@ -148,7 +159,7 @@ public class XByte {
      *
      * <p>Example: 0b00000011_00001010 into 0b11000000_01010000
      */
-    public static int reverseBytes(int i) {
+    public static int reverseBitsInBytes(int i) {
         i = ((i & 0xaaaaaaaa) >> 1) | ((i & 0x55555555) << 1);
         i = ((i & 0xcccccccc) >> 2) | ((i & 0x33333333) << 2);
         i = ((i & 0xf0f0f0f0) >> 4) | ((i & 0x0f0f0f0f) << 4);
