@@ -17,36 +17,37 @@
  */
 package id.xfunction.tests;
 
-import id.xfunction.XAssertException;
-import id.xfunction.XAsserts;
+import id.xfunction.Preconditions;
+import id.xfunction.PredonditionException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class XAssertsTests {
+public class PreconditionsTests {
 
     @Test
     public void test_assertTrue() {
-        Assertions.assertThrows(XAssertException.class, () -> XAsserts.assertTrue(false));
+        Assertions.assertThrows(PredonditionException.class, () -> Preconditions.isTrue(false));
     }
 
     @Test
     public void test_assertTrue_happy() {
-        XAsserts.assertTrue(true);
+        Preconditions.isTrue(true);
     }
 
     @Test
     public void test_assertNotNull() {
-        Assertions.assertThrows(XAssertException.class, () -> XAsserts.assertNotNull(null));
+        Assertions.assertThrows(PredonditionException.class, () -> Preconditions.notNull(null));
     }
 
     @Test
     public void test_assertNotNull_happy() {
-        XAsserts.assertNotNull("test");
+        Preconditions.notNull("test");
     }
 
     @Test
     public void test_assertEquals() {
-        XAsserts.assertEquals(null, null);
-        Assertions.assertThrows(XAssertException.class, () -> XAsserts.assertEquals(null, "test"));
+        Preconditions.equals(null, null);
+        Assertions.assertThrows(
+                PredonditionException.class, () -> Preconditions.equals(null, "test"));
     }
 }

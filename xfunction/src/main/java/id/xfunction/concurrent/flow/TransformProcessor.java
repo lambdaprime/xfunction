@@ -19,7 +19,7 @@ package id.xfunction.concurrent.flow;
 
 import static java.util.stream.Collectors.joining;
 
-import id.xfunction.XAsserts;
+import id.xfunction.Preconditions;
 import java.util.Arrays;
 import java.util.concurrent.Flow.Processor;
 import java.util.concurrent.Flow.Subscription;
@@ -58,7 +58,7 @@ public class TransformProcessor<T, R> extends SubmissionPublisher<R> implements 
 
     @Override
     public void onSubscribe(Subscription subscription) {
-        XAsserts.assertNull(
+        Preconditions.isNull(
                 this.subscription, "Already subscribed. Created from " + ctorStackTrace);
         this.subscription = subscription;
         subscription.request(1);

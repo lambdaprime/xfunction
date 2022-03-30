@@ -17,34 +17,34 @@
  */
 package id.xfunction;
 
-/** Exception which is thrown by {@link XAsserts} methods. */
-public class XAssertException extends RuntimeException {
+/** Exception which is thrown by {@link Preconditions} methods. */
+public class PredonditionException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
     private static final String EQUALS_MESSAGE_FORMAT =
             "%s: expected value <%s>, actual value <%s>";
 
-    public XAssertException(String message) {
+    public PredonditionException(String message) {
         super(message);
     }
 
-    public XAssertException(Throwable t) {
+    public PredonditionException(Throwable t) {
         super(t);
     }
 
-    public XAssertException(String fmt, Object... objs) {
+    public PredonditionException(String fmt, Object... objs) {
         super(String.format(fmt, objs));
     }
 
-    public XAssertException(double expected, double actual) {
-        super(String.format(EQUALS_MESSAGE_FORMAT, "Assertion error", expected, actual));
+    public PredonditionException(double expected, double actual) {
+        super(String.format(EQUALS_MESSAGE_FORMAT, "Predondition error", expected, actual));
     }
 
-    public XAssertException(String message, double expected, double actual) {
+    public PredonditionException(String message, double expected, double actual) {
         super(String.format(EQUALS_MESSAGE_FORMAT, message, expected, actual));
     }
 
-    public <T> XAssertException(String message, T expected, T actual) {
+    public <T> PredonditionException(String message, T expected, T actual) {
         super(String.format(EQUALS_MESSAGE_FORMAT, message, expected, actual));
     }
 }

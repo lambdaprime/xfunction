@@ -69,7 +69,7 @@ public class XUtils {
      * @return md5 sum
      */
     public static String md5Sum(File f) throws Exception {
-        XAsserts.assertTrue(f.isFile(), "Argument " + f + " is not a file");
+        Preconditions.isTrue(f.isFile(), "Argument " + f + " is not a file");
         try (InputStream bais = new FileInputStream(f)) {
             MessageDigest md = MessageDigest.getInstance("MD5");
             byte[] b = new byte[1 << 20];

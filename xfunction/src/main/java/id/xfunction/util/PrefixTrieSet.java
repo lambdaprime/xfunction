@@ -19,7 +19,7 @@ package id.xfunction.util;
 
 import static java.util.stream.Collectors.joining;
 
-import id.xfunction.XAsserts;
+import id.xfunction.Preconditions;
 import java.util.AbstractMap;
 import java.util.AbstractSet;
 import java.util.Collection;
@@ -68,7 +68,7 @@ public class PrefixTrieSet extends AbstractSet<String> {
 
     @Override
     public boolean add(String str) {
-        XAsserts.assertNotNull(str);
+        Preconditions.notNull(str);
         isAdded = false;
         add(root, (str + '\0').toCharArray(), 0);
         if (isAdded) size++;

@@ -17,7 +17,7 @@
  */
 package id.xfunction.text;
 
-import id.xfunction.XAsserts;
+import id.xfunction.Preconditions;
 
 /** Ellipsize the text. For example "aaaaaaaaa" -&gt; "aaaa...aaa". It is thread safe. */
 public class Ellipsizer {
@@ -29,7 +29,7 @@ public class Ellipsizer {
      *     4.
      */
     public Ellipsizer(int maxLength) {
-        XAsserts.assertTrue(
+        Preconditions.isTrue(
                 maxLength >= 5,
                 String.format("maxLength %d is too low and should be at least 5", maxLength));
         this.maxLength = maxLength;

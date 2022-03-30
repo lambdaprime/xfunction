@@ -99,14 +99,14 @@ public class AssertRunCommand {
         consumer.ifPresent(c -> c.accept(actualOutput));
         expectedCode.ifPresent(
                 expectedCode -> {
-                    XAsserts.assertEquals(
+                    Preconditions.equals(
                             expectedCode.intValue(), actualCode, "Unexpected return code");
                 });
         expectedOutput.ifPresent(
                 expectedOutput -> {
-                    if (!isWildcardMatching) XAsserts.assertEquals(expectedOutput, actualOutput);
+                    if (!isWildcardMatching) Preconditions.equals(expectedOutput, actualOutput);
                     else
-                        XAsserts.assertTrue(
+                        Preconditions.isTrue(
                                 new WildcardMatcher(expectedOutput).matches(actualOutput),
                                 "Actual output <" + actualOutput + "> does not match expected");
                 });

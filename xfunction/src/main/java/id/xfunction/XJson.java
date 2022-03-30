@@ -61,7 +61,7 @@ public class XJson {
      * <p>Produces a string like: { "k1": "123", "k2": "ggg", "k3": ["sg", "dfg", "dsfg"] }
      */
     public static String asString(Object... pairs) {
-        XAsserts.assertTrue(pairs.length % 2 == 0, "Key-value missmatch");
+        Preconditions.isTrue(pairs.length % 2 == 0, "Key-value missmatch");
         StringJoiner buf = new StringJoiner(", ");
         for (int i = 0; i < pairs.length; i += 2) {
             Object k = pairs[i];

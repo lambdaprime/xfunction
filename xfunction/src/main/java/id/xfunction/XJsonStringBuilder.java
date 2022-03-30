@@ -43,7 +43,7 @@ public class XJsonStringBuilder {
     }
 
     public XJsonStringBuilder append(Object... pairs) {
-        XAsserts.assertTrue(pairs.length % 2 == 0, "Key-value missmatch");
+        Preconditions.isTrue(pairs.length % 2 == 0, "Key-value missmatch");
         for (int i = 0; i < pairs.length; i += 2) {
             if (pairs[i] == null) continue;
             append(pairs[i].toString(), pairs[i + 1]);

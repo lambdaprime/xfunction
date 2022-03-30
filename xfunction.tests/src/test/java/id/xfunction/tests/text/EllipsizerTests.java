@@ -20,7 +20,7 @@ package id.xfunction.tests.text;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import id.xfunction.XAssertException;
+import id.xfunction.PredonditionException;
 import id.xfunction.text.Ellipsizer;
 import org.junit.jupiter.api.Test;
 
@@ -54,6 +54,6 @@ public class EllipsizerTests {
         assertEquals("aaa...ccc", ellipsizer.ellipsizeMiddle("aaaaabbbbcccc"));
         assertEquals("...bbcccc", ellipsizer.ellipsizeHead("aaaaabbbbcccc"));
 
-        assertThrows(XAssertException.class, () -> new Ellipsizer(4));
+        assertThrows(PredonditionException.class, () -> new Ellipsizer(4));
     }
 }

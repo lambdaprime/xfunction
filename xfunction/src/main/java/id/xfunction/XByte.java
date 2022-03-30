@@ -64,7 +64,7 @@ public class XByte {
             buf.append(toHexPair(b));
         }
         String hex = buf.toString();
-        XAsserts.assertTrue(hex.length() % 2 == 0);
+        Preconditions.isTrue(hex.length() % 2 == 0);
         return hex;
     }
 
@@ -77,7 +77,7 @@ public class XByte {
             }
         }
         String hex = buf.toString();
-        XAsserts.assertTrue(hex.length() % 2 == 0);
+        Preconditions.isTrue(hex.length() % 2 == 0);
         return hex;
     }
 

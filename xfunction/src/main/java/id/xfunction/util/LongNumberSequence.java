@@ -17,7 +17,7 @@
  */
 package id.xfunction.util;
 
-import id.xfunction.XAsserts;
+import id.xfunction.Preconditions;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -96,7 +96,7 @@ public class LongNumberSequence {
      * <p>Complexity is log(N)
      */
     public void add(long n) {
-        XAsserts.assertTrue(n > 0, "Only positive numbers are allowed in the sequence");
+        Preconditions.isTrue(n > 0, "Only positive numbers are allowed in the sequence");
         if (lastMax < n) {
             long prevLastMax = lastMax;
             lastMax = n;

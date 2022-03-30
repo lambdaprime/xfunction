@@ -19,7 +19,7 @@ package id.xfunction.tests.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import id.xfunction.XAssertException;
+import id.xfunction.PredonditionException;
 import id.xfunction.util.IntBitSet;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -96,7 +96,7 @@ public class IntBitSetTest {
     @Test
     public void test_4_words() {
         IntBitSet set = new IntBitSet(128);
-        Assertions.assertThrows(XAssertException.class, () -> set.flip(128));
+        Assertions.assertThrows(PredonditionException.class, () -> set.flip(128));
 
         set.flip(127);
         assertEquals(
