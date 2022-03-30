@@ -72,7 +72,7 @@ public class MicroprofilerTests {
                     }
                 };
         long l = new Microprofiler().measureUserCpuTime(r);
-        assertTrue(l == 0);
+        assertTrue(l < 10);
     }
 
     @Test
