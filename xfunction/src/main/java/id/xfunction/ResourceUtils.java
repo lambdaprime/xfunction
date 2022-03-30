@@ -18,6 +18,7 @@
 package id.xfunction;
 
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 import id.xfunction.io.IoUtils;
 import id.xfunction.lang.XRE;
@@ -27,20 +28,14 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.stream.Stream;
 
 public class ResourceUtils {
 
     private IoUtils ioUtils = new IoUtils();
 
-    /**
-     * Reads given resource file and returns its content as a stream of lines.
-     *
-     * <p>If you try to read resource from the module you need to "open" that module to xfunction,
-     * otherwise Java will throw NPE.
-     *
-     * @param absolutePath absolute path to the resource in form "xxx/xxx/.../resource"
-     */
+    /** @see #readResource(String) */
     public Stream<String> readResourceAsStream(String absolutePath) {
         InputStream in = ClassLoader.getSystemResourceAsStream(absolutePath);
         if (in == null) throw new XRE("Resource %s is not found", absolutePath);
@@ -51,15 +46,12 @@ public class ResourceUtils {
         }
     }
 
-    /**
-     * Reads given resource file and returns its content as a stream of lines
-     *
-     * <p>If you try to read resource from the module you need to "open" that module to xfunction,
-     * otherwise Java will throw NPE.
-     *
-     * @param clazz class in which package resource is located
-     * @param name resource name
-     */
+    /** @see #readResource(String) */
+    public List<String> readResourceAsList(String absolutePath) {
+        return readResourceAsStream(absolutePath).collect(toList());
+    }
+
+    /** @see #readResource(Class, String) */
     public Stream<String> readResourceAsStream(Class<?> clazz, String name) {
         InputStream in = clazz.getResourceAsStream(name);
         if (in == null) {
@@ -72,6 +64,11 @@ public class ResourceUtils {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /** @see #readResource(String) */
+    public List<String> readResourceAsList(Class<?> clazz, String name) {
+        return readResourceAsStream(clazz, name).collect(toList());
     }
 
     /**
