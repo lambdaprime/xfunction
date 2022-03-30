@@ -19,9 +19,11 @@ package id.xfunction.tests.concurrent.flow;
 
 import id.xfunction.concurrent.flow.SimpleSubscriber;
 import id.xfunction.concurrent.flow.TransformProcessor;
+import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.SubmissionPublisher;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -32,17 +34,23 @@ public class TransformProcessorTest {
     public void test_transform_subscriber() throws Exception {
         var proc = new TransformProcessor<Integer, String>(i -> i.toString());
         var pub = new SubmissionPublisher<Integer>(Executors.newSingleThreadExecutor(), 10);
-        var future = new CompletableFuture<String>();
+        var future = new CompletableFuture<Void>();
+        var actual = new ArrayList<>();
         proc.subscribe(
                 new SimpleSubscriber<>() {
                     @Override
                     public void onNext(String item) {
-                        future.complete(item);
+                        actual.add(item);
+                        if (actual.size() == 5) {
+                            future.complete(null);
+                            return;
+                        }
+                        subscription.request(1);
                     }
                 });
         pub.subscribe(proc);
-        var data = 1234;
-        pub.submit(data);
-        Assertions.assertEquals(future.get(), Integer.toString(data));
+        IntStream.range(0, 5).boxed().forEach(pub::submit);
+        future.get();
+        Assertions.assertEquals("[0, 1, 2, 3, 4]", actual.toString());
     }
 }

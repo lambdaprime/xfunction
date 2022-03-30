@@ -22,14 +22,12 @@ import static java.util.stream.Collectors.joining;
 import id.xfunction.XAsserts;
 import java.util.Arrays;
 import java.util.concurrent.Flow.Processor;
-import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;
+import java.util.concurrent.SubmissionPublisher;
 import java.util.function.Function;
 
 /**
  * Processor which can be used to transform publisher messages into different type.
- *
- * <p>Supports only one subscriber.
  *
  * <p>Example of transforming integer to String:
  *
@@ -40,10 +38,9 @@ import java.util.function.Function;
  * @param <T> input type
  * @param <R> output type
  */
-public class TransformProcessor<T, R> implements Processor<T, R> {
+public class TransformProcessor<T, R> extends SubmissionPublisher<R> implements Processor<T, R> {
 
     private Subscription subscription;
-    private Subscriber<? super R> subscriber;
     private Function<T, R> transformer;
     private String ctorStackTrace;
 
@@ -61,32 +58,25 @@ public class TransformProcessor<T, R> implements Processor<T, R> {
 
     @Override
     public void onSubscribe(Subscription subscription) {
-        XAsserts.assertNotNull(
-                this.subscriber, "Transformer must have subscriber which is subscribed to it");
         XAsserts.assertNull(
                 this.subscription, "Already subscribed. Created from " + ctorStackTrace);
         this.subscription = subscription;
-        subscriber.onSubscribe(subscription);
+        subscription.request(1);
     }
 
     @Override
     public void onNext(T item) {
-        subscriber.onNext(transformer.apply(item));
+        submit(transformer.apply(item));
+        subscription.request(1);
     }
 
     @Override
     public void onError(Throwable throwable) {
-        subscriber.onError(throwable);
+        closeExceptionally(throwable);
     }
 
     @Override
     public void onComplete() {
-        subscriber.onComplete();
-    }
-
-    @Override
-    public void subscribe(Subscriber<? super R> subscriber) {
-        XAsserts.assertNull(this.subscriber, "Already has subscriber");
-        this.subscriber = subscriber;
+        close();
     }
 }
