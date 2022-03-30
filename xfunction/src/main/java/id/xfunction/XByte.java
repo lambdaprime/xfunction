@@ -68,6 +68,19 @@ public class XByte {
         return hex;
     }
 
+    public static String toHex(int... a) {
+        StringBuilder buf = new StringBuilder();
+        for (int i : a) {
+            var bytes = ByteBuffer.allocate(4).putInt(i).array();
+            for (byte b : bytes) {
+                buf.append(toHexPair(b));
+            }
+        }
+        String hex = buf.toString();
+        XAsserts.assertTrue(hex.length() % 2 == 0);
+        return hex;
+    }
+
     public static byte[] fromHex(String hex) {
         var out = new byte[hex.length() / 2];
         for (int i = 0; i < hex.length(); i += 2) {
