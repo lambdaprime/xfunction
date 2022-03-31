@@ -17,6 +17,9 @@
  */
 package id.xfunction.text;
 
+import java.util.List;
+import java.util.Optional;
+
 /**
  * Match text with a wildcards (called template) with any other text.
  *
@@ -36,21 +39,45 @@ package id.xfunction.text;
  */
 public class WildcardMatcher {
 
-    private String template;
+    public static class Result {
+
+        /** Template for which matching failed */
+        public Optional<String> template = Optional.empty();
+
+        public boolean isMatches() {
+            return template.isEmpty();
+        }
+    }
+
+    private List<String> templates;
 
     public WildcardMatcher(String template) {
-        this.template = template;
+        this.templates = List.of(template);
     }
 
-    /** Check if given text matches current template. */
+    public WildcardMatcher(List<String> templates) {
+        this.templates = templates;
+    }
+
+    /** Check if given text matches all templates. */
     public boolean matches(String str) {
-        return matches(str, 0, 0);
+        return match(str).isMatches();
     }
 
-    private boolean matches(String str, int si, int ti) {
+    /** Match given text against all templates and return result */
+    public Result match(String str) {
+        for (var template : templates) {
+            var result = new Result();
+            result.template = Optional.of(template);
+            if (!matches(template, str, 0, 0)) return result;
+        }
+        return new Result();
+    }
+
+    private boolean matches(String template, String str, int ti, int si) {
         while (si < str.length() && ti < template.length()) {
             if (template.charAt(ti) == '*') {
-                boolean ret = matches(str, si, ti + 1);
+                boolean ret = matches(template, str, ti + 1, si);
                 if (ret) return true;
                 si++;
                 continue;
