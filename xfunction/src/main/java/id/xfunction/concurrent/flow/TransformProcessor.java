@@ -21,8 +21,11 @@ import static java.util.stream.Collectors.joining;
 
 import id.xfunction.Preconditions;
 import java.util.Arrays;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Flow;
 import java.util.concurrent.Flow.Processor;
 import java.util.concurrent.Flow.Subscription;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.SubmissionPublisher;
 import java.util.function.Function;
 
@@ -45,6 +48,12 @@ public class TransformProcessor<T, R> extends SubmissionPublisher<R> implements 
     private String ctorStackTrace;
 
     public TransformProcessor(Function<T, R> transformer) {
+        this(transformer, ForkJoinPool.commonPool(), Flow.defaultBufferSize());
+    }
+
+    public TransformProcessor(
+            Function<T, R> transformer, Executor executor, int maxBufferCapacity) {
+        super(executor, maxBufferCapacity);
         this.transformer = transformer;
         // debugging subscriber issues may be difficult since they operate
         // usually on different threads so stacktrace for them not very useful
