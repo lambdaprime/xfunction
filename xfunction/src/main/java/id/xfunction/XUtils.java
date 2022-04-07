@@ -52,15 +52,23 @@ public class XUtils {
     }
 
     /**
+     * Calculates md5 sum for byte array
+     *
+     * @return md5 sum
+     */
+    public static String md5Sum(byte[] data) throws Exception {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        byte[] digest = md.digest(data);
+        return XByte.toHex(digest);
+    }
+
+    /**
      * Calculates md5 sum for input string
      *
      * @return md5 sum
      */
     public static String md5Sum(String string) throws Exception {
-        byte[] bytesOfMessage = string.getBytes();
-        MessageDigest md = MessageDigest.getInstance("MD5");
-        byte[] digest = md.digest(bytesOfMessage);
-        return XByte.toHex(digest);
+        return md5Sum(string.getBytes());
     }
 
     /**
