@@ -50,7 +50,7 @@ public class MethodCaller {
             if (Modifier.isNative(m.getModifiers())) continue;
             if (Modifier.isStatic(m.getModifiers())) continue;
             MethodType mt = MethodType.methodType(m.getReturnType(), m.getParameterTypes());
-            MethodHandle mh = MethodHandles.lookup().findVirtual(clazz, m.getName(), mt);
+            MethodHandle mh = MethodHandles.publicLookup().findVirtual(clazz, m.getName(), mt);
             this.methods.put(m.getName(), mh);
         }
     }
