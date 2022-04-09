@@ -19,6 +19,7 @@ package id.xfunction.lang.invoke;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodHandles.Lookup;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -40,8 +41,13 @@ public class MethodCaller {
     private Object object;
     private Map<String, MethodHandle> methods = new HashMap<>();
 
-    /** @param object object which methods will be called */
-    public MethodCaller(Object object) throws Exception {
+    /**
+     * @param lookup this is normally object returned by {@link MethodHandles#lookup()} which is
+     *     called in user module space. This allows MethodCaller to call cross module methods
+     *     (methods which declared outside of xfunction module)
+     * @param object object which methods will be called
+     */
+    public MethodCaller(Lookup lookup, Object object) throws Exception {
         this.object = object;
         Class<?> clazz = object.getClass();
         Method[] methods = clazz.getMethods();
@@ -50,7 +56,7 @@ public class MethodCaller {
             if (Modifier.isNative(m.getModifiers())) continue;
             if (Modifier.isStatic(m.getModifiers())) continue;
             MethodType mt = MethodType.methodType(m.getReturnType(), m.getParameterTypes());
-            MethodHandle mh = MethodHandles.publicLookup().findVirtual(clazz, m.getName(), mt);
+            MethodHandle mh = lookup.findVirtual(clazz, m.getName(), mt);
             this.methods.put(m.getName(), mh);
         }
     }

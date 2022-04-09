@@ -20,6 +20,7 @@ package id.xfunction.tests.lang.invoke;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import id.xfunction.lang.invoke.MethodCaller;
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,7 @@ public class MethodCallerTest {
 
     @Test
     public void test_no_method() throws Exception {
-        var caller = new MethodCaller("hello world");
+        var caller = new MethodCaller(MethodHandles.lookup(), "hello world");
         Assertions.assertThrows(NoSuchMethodException.class, () -> caller.call("sadf"));
     }
 
@@ -37,13 +38,13 @@ public class MethodCallerTest {
     public void test_happy() throws Throwable {
         var list = new ArrayList();
         list.add("hello");
-        var caller = new MethodCaller(list);
+        var caller = new MethodCaller(MethodHandles.lookup(), list);
         assertEquals("[hello]", caller.call("toString"));
     }
 
     @Test
     public void test_void() throws Throwable {
-        var caller = new MethodCaller("hello  ");
+        var caller = new MethodCaller(MethodHandles.lookup(), "hello  ");
         assertEquals("hello", caller.call("trim"));
     }
 }
