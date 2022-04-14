@@ -21,6 +21,7 @@ import id.xfunction.util.PrefixTrieSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Filter;
+import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.LogRecord;
 import java.util.regex.Pattern;
@@ -78,6 +79,7 @@ public class LoggerNameFilter implements Filter {
     @Override
     public boolean isLoggable(LogRecord record) {
         String name = record.getLoggerName();
+        if (record.getLevel().intValue() >= Level.WARNING.intValue()) return true;
         if (name == null) return false;
         if (namePrefixes.isEmpty()) return false;
         if (excludedLoggers.contains(name)) return false;
