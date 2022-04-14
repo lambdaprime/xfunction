@@ -19,7 +19,7 @@ package id.xfunction.tests.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import id.xfunction.PredonditionException;
+import id.xfunction.PreconditionException;
 import id.xfunction.util.LongNumberSequence;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ public class LongNumberSequenceTest {
     @Test
     public void test_negative() {
         LongNumberSequence seq = new LongNumberSequence(3);
-        Assertions.assertThrows(PredonditionException.class, () -> seq.add(-1));
+        Assertions.assertThrows(PreconditionException.class, () -> seq.add(-1));
     }
 
     @Test

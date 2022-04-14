@@ -17,8 +17,8 @@
  */
 package id.xfunction.concurrent.flow;
 
+import id.xfunction.PreconditionException;
 import id.xfunction.Preconditions;
-import id.xfunction.PredonditionException;
 import java.util.Optional;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;
@@ -39,7 +39,7 @@ public class DelegateSubscriber<T> implements Subscriber<T> {
     }
 
     @Override
-    public void onSubscribe(Subscription subscription) throws PredonditionException {
+    public void onSubscribe(Subscription subscription) throws PreconditionException {
         Preconditions.isNull(this.subscription, "Already subscribed");
         this.subscription = subscription;
         subscriber.onSubscribe(subscription);

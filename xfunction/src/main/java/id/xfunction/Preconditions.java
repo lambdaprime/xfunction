@@ -25,81 +25,81 @@ public class Preconditions {
     /**
      * Preconditional check for null objects.
      *
-     * @throws PredonditionException with a message if obj is null
+     * @throws PreconditionException with a message if obj is null
      */
-    public static void notNull(Object obj, String message) throws PredonditionException {
-        if (obj == null) throw new PredonditionException(message);
+    public static void notNull(Object obj, String message) throws PreconditionException {
+        if (obj == null) throw new PreconditionException(message);
     }
 
     /**
      * Preconditional check for null objects.
      *
-     * @throws PredonditionException if obj is null
+     * @throws PreconditionException if obj is null
      */
-    public static void notNull(Object obj) throws PredonditionException {
+    public static void notNull(Object obj) throws PreconditionException {
         notNull(obj, "");
     }
 
     /**
      * Preconditional check for null objects.
      *
-     * @throws PredonditionException with a message if obj is not null
+     * @throws PreconditionException with a message if obj is not null
      */
-    public static void isNull(Object obj, String message) throws PredonditionException {
-        if (obj != null) throw new PredonditionException(message);
+    public static void isNull(Object obj, String message) throws PreconditionException {
+        if (obj != null) throw new PreconditionException(message);
     }
 
     /**
      * Preconditional check for null objects.
      *
-     * @throws PredonditionException if obj is not null
+     * @throws PreconditionException if obj is not null
      */
-    public static void isNull(Object obj) throws PredonditionException {
+    public static void isNull(Object obj) throws PreconditionException {
         isNull(obj, "");
     }
 
     /**
      * Preconditional check.
      *
-     * @throws PredonditionException with a message if b is false
+     * @throws PreconditionException with a message if b is false
      */
-    public static void isTrue(boolean b, String message) throws PredonditionException {
-        if (!b) throw new PredonditionException(message);
+    public static void isTrue(boolean b, String message) throws PreconditionException {
+        if (!b) throw new PreconditionException(message);
     }
 
     /**
      * Preconditional check.
      *
-     * @throws PredonditionException if b is false
+     * @throws PreconditionException if b is false
      */
-    public static void isTrue(boolean b) throws PredonditionException {
+    public static void isTrue(boolean b) throws PreconditionException {
         isTrue(b, "");
     }
 
     /**
      * Preconditional check for equality.
      *
-     * @throws PredonditionException if two values are not equal
+     * @throws PreconditionException if two values are not equal
      */
-    public static void equals(long expected, long actual) throws PredonditionException {
-        if (expected != actual) throw new PredonditionException(expected, actual);
+    public static void equals(long expected, long actual) throws PreconditionException {
+        if (expected != actual) throw new PreconditionException(expected, actual);
     }
 
     /**
      * Preconditional check for equality.
      *
-     * @throws PredonditionException if two values are not equal
+     * @throws PreconditionException if two values are not equal
      */
-    public static void equals(double expected, double actual) throws PredonditionException {
-        if (expected != actual) throw new PredonditionException(expected, actual);
+    public static void equals(double expected, double actual) throws PreconditionException {
+        if (expected != actual) throw new PreconditionException(expected, actual);
     }
 
     /**
      * Preconditional check for equality.
      *
-     * @throws PredonditionException if two values are not equal
+     * @throws PreconditionException if two values are not equal
      */
-    public static <T> void equals(T expected, T actual) throws PredonditionException {
+    public static <T> void equals(T expected, T actual) throws PreconditionException {
         isTrue(
                 Objects.equals(expected, actual),
                 String.format("expected value %s, actual value %s", expected, actual));
@@ -108,53 +108,53 @@ public class Preconditions {
     /**
      * Preconditional check for equality with custom additional message
      *
-     * @throws PredonditionException if two values are not equal
+     * @throws PreconditionException if two values are not equal
      */
-    public static void equals(long expected, long actual, String msg) throws PredonditionException {
-        if (expected != actual) throw new PredonditionException(msg, expected, actual);
+    public static void equals(long expected, long actual, String msg) throws PreconditionException {
+        if (expected != actual) throw new PreconditionException(msg, expected, actual);
     }
 
     /**
      * Preconditional check for equality with custom additional message
      *
-     * @throws PredonditionException if two values are not equal
+     * @throws PreconditionException if two values are not equal
      */
     public static void equals(double expected, double actual, String msg)
-            throws PredonditionException {
-        if (expected != actual) throw new PredonditionException(msg, expected, actual);
+            throws PreconditionException {
+        if (expected != actual) throw new PreconditionException(msg, expected, actual);
     }
 
     /**
      * Preconditional check for equality with custom additional message
      *
-     * @throws PredonditionException if two values are not equal
+     * @throws PreconditionException if two values are not equal
      */
-    public static <T> void equals(T expected, T actual, String msg) throws PredonditionException {
+    public static <T> void equals(T expected, T actual, String msg) throws PreconditionException {
         if (!Objects.equals(expected, actual))
-            throw new PredonditionException(msg, expected, actual);
+            throw new PreconditionException(msg, expected, actual);
     }
 
     /**
      * Preconditional check for equality.
      *
-     * @throws PredonditionException if two values are not equal
+     * @throws PreconditionException if two values are not equal
      */
     public static void isLess(long lesser, long greater, String message)
-            throws PredonditionException {
+            throws PreconditionException {
         if (lesser >= greater)
-            throw new PredonditionException(
+            throw new PreconditionException(
                     "%s: Value <%s> should be less <%s>", message, lesser, greater);
     }
 
     /**
      * Preconditional check for equality.
      *
-     * @throws PredonditionException if two values are not equal
+     * @throws PreconditionException if two values are not equal
      */
     public static void isLessOrEqual(long lesser, long greater, String message)
-            throws PredonditionException {
+            throws PreconditionException {
         if (lesser > greater)
-            throw new PredonditionException(
+            throw new PreconditionException(
                     "%s: Value <%s> should be less or equal <%s>", message, lesser, greater);
     }
 }

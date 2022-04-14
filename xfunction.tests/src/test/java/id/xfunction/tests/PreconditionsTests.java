@@ -17,8 +17,8 @@
  */
 package id.xfunction.tests;
 
+import id.xfunction.PreconditionException;
 import id.xfunction.Preconditions;
-import id.xfunction.PredonditionException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +26,7 @@ public class PreconditionsTests {
 
     @Test
     public void test_assertTrue() {
-        Assertions.assertThrows(PredonditionException.class, () -> Preconditions.isTrue(false));
+        Assertions.assertThrows(PreconditionException.class, () -> Preconditions.isTrue(false));
     }
 
     @Test
@@ -36,7 +36,7 @@ public class PreconditionsTests {
 
     @Test
     public void test_assertNotNull() {
-        Assertions.assertThrows(PredonditionException.class, () -> Preconditions.notNull(null));
+        Assertions.assertThrows(PreconditionException.class, () -> Preconditions.notNull(null));
     }
 
     @Test
@@ -48,6 +48,6 @@ public class PreconditionsTests {
     public void test_assertEquals() {
         Preconditions.equals(null, null);
         Assertions.assertThrows(
-                PredonditionException.class, () -> Preconditions.equals(null, "test"));
+                PreconditionException.class, () -> Preconditions.equals(null, "test"));
     }
 }

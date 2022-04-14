@@ -19,8 +19,8 @@ package id.xfunction.concurrent.flow;
 
 import static java.util.stream.Collectors.joining;
 
+import id.xfunction.PreconditionException;
 import id.xfunction.Preconditions;
-import id.xfunction.PredonditionException;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.Flow.Subscriber;
@@ -56,10 +56,10 @@ public class SimpleSubscriber<T> implements Subscriber<T> {
     /**
      * Saves subscription and requests {@link #withInitialRequest(int)} number of items.
      *
-     * @throws PredonditionException if subscriber is already subscribed
+     * @throws PreconditionException if subscriber is already subscribed
      */
     @Override
-    public void onSubscribe(Subscription subscription) throws PredonditionException {
+    public void onSubscribe(Subscription subscription) throws PreconditionException {
         Preconditions.isNull(
                 this.subscription, "Already subscribed. Created from " + ctorStackTrace);
         this.subscription = subscription;

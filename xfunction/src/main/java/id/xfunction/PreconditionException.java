@@ -18,33 +18,33 @@
 package id.xfunction;
 
 /** Exception which is thrown by {@link Preconditions} methods. */
-public class PredonditionException extends RuntimeException {
+public class PreconditionException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
     private static final String EQUALS_MESSAGE_FORMAT =
             "%s: expected value <%s>, actual value <%s>";
 
-    public PredonditionException(String message) {
+    public PreconditionException(String message) {
         super(message);
     }
 
-    public PredonditionException(Throwable t) {
+    public PreconditionException(Throwable t) {
         super(t);
     }
 
-    public PredonditionException(String fmt, Object... objs) {
+    public PreconditionException(String fmt, Object... objs) {
         super(String.format(fmt, objs));
     }
 
-    public PredonditionException(double expected, double actual) {
+    public PreconditionException(double expected, double actual) {
         super(String.format(EQUALS_MESSAGE_FORMAT, "Predondition error", expected, actual));
     }
 
-    public PredonditionException(String message, double expected, double actual) {
+    public PreconditionException(String message, double expected, double actual) {
         super(String.format(EQUALS_MESSAGE_FORMAT, message, expected, actual));
     }
 
-    public <T> PredonditionException(String message, T expected, T actual) {
+    public <T> PreconditionException(String message, T expected, T actual) {
         super(String.format(EQUALS_MESSAGE_FORMAT, message, expected, actual));
     }
 }
