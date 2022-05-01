@@ -30,6 +30,8 @@ public class XByteTests {
         assertEquals("68656c6c6f20776f726c64", XByte.toHex("hello world".getBytes()));
         assertArrayEquals("hello world".getBytes(), XByte.fromHex("68656c6c6f20776f726c64"));
         assertArrayEquals(
+                "hello world".getBytes(), XByte.fromHexPairs("68,65 6c, 6c  6f,20,77,6f,72,6c,64"));
+        assertArrayEquals(
                 "hello world".getBytes(),
                 XByte.fromHexPairs("68 65  6c 6c    6f 20 77 6f 72 6c 64"));
         assertArrayEquals(new byte[] {(byte) 0xb7}, XByte.fromHex("b7"));

@@ -18,7 +18,7 @@
 package id.xfunction;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
+import java.util.regex.Pattern;
 
 public class XByte {
 
@@ -115,7 +115,9 @@ public class XByte {
     /** Opposite to {@link XByte#toHexPairs(byte...)} */
     public static byte[] fromHexPairs(String hex) {
         var array =
-                Arrays.stream(hex.split("\\s+"))
+                Pattern.compile("\\s|,|\\n")
+                        .splitAsStream(hex)
+                        .map(String::trim)
                         .filter(s -> !s.isEmpty())
                         .mapToInt(s -> Integer.valueOf(s, 16))
                         .toArray();
