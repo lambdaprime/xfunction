@@ -30,6 +30,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Predicate;
 
 /** Performs string substitution according to the given mapping. */
 public class Substitutor {
@@ -50,8 +51,25 @@ public class Substitutor {
         return text.stream().map(l -> substitute(l, mapping)).collect(toList());
     }
 
-    /** Performs inplace substitution of strings in a given file */
-    public void substitute(Path file, Map<String, String> mapping) throws IOException {
+    /** Performs inplace substitution of strings in a given directory or file */
+    public void substitute(Path target, Predicate<Path> filter, Map<String, String> mapping)
+            throws IOException {
+        Files.find(target, Integer.MAX_VALUE, (p, a) -> filter.test(p))
+                .forEach(
+                        file -> {
+                            try {
+                                substituteFile(file, mapping);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        });
+    }
+
+    public void substitute(Path target, Map<String, String> mapping) throws IOException {
+        substitute(target, p -> true, mapping);
+    }
+
+    private void substituteFile(Path file, Map<String, String> mapping) throws IOException {
         Path tmp = Files.createTempFile(file.getParent(), "tmp", "");
         try (BufferedReader r = new BufferedReader(new FileReader(file.toFile()));
                 BufferedWriter w = new BufferedWriter(new FileWriter(tmp.toFile()))) {
