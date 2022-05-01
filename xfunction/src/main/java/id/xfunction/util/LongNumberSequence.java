@@ -37,7 +37,7 @@ import java.util.stream.LongStream;
  *
  * <p>This collection is not thread safe.
  *
- * <h1>Examples</h1>
+ * <h2>Examples</h2>
  *
  * <pre>{@code
  * // empty sequence of numbers between [1, 10]

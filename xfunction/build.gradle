@@ -9,7 +9,6 @@ buildscript {
 }
 
 plugins {
-    id 'java'
     id 'com.diffplug.spotless'
 }
 
@@ -24,11 +23,6 @@ javadoc {
     options.overview = "src/overview.html";
     // ignore missing @return, @param etc
     options.addBooleanOption('Xdoclint:all,-missing', true)
-}
-
-compileJava {
-    sourceCompatibility = 11
-    targetCompatibility = 11
 }
 
 jar {

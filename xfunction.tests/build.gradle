@@ -1,5 +1,4 @@
 plugins {
-    id 'java'
     id 'com.diffplug.spotless'
 }
 
@@ -17,9 +16,6 @@ dependencies {
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.4.2')
     testRuntimeOnly("org.junit.platform:junit-platform-commons:1.7.0")
 }
-
-sourceCompatibility = '11'
-targetCompatibility = '11'
 
 test {
     useJUnitPlatform()
