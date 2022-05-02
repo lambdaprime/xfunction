@@ -66,7 +66,7 @@ public class Substitutor {
     }
 
     public void substitute(Path target, Map<String, String> mapping) throws IOException {
-        substitute(target, p -> true, mapping);
+        substitute(target, p -> p.toFile().isFile(), mapping);
     }
 
     private void substituteFile(Path file, Map<String, String> mapping) throws IOException {
