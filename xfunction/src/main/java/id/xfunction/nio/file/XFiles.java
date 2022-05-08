@@ -23,13 +23,28 @@ import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /** Additions to standard java.nio.file.Files */
 public class XFiles {
+
+    /** System temporary folder location if it was found */
+    public static final Optional<Path> TEMP_FOLDER = findTempFolder();
+
+    private static Optional<Path> findTempFolder() {
+        try {
+            return Optional.of(Files.createTempFile("test", "").getParent());
+        } catch (IOException e) {
+            var tmpDir = System.getProperty("java.io.tmpdir");
+            if (tmpDir != null) return Optional.of(Paths.get(tmpDir));
+        }
+        return Optional.empty();
+    }
 
     /** Deletes directory recursively with all files and sub-directories */
     public static void deleteRecursively(Path dir) throws IOException {
@@ -76,7 +91,7 @@ public class XFiles {
      * @param a folder A
      * @param b folder B
      */
-    public boolean containsAll(Path a, Path b) throws IOException {
+    public static boolean containsAll(Path a, Path b) throws IOException {
         return !Files.list(a)
                 .map(
                         Unchecked.wrapApply(
