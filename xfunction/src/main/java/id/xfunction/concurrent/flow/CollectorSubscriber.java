@@ -18,6 +18,7 @@
 package id.xfunction.concurrent.flow;
 
 import id.xfunction.PreconditionException;
+import id.xfunction.Preconditions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -34,6 +35,16 @@ public class CollectorSubscriber<T> extends SimpleSubscriber<T> {
     public CollectorSubscriber(int maxSize) {
         this.maxSize = maxSize;
         items = new ArrayList<>(maxSize);
+    }
+
+    @Override
+    public void replay(T item) {
+        Preconditions.isTrue(!isSubscribed(), "Replay possible only before subscribe");
+        if (items.size() == maxSize) return;
+        items.add(item);
+        if (items.size() == maxSize) {
+            future.complete(items);
+        }
     }
 
     @Override

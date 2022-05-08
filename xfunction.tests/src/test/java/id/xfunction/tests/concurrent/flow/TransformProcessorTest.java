@@ -17,10 +17,8 @@
  */
 package id.xfunction.tests.concurrent.flow;
 
-import id.xfunction.concurrent.flow.SimpleSubscriber;
+import id.xfunction.concurrent.flow.CollectorSubscriber;
 import id.xfunction.concurrent.flow.TransformProcessor;
-import java.util.ArrayList;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.SubmissionPublisher;
 import java.util.stream.IntStream;
@@ -34,23 +32,10 @@ public class TransformProcessorTest {
     public void test_transform_subscriber() throws Exception {
         var proc = new TransformProcessor<Integer, String>(i -> i.toString());
         var pub = new SubmissionPublisher<Integer>(Executors.newSingleThreadExecutor(), 10);
-        var future = new CompletableFuture<Void>();
-        var actual = new ArrayList<>();
-        proc.subscribe(
-                new SimpleSubscriber<>() {
-                    @Override
-                    public void onNext(String item) {
-                        actual.add(item);
-                        if (actual.size() == 5) {
-                            future.complete(null);
-                            return;
-                        }
-                        subscription.request(1);
-                    }
-                });
+        var subscriber = new CollectorSubscriber<String>(5);
+        proc.subscribe(subscriber);
         pub.subscribe(proc);
         IntStream.range(0, 5).boxed().forEach(pub::submit);
-        future.get();
-        Assertions.assertEquals("[0, 1, 2, 3, 4]", actual.toString());
+        Assertions.assertEquals("[0, 1, 2, 3, 4]", subscriber.getFuture().get().toString());
     }
 }

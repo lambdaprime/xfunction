@@ -27,7 +27,7 @@ import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;
 
 /** Simple implementation for {@link Subscriber} interface which can be subscribed only once. */
-public class SimpleSubscriber<T> implements Subscriber<T> {
+public class SimpleSubscriber<T> implements ReplayableSubscriber<T> {
 
     private int initNumOfMessages = 1;
     protected Subscription subscription;
@@ -83,5 +83,13 @@ public class SimpleSubscriber<T> implements Subscriber<T> {
     /** Returns subscription if subscriber is already subscribed */
     public Optional<Subscription> getSubscription() {
         return Optional.ofNullable(subscription);
+    }
+
+    /** Empty */
+    @Override
+    public void replay(T item) {}
+
+    public boolean isSubscribed() {
+        return subscription != null;
     }
 }
