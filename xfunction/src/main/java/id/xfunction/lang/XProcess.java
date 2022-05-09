@@ -70,7 +70,15 @@ public class XProcess {
      * @see flushStdout await
      * @throws IllegalStateException if called more than once
      */
-    public String stdoutAsString() {
+    public synchronized String stdoutAsString() {
+        if (isStdoutConsumed)
+            try {
+                // wait for flushStdout to finish if it is
+                // running now
+                process.waitFor();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         return stdoutAsString.orElseGet(() -> stdout.collect(joining("\n")));
     }
 
