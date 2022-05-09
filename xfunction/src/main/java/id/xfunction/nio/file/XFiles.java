@@ -38,7 +38,9 @@ public class XFiles {
 
     private static Optional<Path> findTempFolder() {
         try {
-            return Optional.of(Files.createTempFile("test", "").getParent());
+            var tmpFile = Files.createTempFile("test", "");
+            tmpFile.toFile().deleteOnExit();
+            return Optional.of(tmpFile.getParent());
         } catch (IOException e) {
             var tmpDir = System.getProperty("java.io.tmpdir");
             if (tmpDir != null) return Optional.of(Paths.get(tmpDir));
