@@ -92,10 +92,10 @@ public class AssertRunCommand {
 
     public void run(Consumer<XProcess> procConsumer) {
         XProcess proc = exec.run();
-        proc.flush(false);
+        proc.outputAsync(false);
         procConsumer.accept(proc);
         int actualCode = proc.await();
-        String actualOutput = proc.stdoutAsString() + "\n" + proc.stderrAsString() + "\n";
+        String actualOutput = proc.stdout() + "\n" + proc.stderr() + "\n";
         consumer.ifPresent(c -> c.accept(actualOutput));
         expectedCode.ifPresent(
                 expectedCode -> {

@@ -64,13 +64,13 @@ public class XProcess {
 
     /**
      * Returns standard output as a string. This call will consume stdout stream meaning that you
-     * can call it only once. If you want to call it multiple times make sure to flush stdout first
-     * and wait until process will finish.
+     * can call it only once. If you want to call it multiple times make sure to call {@link
+     * #stdoutAsync(boolean)} first and wait until process will finish.
      *
-     * @see flushStdout await
+     * @see #stdoutAsync(boolean)
      * @throws IllegalStateException if called more than once
      */
-    public synchronized String stdoutAsString() {
+    public synchronized String stdout() {
         if (isStdoutConsumed)
             try {
                 // wait for flushStdout to finish if it is
@@ -82,8 +82,15 @@ public class XProcess {
         return stdoutAsString.orElseGet(() -> stdout.collect(joining("\n")));
     }
 
-    /** Consumes stdout stream into internal buffer or ignores it. This call is async. */
-    public XProcess flushStdout(boolean ignore) {
+    /**
+     * Consumes stdout stream into internal buffer which later can be obtained through {@link
+     * XProcess#stdout()} or ignores it. This call is async.
+     *
+     * <p>When process writes to stdout it may get blocked until somebody starts reading it. This
+     * methods starts reading immediately in background (so that process will not block) and
+     * preserves the output.
+     */
+    public XProcess stdoutAsync(boolean ignore) {
         consumeStdout();
         if (!process.isAlive()) return this;
         executor.execute(
@@ -98,12 +105,12 @@ public class XProcess {
     }
 
     /** Consumes stdout stream and forwards it to System.out This call is async. */
-    public XProcess forwardStdout() {
-        return forwardStdout(System.out::println);
+    public XProcess forwardStdoutAsync() {
+        return stdoutAsync(System.out::println);
     }
 
     /** Consumes stdout stream and forwards it to consumer. This call is async. */
-    public XProcess forwardStdout(Consumer<String> consumer) {
+    public XProcess stdoutAsync(Consumer<String> consumer) {
         consumeStdout();
         if (!process.isAlive()) return this;
         executor.execute(
@@ -115,18 +122,25 @@ public class XProcess {
 
     /**
      * Returns standard error output as a string. This call will consume stderr stream meaning that
-     * you can call it only once. If you want to call it multiple times make sure to flush stderr
-     * first.
+     * you can call it only once. If you want to call it multiple times make sure to call {@link
+     * XProcess#stderrAsync(boolean)} first.
      *
-     * @see flushStderr
+     * @see #stderrAsync(boolean)
      * @throws IllegalStateException if called more than once
      */
-    public String stderrAsString() {
+    public String stderr() {
         return stderrAsString.orElseGet(() -> stderr.collect(joining("\n")));
     }
 
-    /** Consumes stderr stream into internal buffer asynchronously. This call is async. */
-    public XProcess flushStderr(boolean ignore) {
+    /**
+     * Consumes stderr stream into internal buffer which later can be obtained through {@link
+     * XProcess#stderr()} or ignores it. This call is async.
+     *
+     * <p>When process writes to stderr it may get blocked until somebody starts reading it. This
+     * methods starts reading immediately in background (so that process will not block) and
+     * preserves the output.
+     */
+    public XProcess stderrAsync(boolean ignore) {
         consumeStderr();
         if (!process.isAlive()) return this;
         executor.execute(
@@ -141,7 +155,7 @@ public class XProcess {
     }
 
     /** Consumes stderr stream and forwards it to System.err This call is async. */
-    public XProcess forwardStderr() {
+    public XProcess forwardStderrAsync() {
         consumeStderr();
         if (!process.isAlive()) return this;
         executor.execute(
@@ -152,26 +166,30 @@ public class XProcess {
     }
 
     /**
-     * Flushes stdout and stderr.
+     * Combines {@link #stdoutAsync(boolean)} and {@link #stderrAsync(boolean)} into one method
      *
-     * @see flushStderr
-     * @see flushStdout
+     * <p>When process writes to stdout/stderr it may get blocked until somebody starts reading it.
+     * This methods starts reading both immediately in background (so that process will not block)
+     * and preserves the output.
+     *
+     * @see #stdoutAsync
+     * @see #stderrAsync
      */
-    public XProcess flush(boolean ignore) {
-        flushStderr(ignore);
-        flushStdout(ignore);
+    public XProcess outputAsync(boolean ignore) {
+        stderrAsync(ignore);
+        stdoutAsync(ignore);
         return this;
     }
 
     /**
      * Forwards stdout and stderr to System.out and System.err respectively.
      *
-     * @see forwardStderr
-     * @see forwardStdout
+     * @see #forwardStderrAsync()
+     * @see #forwardOutputAsync()
      */
-    public XProcess forward() {
-        forwardStderr();
-        forwardStdout();
+    public XProcess forwardOutputAsync() {
+        forwardStderrAsync();
+        forwardStdoutAsync();
         return this;
     }
 
@@ -179,21 +197,13 @@ public class XProcess {
         return process;
     }
 
-    /**
-     * After you consume this stream it will not be longer valid.
-     *
-     * @see flushStdout
-     */
-    public Stream<String> stdout() {
+    /** After you consume this stream it will not be longer valid. */
+    public Stream<String> stdoutAsStream() {
         return stdout;
     }
 
-    /**
-     * After you consume this stream it will not be longer valid.
-     *
-     * @see flushStderr
-     */
-    public Stream<String> stderr() {
+    /** After you consume this stream it will not be longer valid. */
+    public Stream<String> stderrAsStream() {
         return stderr;
     }
 
@@ -209,7 +219,8 @@ public class XProcess {
      * Waits for process to complete and returns code safely wrapping all checked exceptions to
      * RuntimeException.
      *
-     * <p>Make sure to use flush methods if you ignore output/stderr.
+     * <p>Make sure to use {@link XProcess#outputAsync(boolean)} method to ignore both
+     * output/stderr.
      */
     public int await() {
         executor.shutdown();

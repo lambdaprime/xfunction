@@ -33,46 +33,46 @@ public class XProcessTests {
 
     @Test
     public void test_stdoutAsString() {
-        assertEquals("test", new XExec("echo", "test").run().stdoutAsString());
+        assertEquals("test", new XExec("echo", "test").run().stdout());
     }
 
     @Test
     public void test_flushStdout() {
         XProcess proc = new XExec("echo", "test").run();
-        proc.flushStdout(false).await();
-        proc.stdoutAsString();
-        proc.stdoutAsString();
-        assertEquals("test", proc.stdoutAsString());
+        proc.stdoutAsync(false).await();
+        proc.stdout();
+        proc.stdout();
+        assertEquals("test", proc.stdout());
     }
 
     @Test
     public void test_flushStderr() {
         XProcess proc = new XExec("pwd", "-z").run();
-        proc.flushStderr(false).await();
-        proc.stderrAsString();
-        proc.stderrAsString();
+        proc.stderrAsync(false).await();
+        proc.stderr();
+        proc.stderr();
         assertEquals(
                 "pwd: invalid option -- 'z'\nTry 'pwd --help' for more information.",
-                proc.stderrAsString());
+                proc.stderr());
     }
 
     @Test
     public void test_await_not_hangs() throws Exception {
         XExec xe = new XExec("printf \"%120000d\" 12");
         XProcess proc = xe.run();
-        System.out.println(proc.flush(true).await());
+        System.out.println(proc.outputAsync(true).await());
     }
 
     @Test
     public void test_forward() {
         XProcess proc = new XExec("echo", "test").run();
-        proc.forward().await();
+        proc.forwardOutputAsync().await();
     }
 
     @Test
     public void test_forward_and_flush_together() {
         XProcess proc = new XExec("echo", "test").run();
-        proc.flush(false);
-        Assertions.assertThrows(IllegalStateException.class, () -> proc.forward());
+        proc.outputAsync(false);
+        Assertions.assertThrows(IllegalStateException.class, () -> proc.forwardOutputAsync());
     }
 }
