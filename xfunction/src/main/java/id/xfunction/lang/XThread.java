@@ -40,8 +40,10 @@ public class XThread {
      * <pre>{@code
      * XThread.sleep(1000);
      * }</pre>
+     *
+     * @param msec how long to sleep in milliseconds. -1 - sleep forever
      */
     public static void sleep(long msec) {
-        Unchecked.run(() -> Thread.sleep(msec));
+        Unchecked.run(() -> Thread.sleep(msec == -1 ? Integer.MAX_VALUE : msec));
     }
 }
