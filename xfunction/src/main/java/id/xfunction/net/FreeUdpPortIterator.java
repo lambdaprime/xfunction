@@ -18,26 +18,26 @@
 package id.xfunction.net;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
 import java.net.StandardProtocolFamily;
 import java.nio.channels.DatagramChannel;
 import java.util.Iterator;
+import java.util.Optional;
 
-public class FreePortIterator implements Iterator<Integer> {
-
-    public enum Protocol {
-        TCP,
-        UDP
-    };
+/** Iterates over free UDP ports available in the system. */
+public class FreeUdpPortIterator implements Iterator<DatagramChannel> {
 
     private int currentPort;
-    private Protocol proto;
+    private Optional<InetAddress> address = Optional.empty();
 
-    public FreePortIterator(int startPort, Protocol proto) {
+    public FreeUdpPortIterator(int startPort) {
+        this(startPort, Optional.empty());
+    }
 
+    public FreeUdpPortIterator(int startPort, Optional<InetAddress> address) {
         this.currentPort = startPort;
-        this.proto = proto;
+        this.address = address;
     }
 
     @Override
@@ -45,21 +45,21 @@ public class FreePortIterator implements Iterator<Integer> {
         return true;
     }
 
+    /**
+     * Find next port which is available on all system network interfaces and return a {@link
+     * DatagramChannel} attached to it.
+     */
     @Override
-    public Integer next() {
+    public DatagramChannel next() {
         while (true) {
-            if (proto == Protocol.UDP) {
-                try (var ss =
-                        DatagramChannel.open(StandardProtocolFamily.INET)
-                                .bind(new InetSocketAddress(currentPort))) {
-                    return currentPort++;
-                } catch (IOException e) {
-                }
-            } else {
-                try (var ss = new ServerSocket(currentPort)) {
-                    return currentPort++;
-                } catch (IOException e) {
-                }
+            try {
+                var dataChannel = DatagramChannel.open(StandardProtocolFamily.INET);
+                if (address.isPresent())
+                    dataChannel.bind(new InetSocketAddress(address.get(), currentPort));
+                else dataChannel.bind(new InetSocketAddress(currentPort));
+                currentPort++;
+                return dataChannel;
+            } catch (IOException e) {
             }
             currentPort++;
         }
