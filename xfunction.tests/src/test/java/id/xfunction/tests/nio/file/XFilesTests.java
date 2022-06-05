@@ -17,13 +17,16 @@
  */
 package id.xfunction.tests.nio.file;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import id.xfunction.lang.XThread;
 import id.xfunction.nio.file.XFiles;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -36,5 +39,28 @@ public class XFilesTests {
         assertTrue(Files.list(tmpDir).count() > 0);
         XFiles.deleteRecursively(tmpDir);
         Assertions.assertEquals(false, tmpDir.toFile().exists());
+    }
+
+    @Test
+    public void test_watchForStringInFile() throws Exception {
+        Path tmpFile = Files.createTempFile("test", "");
+        var future = XFiles.watchForStringInFile(tmpFile, "hello");
+        assertEquals(false, future.isDone());
+        Files.write(tmpFile, "asdsad".getBytes(), StandardOpenOption.APPEND);
+        XThread.sleep(200);
+        assertEquals(false, future.isDone());
+
+        Files.write(tmpFile, "hell".getBytes(), StandardOpenOption.APPEND);
+        XThread.sleep(200);
+        assertEquals(false, future.isDone());
+
+        Files.write(tmpFile, "o".getBytes(), StandardOpenOption.APPEND);
+        XThread.sleep(200);
+        future.get();
+
+        future = XFiles.watchForStringInFile(tmpFile, "hel");
+        assertEquals(false, future.isDone());
+
+        future.cancel(false);
     }
 }
