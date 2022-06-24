@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -51,26 +52,35 @@ public class Substitutor {
         return text.stream().map(l -> substitute(l, mapping)).collect(toList());
     }
 
-    /** Performs inplace substitution of strings in a given directory or file */
-    public void substitute(Path target, Predicate<Path> filter, Map<String, String> mapping)
+    /**
+     * Performs inplace substitution of strings in a given directory or file
+     *
+     * @return list of changed files
+     */
+    public List<Path> substitute(Path target, Predicate<Path> filter, Map<String, String> mapping)
             throws IOException {
+        var out = new ArrayList<Path>();
         Files.find(target, Integer.MAX_VALUE, (p, a) -> filter.test(p))
                 .forEach(
                         file -> {
                             try {
-                                substituteFile(file, mapping);
+                                if (substituteFile(file, mapping)) {
+                                    out.add(file);
+                                }
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
                         });
+        return out;
     }
 
-    public void substitute(Path target, Map<String, String> mapping) throws IOException {
-        substitute(target, p -> p.toFile().isFile(), mapping);
+    public List<Path> substitute(Path target, Map<String, String> mapping) throws IOException {
+        return substitute(target, p -> p.toFile().isFile(), mapping);
     }
 
-    private void substituteFile(Path file, Map<String, String> mapping) throws IOException {
-        Path tmp = Files.createTempFile(file.getParent(), "tmp", "");
+    private boolean substituteFile(Path file, Map<String, String> mapping) throws IOException {
+        Path tmp = Files.createTempFile(file.toAbsolutePath().getParent(), "tmp", "");
+        var isChanged = false;
         try (BufferedReader r = new BufferedReader(new FileReader(file.toFile()));
                 BufferedWriter w = new BufferedWriter(new FileWriter(tmp.toFile()))) {
             String l = null;
@@ -78,8 +88,10 @@ public class Substitutor {
                 w.write(substitute(l, mapping));
                 w.write('\n');
             }
+            isChanged = tmp.toFile().length() != file.toFile().length();
             Files.move(tmp, file, StandardCopyOption.REPLACE_EXISTING);
         }
+        return isChanged;
     }
 
     /** Substitutes all values and return new string */
