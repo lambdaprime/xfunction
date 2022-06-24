@@ -63,4 +63,20 @@ public class XFilesTests {
 
         future.cancel(false);
     }
+
+    @Test
+    public void test_containsAll() throws Exception {
+        var samples = Paths.get("samples");
+        var tmpDir = Files.createTempDirectory("test");
+        assertEquals(false, XFiles.containsAll(samples, tmpDir));
+        assertEquals(false, XFiles.containsAllRecursively(samples, tmpDir));
+
+        Files.copy(samples.resolve("f1"), tmpDir.resolve("f1"));
+        assertEquals(true, XFiles.containsAll(samples, tmpDir));
+        assertEquals(false, XFiles.containsAllRecursively(samples, tmpDir));
+
+        Files.delete(tmpDir.resolve("f1"));
+        XFiles.copyRecursively(samples, tmpDir);
+        assertEquals(true, XFiles.containsAllRecursively(samples, tmpDir));
+    }
 }

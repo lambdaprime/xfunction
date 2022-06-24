@@ -26,12 +26,12 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.function.BiConsumer;
 
-public class RecursiveCopyVisitor implements FileVisitor<Path> {
+class RecursiveFileVisitor implements FileVisitor<Path> {
     private Path srcPath;
     private Path dstPath;
     private BiConsumer<Path, Path> copier;
 
-    public RecursiveCopyVisitor(Path srcPath, Path dstPath, BiConsumer<Path, Path> copier) {
+    public RecursiveFileVisitor(Path srcPath, Path dstPath, BiConsumer<Path, Path> copier) {
         this.srcPath = srcPath;
         this.dstPath = dstPath;
         this.copier = copier;

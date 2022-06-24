@@ -18,7 +18,9 @@
 package id.xfunction.nio.file;
 
 import id.xfunction.function.Unchecked;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.file.FileSystems;
@@ -36,8 +38,6 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /** Additions to standard java.nio.file.Files */
 public class XFiles {
@@ -90,34 +90,53 @@ public class XFiles {
         if (src.isFile() && dst.isDirectory()) {
             dst = new File(dst, src.getName());
         }
-        RecursiveCopyVisitor visitor =
-                new RecursiveCopyVisitor(
+        var visitor =
+                new RecursiveFileVisitor(
                         src.toPath(), dst.toPath(), Unchecked.wrapAccept(Files::copy));
         Files.walkFileTree(src.toPath(), visitor);
     }
 
     /**
-     * Checks if content of folder A exists in folder B
+     * Checks, non recursively, if all files of folder A exists in folder B and their content is
+     * equal.
      *
      * @param a folder A
      * @param b folder B
      */
     public static boolean containsAll(Path a, Path b) throws IOException {
-        return !Files.list(a)
-                .map(
-                        Unchecked.wrapApply(
-                                expectedFile -> {
-                                    String expected =
-                                            Files.lines(expectedFile)
-                                                    .collect(Collectors.joining("\n"));
-                                    String actual =
-                                            Files.lines(b.resolve(a.getFileName().toString()))
-                                                    .collect(Collectors.joining("\n"));
-                                    return expected.equals(actual);
-                                }))
-                .filter(Predicate.isEqual(Boolean.FALSE))
-                .findFirst()
-                .isPresent();
+        return containsAll(a, b, 1);
+    }
+
+    /**
+     * Checks, recursively, if all files of folder A and its subfolders exists in folder B and their
+     * content is equal.
+     *
+     * @param a folder A
+     * @param b folder B
+     */
+    public static boolean containsAllRecursively(Path a, Path b) throws IOException {
+        return containsAll(a, b, Integer.MAX_VALUE);
+    }
+
+    /**
+     * Checks, recursively, if all files of folder A and its subfolders exists in folder B and their
+     * content is equal.
+     *
+     * @param a folder A
+     * @param b folder B
+     * @param maxDepth the maximum number of directory levels to visit
+     */
+    public static boolean containsAll(Path a, Path b, int maxDepth) throws IOException {
+        var iter = Files.walk(a, maxDepth).iterator();
+        while (iter.hasNext()) {
+            var expectedPath = iter.next();
+            if (!expectedPath.toFile().isFile()) continue;
+            if (!isContentEqual(
+                    expectedPath.toFile(),
+                    b.resolve(expectedPath.subpath(a.getNameCount(), expectedPath.getNameCount()))
+                            .toFile())) return false;
+        }
+        return true;
     }
 
     public static Future<Void> watchForStringInFile(Path file, String str)
@@ -165,5 +184,17 @@ public class XFiles {
                             }
                         });
         return future;
+    }
+
+    public static boolean isContentEqual(File a, File b) throws IOException {
+        if (!a.isFile()) return false;
+        if (!b.isFile()) return false;
+        try (var streamA = new BufferedInputStream(new FileInputStream(a));
+                var streamB = new BufferedInputStream(new FileInputStream(b))) {
+            while (streamA.read() == streamB.read()) {
+                if (streamA.available() == 0 && streamB.available() == 0) return true;
+            }
+        }
+        return false;
     }
 }
