@@ -34,7 +34,26 @@ buildscript {
 
 }
 
+plugins {
+    id 'java'
+    id 'com.diffplug.spotless' version '6.7.2'
+}
+
 apply plugin: 'io.codearte.nexus-staging'
+
+allprojects {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    sourceCompatibility = '11'
+    targetCompatibility = '11'
+}
 
 nexusStaging {
     serverUrl = "https://s01.oss.sonatype.org/service/local/"
@@ -52,5 +71,3 @@ props.each { prop ->
     project.ext.set(prop.key, prop.value)
 }
 ins.close()
-
-apply from: '../build.gradle'

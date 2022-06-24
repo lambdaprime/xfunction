@@ -207,7 +207,9 @@ public class XProcess {
         return stderr;
     }
 
-    /** @return process return code */
+    /**
+     * @return process return code
+     */
     public Future<Integer> code() {
         if (!code.isPresent()) {
             code = Optional.of(CompletableFuture.supplyAsync(Unchecked.wrapGet(process::waitFor)));

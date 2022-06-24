@@ -19,7 +19,9 @@ package id.xfunction.concurrent.flow;
 
 import java.util.concurrent.Flow.Subscriber;
 
-/** @author lambdaprime intid@protonmail.com */
+/**
+ * @author lambdaprime intid@protonmail.com
+ */
 public interface ReplayableSubscriber<T> extends Subscriber<T> {
 
     void replay(T item);

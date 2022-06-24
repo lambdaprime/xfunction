@@ -35,7 +35,9 @@ public class ResourceUtils {
 
     private IoUtils ioUtils = new IoUtils();
 
-    /** @see #readResource(String) */
+    /**
+     * @see #readResource(String)
+     */
     public Stream<String> readResourceAsStream(String absolutePath) {
         InputStream in = ClassLoader.getSystemResourceAsStream(absolutePath);
         if (in == null) throw new XRE("Resource %s is not found", absolutePath);
@@ -46,12 +48,16 @@ public class ResourceUtils {
         }
     }
 
-    /** @see #readResource(String) */
+    /**
+     * @see #readResource(String)
+     */
     public List<String> readResourceAsList(String absolutePath) {
         return readResourceAsStream(absolutePath).collect(toList());
     }
 
-    /** @see #readResource(Class, String) */
+    /**
+     * @see #readResource(Class, String)
+     */
     public Stream<String> readResourceAsStream(Class<?> clazz, String name) {
         InputStream in = clazz.getResourceAsStream(name);
         if (in == null) {
@@ -66,7 +72,9 @@ public class ResourceUtils {
         }
     }
 
-    /** @see #readResource(String) */
+    /**
+     * @see #readResource(String)
+     */
     public List<String> readResourceAsList(Class<?> clazz, String name) {
         return readResourceAsStream(clazz, name).collect(toList());
     }

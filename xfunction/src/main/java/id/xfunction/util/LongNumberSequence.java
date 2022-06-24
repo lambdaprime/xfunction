@@ -80,7 +80,9 @@ public class LongNumberSequence {
         this.size = size;
     }
 
-    /** @return how many N last numbers can be queried for presence */
+    /**
+     * @return how many N last numbers can be queried for presence
+     */
     public int size() {
         return size;
     }

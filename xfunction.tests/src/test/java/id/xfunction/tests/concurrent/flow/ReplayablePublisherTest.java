@@ -22,7 +22,9 @@ import id.xfunction.concurrent.flow.ReplayablePublisher;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-/** @author lambdaprime intid@protonmail.com */
+/**
+ * @author lambdaprime intid@protonmail.com
+ */
 public class ReplayablePublisherTest {
 
     @Test

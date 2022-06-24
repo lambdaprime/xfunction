@@ -23,7 +23,9 @@ import java.util.concurrent.ForkJoinPool;
 /** Future which delays its completion for a given amount of time */
 public class DelayedCompletableFuture<T> extends CompletableFuture<T> {
 
-    /** @param millis number of milliseconds when future completes */
+    /**
+     * @param millis number of milliseconds when future completes
+     */
     public DelayedCompletableFuture(T value, long millis) {
         ForkJoinPool.commonPool()
                 .submit(

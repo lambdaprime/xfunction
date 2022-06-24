@@ -28,7 +28,9 @@ public class NamedThreadFactory implements ThreadFactory {
 
     private final String name;
 
-    /** @param name threads will be created with this name */
+    /**
+     * @param name threads will be created with this name
+     */
     public NamedThreadFactory(String name) {
         this.name = name;
     }
