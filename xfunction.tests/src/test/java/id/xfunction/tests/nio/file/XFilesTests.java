@@ -44,9 +44,9 @@ public class XFilesTests {
     @Test
     public void test_watchForStringInFile() throws Exception {
         Path tmpFile = Files.createTempFile("test", "");
-        var future = XFiles.watchForStringInFile(tmpFile, "hello");
+        var future = XFiles.watchForLineInFile(tmpFile, s -> s.contains("hello"));
         assertEquals(false, future.isDone());
-        Files.write(tmpFile, "asdsad".getBytes(), StandardOpenOption.APPEND);
+        Files.write(tmpFile, "asdsa\nd".getBytes(), StandardOpenOption.APPEND);
         XThread.sleep(200);
         assertEquals(false, future.isDone());
 
@@ -54,11 +54,11 @@ public class XFilesTests {
         XThread.sleep(200);
         assertEquals(false, future.isDone());
 
-        Files.write(tmpFile, "o".getBytes(), StandardOpenOption.APPEND);
+        Files.write(tmpFile, "o\n".getBytes(), StandardOpenOption.APPEND);
         XThread.sleep(200);
-        future.get();
+        assertEquals("dhello", future.get());
 
-        future = XFiles.watchForStringInFile(tmpFile, "hel");
+        future = XFiles.watchForLineInFile(tmpFile, s -> s.contains("hel"));
         assertEquals(false, future.isDone());
 
         future.cancel(false);

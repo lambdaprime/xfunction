@@ -57,10 +57,11 @@ public class Substitutor {
      *
      * @return list of changed files
      */
-    public List<Path> substitute(Path target, Predicate<Path> filter, Map<String, String> mapping)
+    public List<Path> substitute(
+            Path target, Predicate<Path> fileFilter, Map<String, String> mapping)
             throws IOException {
         var out = new ArrayList<Path>();
-        Files.find(target, Integer.MAX_VALUE, (p, a) -> filter.test(p))
+        Files.find(target, Integer.MAX_VALUE, (p, a) -> fileFilter.test(p))
                 .forEach(
                         file -> {
                             try {

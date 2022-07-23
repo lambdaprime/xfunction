@@ -38,6 +38,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
+import java.util.function.Predicate;
 
 /** Additions to standard java.nio.file.Files */
 public class XFiles {
@@ -139,7 +140,13 @@ public class XFiles {
         return true;
     }
 
-    public static Future<Void> watchForStringInFile(Path file, String str)
+    /**
+     * Setup a watcher on a file for a particular line.
+     *
+     * <p>It monitors file for all new incoming lines. Once it finds a line which matches the
+     * predicate it completes the future with that line.
+     */
+    public static Future<String> watchForLineInFile(Path file, Predicate<String> matchPredicate)
             throws IOException, InterruptedException {
         WatchService watchService = FileSystems.getDefault().newWatchService();
         file.getParent()
@@ -148,9 +155,8 @@ public class XFiles {
                         StandardWatchEventKinds.ENTRY_MODIFY,
                         StandardWatchEventKinds.ENTRY_DELETE);
         long[] curPos = {0};
-        var future = new CompletableFuture<Void>();
-        var strBuf = new StringBuilder(str);
-        var buf = new StringBuilder(str.length());
+        var future = new CompletableFuture<String>();
+        var buf = new StringBuilder();
         ForkJoinPool.commonPool()
                 .execute(
                         () -> {
@@ -166,13 +172,18 @@ public class XFiles {
                                         var raf = new RandomAccessFile(file.toFile(), "r");
                                         raf.seek(curPos[0]);
                                         while (raf.getFilePointer() < raf.length()) {
-                                            buf.append((char) raf.read());
+                                            var ch = (char) raf.read();
                                             curPos[0]++;
-                                            if (buf.compareTo(strBuf) == 0) {
-                                                future.complete(null);
-                                                break;
+                                            if (ch == '\n') {
+                                                var line = buf.toString();
+                                                if (matchPredicate.test(line)) {
+                                                    future.complete(line);
+                                                    break;
+                                                }
+                                                buf.setLength(0);
+                                            } else {
+                                                buf.append(ch);
                                             }
-                                            if (buf.length() == str.length()) buf.deleteCharAt(0);
                                         }
                                     }
                                     if (!key.reset())
