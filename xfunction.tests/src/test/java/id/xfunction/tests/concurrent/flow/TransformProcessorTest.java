@@ -19,6 +19,7 @@ package id.xfunction.tests.concurrent.flow;
 
 import id.xfunction.concurrent.flow.CollectorSubscriber;
 import id.xfunction.concurrent.flow.TransformProcessor;
+import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.SubmissionPublisher;
 import java.util.stream.IntStream;
@@ -32,7 +33,7 @@ public class TransformProcessorTest {
     public void test_transform_subscriber() throws Exception {
         var proc = new TransformProcessor<Integer, String>(i -> i.toString());
         var pub = new SubmissionPublisher<Integer>(Executors.newSingleThreadExecutor(), 10);
-        var subscriber = new CollectorSubscriber<String>(5);
+        var subscriber = new CollectorSubscriber<>(new ArrayList<String>(), 5);
         proc.subscribe(subscriber);
         pub.subscribe(proc);
         IntStream.range(0, 5).boxed().forEach(pub::submit);

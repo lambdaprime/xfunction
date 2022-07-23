@@ -19,39 +19,47 @@ package id.xfunction.concurrent.flow;
 
 import id.xfunction.PreconditionException;
 import id.xfunction.Preconditions;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Flow.Subscription;
 import java.util.concurrent.Future;
 
 /**
+ * Subscriber which collects items to target collection.
+ *
+ * <p>When target collection size reaches maxSize:
+ *
+ * <ul>
+ *   <li>subscription is canceled
+ *   <li>future which is maintained by this subscriber completes
+ * </ul>
+ *
  * @author lambdaprime intid@protonmail.com
  */
-public class CollectorSubscriber<T> extends SimpleSubscriber<T> {
+public class CollectorSubscriber<T, C extends Collection<T>> extends SimpleSubscriber<T> {
 
-    private List<T> items;
-    private CompletableFuture<List<T>> future = new CompletableFuture<List<T>>();
+    private C targetCollection;
+    private CompletableFuture<C> future = new CompletableFuture<C>();
     private int maxSize;
 
-    public CollectorSubscriber(int maxSize) {
+    public CollectorSubscriber(C targetCollection, int maxSize) {
         this.maxSize = maxSize;
-        items = new ArrayList<>(maxSize);
+        this.targetCollection = targetCollection;
     }
 
     @Override
     public void replay(T item) {
         Preconditions.isTrue(!isSubscribed(), "Replay possible only before subscribe");
-        if (items.size() == maxSize) return;
-        items.add(item);
-        if (items.size() == maxSize) {
-            future.complete(items);
+        if (targetCollection.size() == maxSize) return;
+        targetCollection.add(item);
+        if (targetCollection.size() == maxSize) {
+            future.complete(targetCollection);
         }
     }
 
     @Override
     public void onSubscribe(Subscription subscription) throws PreconditionException {
-        if (items.size() == maxSize) {
+        if (targetCollection.size() == maxSize) {
             subscription.cancel();
             return;
         }
@@ -60,16 +68,16 @@ public class CollectorSubscriber<T> extends SimpleSubscriber<T> {
 
     @Override
     public void onNext(T item) {
-        items.add(item);
-        if (items.size() == maxSize) {
-            future.complete(items);
+        targetCollection.add(item);
+        if (targetCollection.size() == maxSize) {
+            future.complete(targetCollection);
             subscription.cancel();
             return;
         }
         subscription.request(1);
     }
 
-    public Future<List<T>> getFuture() {
+    public Future<C> getFuture() {
         return future;
     }
 }
