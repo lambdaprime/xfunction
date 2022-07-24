@@ -41,4 +41,17 @@ public class FilePredicates {
             }
         };
     }
+
+    /**
+     * Return file predicate which checks if a given file extension is any from the list of target
+     * extensions
+     */
+    public static Predicate<Path> anyExtensionOf(String... targetExtensions) {
+        return inputPath -> {
+            if (!inputPath.toFile().isFile()) return false;
+            for (var ext : targetExtensions)
+                if (inputPath.getFileName().toString().endsWith(ext)) return true;
+            return false;
+        };
+    }
 }
