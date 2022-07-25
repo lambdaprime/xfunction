@@ -92,6 +92,10 @@ public class XLogger extends Logger {
         return new XLogger(cls.getName(), obj.hashCode());
     }
 
+    public static XLogger getLogger(Class<?> clazz, TracingToken token) {
+        return XLogger.getLogger(clazz.getName() + "#" + token.toString());
+    }
+
     /**
      * Initializes JUL using specified property resource.
      *
@@ -142,6 +146,7 @@ public class XLogger extends Logger {
         super.exiting(className, sourceMethod, Objects.toString(result));
     }
 
+    @Override
     public void info(String msg) {
         super.log(Level.INFO, msg);
     }
