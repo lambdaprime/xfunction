@@ -105,6 +105,11 @@ public class XLogger extends Logger {
         Unchecked.run(() -> LogManager.getLogManager().readConfiguration(inputStream));
     }
 
+    /** Reset {@link LogManager} to default configuration */
+    public static void reset() {
+        LogManager.getLogManager().reset();
+    }
+
     @Override
     public boolean isLoggable(Level level) {
         return logger.isLoggable(level);
