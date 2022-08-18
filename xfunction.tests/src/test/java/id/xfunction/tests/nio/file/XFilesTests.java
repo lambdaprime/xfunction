@@ -32,6 +32,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class XFilesTests {
+    private static final String NL = System.lineSeparator();
 
     @Test
     public void test_copyRecursively() throws IOException {
@@ -54,7 +55,7 @@ public class XFilesTests {
         Path tmpFile = Files.createTempFile("test", "");
         var future = XFiles.watchForLineInFile(tmpFile, s -> s.contains("hello"));
         assertEquals(false, future.isDone());
-        Files.write(tmpFile, "asdsa\nd".getBytes(), StandardOpenOption.APPEND);
+        Files.write(tmpFile, ("asdsa" + NL + "d").getBytes(), StandardOpenOption.APPEND);
         XThread.sleep(200);
         assertEquals(false, future.isDone());
 
@@ -62,7 +63,7 @@ public class XFilesTests {
         XThread.sleep(200);
         assertEquals(false, future.isDone());
 
-        Files.write(tmpFile, "o\n".getBytes(), StandardOpenOption.APPEND);
+        Files.write(tmpFile, ("o" + NL).getBytes(), StandardOpenOption.APPEND);
         XThread.sleep(200);
         assertEquals("dhello", future.get());
 

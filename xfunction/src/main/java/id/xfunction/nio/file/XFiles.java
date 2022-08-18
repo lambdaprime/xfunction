@@ -157,6 +157,7 @@ public class XFiles {
         long[] curPos = {0};
         var future = new CompletableFuture<String>();
         var buf = new StringBuilder();
+        var separator = System.lineSeparator();
         ForkJoinPool.commonPool()
                 .execute(
                         () -> {
@@ -171,17 +172,28 @@ public class XFiles {
                                                             "File " + file + " is deleted"));
                                         var raf = new RandomAccessFile(file.toFile(), "r");
                                         raf.seek(curPos[0]);
+                                        int separatorLenSoFar = 0;
                                         while (raf.getFilePointer() < raf.length()) {
                                             var ch = (char) raf.read();
                                             curPos[0]++;
-                                            if (ch == '\n') {
-                                                var line = buf.toString();
-                                                if (matchPredicate.test(line)) {
-                                                    future.complete(line);
-                                                    break;
+                                            if (ch == separator.charAt(separatorLenSoFar)) {
+                                                separatorLenSoFar++;
+                                                if (separatorLenSoFar == separator.length()) {
+                                                    var line = buf.toString();
+                                                    if (matchPredicate.test(line)) {
+                                                        future.complete(line);
+                                                        break;
+                                                    }
+                                                    buf.setLength(0);
+                                                    separatorLenSoFar = 0;
                                                 }
-                                                buf.setLength(0);
                                             } else {
+                                                if (separatorLenSoFar != 0) {
+                                                    buf.append(
+                                                            separator.substring(
+                                                                    0, separatorLenSoFar));
+                                                    separatorLenSoFar = 0;
+                                                }
                                                 buf.append(ch);
                                             }
                                         }
