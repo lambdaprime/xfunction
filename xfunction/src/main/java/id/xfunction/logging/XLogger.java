@@ -26,7 +26,7 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 /**
- * Using JUL you have to specify location of logging.properties file using
+ * Using {@link java.util.logging} you have to specify location of logging.properties file using
  * -Djava.util.logging.config.file=ABSOLUTE_PATH where ABSOLUTE_PATH is a local file system path. If
  * you want to put it inside of your jar it may be a problem. XLogger helps to overcome this.
  *
@@ -39,7 +39,7 @@ import java.util.logging.Logger;
  *   <li>Otherwise it will do nothing
  * </ul>
  *
- * <p>Use it in same way as you would use Logger.
+ * <p>Use it in same way as you would use {@link java.util.logging.Logger}
  *
  * <pre>{@code
  * static final Logger LOGGER = XLogger.getLogger(HelloWorld.class);
@@ -72,12 +72,12 @@ public class XLogger extends Logger {
         load(System.getProperty("java.util.logging.config.file", "logging.properties"));
     }
 
-    /** Returns Logger with given class name as a logger name. */
+    /** Returns {@link java.util.logging.Logger} with given class name as a logger name. */
     public static XLogger getLogger(Class<?> cls) {
         return new XLogger(cls.getName());
     }
 
-    /** Returns Logger with given logger name. */
+    /** Returns {@link java.util.logging.Logger} with given logger name. */
     public static XLogger getLogger(String name) {
         return new XLogger(name);
     }
@@ -97,7 +97,7 @@ public class XLogger extends Logger {
     }
 
     /**
-     * Initializes JUL using specified property resource.
+     * Initializes {@link java.util.logging} using specified property resource.
      *
      * <p>Visible for tests only.
      *
@@ -138,9 +138,9 @@ public class XLogger extends Logger {
     }
 
     /**
-     * Unfortunately original Logger method does not convert result to String and requires you to
-     * call it explicitly and only then pass String result. This method does it for you and converts
-     * the result to String and pass it further to Logger.
+     * Unfortunately original {@link java.util.logging.Logger} method does not convert result to
+     * String and requires you to call it explicitly and only then pass String result. This method
+     * does it for you and converts the result to String and pass it further to Logger.
      */
     public void exiting(String sourceMethod, Object result) {
         super.exiting(className, sourceMethod, Objects.toString(result));

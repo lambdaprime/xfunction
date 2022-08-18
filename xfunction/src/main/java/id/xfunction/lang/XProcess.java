@@ -249,12 +249,12 @@ public class XProcess {
     }
 
     private void consumeStdout() {
-        if (isStdoutConsumed) throw new IllegalStateException("Stdout has consumer already");
+        if (isStdoutConsumed) throw new IllegalStateException("Stdout has a consumer already");
         isStdoutConsumed = true;
     }
 
     private void consumeStderr() {
-        if (isStderrConsumed) throw new IllegalStateException("Stderr has consumer already");
+        if (isStderrConsumed) throw new IllegalStateException("Stderr has a consumer already");
         isStderrConsumed = true;
     }
 }
