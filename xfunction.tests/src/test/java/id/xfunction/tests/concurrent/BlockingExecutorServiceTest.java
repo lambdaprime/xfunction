@@ -42,12 +42,12 @@ public class BlockingExecutorServiceTest {
         "200, 7, 100000",
     })
     public void test_different_params(int numOfThreads, int capacity, int total) throws Exception {
-        AtomicInteger c = new AtomicInteger();
+        AtomicInteger counter = new AtomicInteger();
         ExecutorService executor = new BlockingExecutorService(numOfThreads, capacity);
-        range(0, total).forEach(i -> executor.submit(() -> c.incrementAndGet()));
+        range(0, total).forEach(i -> executor.submit(() -> counter.incrementAndGet()));
         executor.shutdown();
         executor.awaitTermination(Integer.MAX_VALUE, TimeUnit.DAYS);
-        Assertions.assertEquals(total, c.get());
+        Assertions.assertEquals(total, counter.get());
     }
 
     @Test

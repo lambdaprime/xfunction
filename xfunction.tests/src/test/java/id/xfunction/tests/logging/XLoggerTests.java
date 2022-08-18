@@ -18,9 +18,9 @@
 package id.xfunction.tests.logging;
 
 import id.xfunction.logging.XLogger;
+import id.xfunction.nio.file.XFiles;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import org.junit.jupiter.api.Assertions;
@@ -32,7 +32,7 @@ public class XLoggerTests {
     public void test_read_config() throws IOException {
         Logger logger = XLogger.getLogger(XLoggerTests.class);
         System.out.println(logger.getName());
-        Path file = Paths.get("/tmp/l.txt");
+        Path file = XFiles.TEMP_FOLDER.get().resolve("l.txt");
         file.toFile().delete();
         logger.info("test");
         Assertions.assertTrue(file.toFile().exists());

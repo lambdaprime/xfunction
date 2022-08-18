@@ -19,9 +19,10 @@ package id.xfunction.tests.nio.file;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import id.xfunction.nio.file.XFiles;
 import id.xfunction.nio.file.XPaths;
 import java.io.IOException;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
@@ -37,9 +38,11 @@ public class XPathsTests {
 
     @Test
     public void test_append() throws IOException {
+        Path tmpFolder = XFiles.TEMP_FOLDER.get();
         assertEquals(
-                "/tmp/a-cropped.png",
-                XPaths.append(Paths.get("/tmp/a.png"), "-cropped").toString());
-        assertEquals("/tmp/a-cropped", XPaths.append(Paths.get("/tmp/a"), "-cropped").toString());
+                tmpFolder.resolve("a-cropped.png"),
+                XPaths.append(tmpFolder.resolve("a.png"), "-cropped"));
+        assertEquals(
+                tmpFolder.resolve("a-cropped"), XPaths.append(tmpFolder.resolve("a"), "-cropped"));
     }
 }

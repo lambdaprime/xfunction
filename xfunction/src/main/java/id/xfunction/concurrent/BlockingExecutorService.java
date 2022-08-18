@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.concurrent.AbstractExecutorService;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Semaphore;
@@ -115,9 +116,23 @@ public class BlockingExecutorService extends AbstractExecutorService {
         return semaphore.availablePermits() == workers.size();
     }
 
+    /**
+     * This call blocks indefinitely if there are some pending tasks in the queue which is yet to be
+     * taken.
+     *
+     * <p>If the queue is empty it behaves as {@link ExecutorService#awaitTermination(long,
+     * TimeUnit)}
+     */
     @Override
     public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
-        boolean isTerminated = semaphore.tryAcquire(workers.size(), timeout, unit);
+        boolean isTerminated = false;
+        int numOfPermits = workers.size();
+        while (true) {
+            isTerminated = semaphore.tryAcquire(numOfPermits, timeout, unit);
+            if (isTerminated && queue.peek() != EOQ) {
+                semaphore.release(numOfPermits);
+            } else break;
+        }
         if (isTerminated) return true;
         return workers.stream().map(Thread::isAlive).noneMatch(Predicate.isEqual(true));
     }

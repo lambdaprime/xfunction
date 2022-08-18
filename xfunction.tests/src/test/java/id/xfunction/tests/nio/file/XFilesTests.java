@@ -27,6 +27,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -34,9 +35,16 @@ public class XFilesTests {
 
     @Test
     public void test_copyRecursively() throws IOException {
-        Path tmpDir = Files.createTempDirectory("test");
+        Path tmpDir = XFiles.TEMP_FOLDER.get().resolve("test" + System.currentTimeMillis());
         XFiles.copyRecursively(Paths.get("src/test/resources/a"), tmpDir);
-        assertTrue(Files.list(tmpDir).count() > 0);
+        Stream<Path> stream = Files.list(tmpDir);
+        assertTrue(stream.count() > 0);
+        // even though count is terminal operation on Windows 10/Java 17 this test fails
+        // because tmpDir would still be present after deleteRecursively
+        // It is present because stream is not closed and as the result tmpDir still open
+        // therefore we close it explicitly
+        stream.close();
+        System.out.println(tmpDir);
         XFiles.deleteRecursively(tmpDir);
         Assertions.assertEquals(false, tmpDir.toFile().exists());
     }

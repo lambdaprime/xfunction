@@ -27,6 +27,8 @@ import java.nio.file.Path;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 public class ResourceUtilsTests {
 
@@ -63,6 +65,7 @@ public class ResourceUtilsTests {
     }
 
     @Test
+    @DisabledOnOs(OS.WINDOWS)
     public void test_extractResource() throws IOException {
         Path out = Files.createTempFile("resource", "");
         resourceUtils.extractResource("testFile", out);

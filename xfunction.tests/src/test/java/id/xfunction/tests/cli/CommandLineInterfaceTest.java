@@ -31,6 +31,8 @@ import org.junit.jupiter.api.Test;
 
 public class CommandLineInterfaceTest {
 
+    private static final String NL = System.lineSeparator();
+
     @Test
     public void test_askConfirm() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -39,7 +41,7 @@ public class CommandLineInterfaceTest {
         String msg = "test?";
         boolean actual = cli.askConfirm(msg);
         assertTrue(actual);
-        assertEquals(msg + "\nPlease confirm [yes/no]: ", baos.toString());
+        assertEquals(msg + NL + "Please confirm [yes/no]: ", baos.toString());
     }
 
     @Test
@@ -52,7 +54,7 @@ public class CommandLineInterfaceTest {
         assertFalse(actual);
         assertEquals(
                 msg
-                        + "\n"
+                        + NL
                         + "Please confirm [yes/no]: Please confirm [yes/no]: Please confirm"
                         + " [yes/no]: ",
                 baos.toString());
@@ -63,7 +65,7 @@ public class CommandLineInterfaceTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         CommandLineInterface cli = new CommandLineInterface(System.in, baos, baos);
         cli.print(12);
-        assertEquals("12\n", baos.toString());
+        assertEquals("12" + NL, baos.toString());
     }
 
     @Test
@@ -71,7 +73,7 @@ public class CommandLineInterfaceTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         CommandLineInterface cli = new CommandLineInterface(System.in, baos, baos);
         cli.print("12");
-        assertEquals("12\n", baos.toString());
+        assertEquals("12" + NL, baos.toString());
     }
 
     @Test
@@ -79,7 +81,7 @@ public class CommandLineInterfaceTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         CommandLineInterface cli = new CommandLineInterface(System.in, baos, baos);
         cli.print("12%d");
-        assertEquals("12%d\n", baos.toString());
+        assertEquals("12%d" + NL, baos.toString());
     }
 
     @Test
@@ -89,6 +91,6 @@ public class CommandLineInterfaceTest {
         cli.teeToFile(tempFile);
         cli.print("Test");
         cli.printerr("Error");
-        assertEquals("Test\nError\n", Files.readString(tempFile));
+        assertEquals("Test" + NL + "Error" + NL, Files.readString(tempFile));
     }
 }

@@ -23,7 +23,10 @@ import id.xfunction.AssertRunCommand;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
+@EnabledOnOs({OS.LINUX})
 public class AssertRunCommandTests {
 
     @Test

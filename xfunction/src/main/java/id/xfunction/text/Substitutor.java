@@ -90,8 +90,8 @@ public class Substitutor {
                 w.write('\n');
             }
             isChanged = tmp.toFile().length() != file.toFile().length();
-            Files.move(tmp, file, StandardCopyOption.REPLACE_EXISTING);
         }
+        Files.move(tmp, file, StandardCopyOption.REPLACE_EXISTING);
         return isChanged;
     }
 

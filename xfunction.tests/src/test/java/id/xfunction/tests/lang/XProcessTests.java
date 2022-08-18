@@ -23,7 +23,10 @@ import id.xfunction.lang.XExec;
 import id.xfunction.lang.XProcess;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
+@EnabledOnOs({OS.LINUX})
 public class XProcessTests {
 
     @Test

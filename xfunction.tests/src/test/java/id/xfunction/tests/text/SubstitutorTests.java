@@ -58,7 +58,7 @@ public class SubstitutorTests {
     @Test
     public void test_substitute_file() throws IOException {
         Path path = Files.createTempFile("tmp", "");
-        Files.writeString(path, "a{A}a{A}\nb{B}b");
+        Files.writeString(path, "a{A}a{A}" + System.lineSeparator() + "b{B}b");
         Substitutor substitutor = new Substitutor();
         substitutor.substitute(
                 path,

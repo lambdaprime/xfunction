@@ -22,7 +22,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
@@ -43,7 +42,7 @@ public class LoggerNameFilterTests {
 
     @Test
     public void test_allow_whitelisted() throws IOException {
-        Path config = Paths.get("/tmp/log");
+        Path config = Files.createTempFile("log", "");
         Files.writeString(
                 config, "id.xfunction.logging.filter = id.kk, sun.net", StandardOpenOption.CREATE);
         LogManager.getLogManager().readConfiguration(new FileInputStream(config.toString()));
