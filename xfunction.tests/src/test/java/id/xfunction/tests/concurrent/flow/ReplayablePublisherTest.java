@@ -17,7 +17,7 @@
  */
 package id.xfunction.tests.concurrent.flow;
 
-import id.xfunction.concurrent.flow.CollectorSubscriber;
+import id.xfunction.concurrent.flow.FixedCollectorSubscriber;
 import id.xfunction.concurrent.flow.ReplayablePublisher;
 import java.util.ArrayList;
 import org.junit.jupiter.api.Assertions;
@@ -31,9 +31,9 @@ public class ReplayablePublisherTest {
     @Test
     public void test_replay() throws Exception {
         try (var publisher = new ReplayablePublisher<Integer>(3)) {
-            var subscriber1 = new CollectorSubscriber<>(new ArrayList<Integer>(), 5);
-            var subscriber2 = new CollectorSubscriber<>(new ArrayList<Integer>(), 5);
-            var subscriber3 = new CollectorSubscriber<>(new ArrayList<Integer>(), 5);
+            var subscriber1 = new FixedCollectorSubscriber<>(new ArrayList<Integer>(), 5);
+            var subscriber2 = new FixedCollectorSubscriber<>(new ArrayList<Integer>(), 5);
+            var subscriber3 = new FixedCollectorSubscriber<>(new ArrayList<Integer>(), 5);
             publisher.subscribe(subscriber1);
             publisher.submit(1);
             publisher.submit(2);
@@ -52,8 +52,8 @@ public class ReplayablePublisherTest {
     @Test
     public void test_duplicates() throws Exception {
         try (var publisher = new ReplayablePublisher<Integer>(4)) {
-            var subscriber1 = new CollectorSubscriber<>(new ArrayList<Integer>(), 7);
-            var subscriber2 = new CollectorSubscriber<>(new ArrayList<Integer>(), 3);
+            var subscriber1 = new FixedCollectorSubscriber<>(new ArrayList<Integer>(), 7);
+            var subscriber2 = new FixedCollectorSubscriber<>(new ArrayList<Integer>(), 3);
             publisher.subscribe(subscriber1);
             publisher.submit(1);
             publisher.submit(2);
@@ -81,13 +81,13 @@ public class ReplayablePublisherTest {
             publisher.submit(3);
             publisher.submit(4);
             publisher.submit(5);
-            var subscriber = new CollectorSubscriber<>(new ArrayList<Integer>(), 3);
+            var subscriber = new FixedCollectorSubscriber<>(new ArrayList<Integer>(), 3);
             publisher.subscribe(subscriber);
             Assertions.assertEquals("[2, 3, 4]", subscriber.getFuture().get().toString());
         }
         try (var publisher = new ReplayablePublisher<Integer>(1)) {
             publisher.submit(1);
-            var subscriber = new CollectorSubscriber<>(new ArrayList<Integer>(), 2);
+            var subscriber = new FixedCollectorSubscriber<>(new ArrayList<Integer>(), 2);
             publisher.subscribe(subscriber);
             publisher.submit(2);
             Assertions.assertEquals("[1, 2]", subscriber.getFuture().get().toString());

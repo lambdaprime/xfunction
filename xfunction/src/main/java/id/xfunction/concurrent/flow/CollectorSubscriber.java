@@ -17,67 +17,31 @@
  */
 package id.xfunction.concurrent.flow;
 
-import id.xfunction.PreconditionException;
 import id.xfunction.Preconditions;
 import java.util.Collection;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Flow.Subscription;
-import java.util.concurrent.Future;
 
 /**
  * Subscriber which collects items to target collection.
- *
- * <p>When target collection size reaches maxSize:
- *
- * <ul>
- *   <li>subscription is canceled
- *   <li>future which is maintained by this subscriber completes
- * </ul>
  *
  * @author lambdaprime intid@protonmail.com
  */
 public class CollectorSubscriber<T, C extends Collection<T>> extends SimpleSubscriber<T> {
 
     private C targetCollection;
-    private CompletableFuture<C> future = new CompletableFuture<C>();
-    private int maxSize;
 
-    public CollectorSubscriber(C targetCollection, int maxSize) {
-        this.maxSize = maxSize;
+    public CollectorSubscriber(C targetCollection) {
         this.targetCollection = targetCollection;
     }
 
     @Override
     public void replay(T item) {
         Preconditions.isTrue(!isSubscribed(), "Replay possible only before subscribe");
-        if (targetCollection.size() == maxSize) return;
         targetCollection.add(item);
-        if (targetCollection.size() == maxSize) {
-            future.complete(targetCollection);
-        }
-    }
-
-    @Override
-    public void onSubscribe(Subscription subscription) throws PreconditionException {
-        if (targetCollection.size() == maxSize) {
-            subscription.cancel();
-            return;
-        }
-        super.onSubscribe(subscription);
     }
 
     @Override
     public void onNext(T item) {
         targetCollection.add(item);
-        if (targetCollection.size() == maxSize) {
-            future.complete(targetCollection);
-            subscription.cancel();
-            return;
-        }
         subscription.request(1);
-    }
-
-    public Future<C> getFuture() {
-        return future;
     }
 }
