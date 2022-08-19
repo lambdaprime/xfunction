@@ -97,7 +97,7 @@ public class XFiles {
 
     /**
      * Checks, non recursively, if all files of folder A exists in folder B and their content is
-     * equal.
+     * equal (byte-to-byte comparison).
      *
      * @param a folder A
      * @param b folder B
@@ -108,7 +108,7 @@ public class XFiles {
 
     /**
      * Checks, recursively, if all files of folder A and its subfolders exists in folder B and their
-     * content is equal.
+     * content is equal (byte-to-byte comparison).
      *
      * @param a folder A
      * @param b folder B
@@ -118,11 +118,7 @@ public class XFiles {
     }
 
     /**
-     * Checks, recursively, if all files of folder A and its subfolders exists in folder B and their
-     * content is equal.
-     *
-     * @param a folder A
-     * @param b folder B
+     * @see #containsAllRecursively(Path, Path)
      * @param maxDepth the maximum number of directory levels to visit
      */
     public static boolean containsAll(Path a, Path b, int maxDepth) throws IOException {
@@ -208,6 +204,7 @@ public class XFiles {
         return future;
     }
 
+    /** Compares two files byte-to-byte */
     public static boolean isContentEqual(File a, File b) throws IOException {
         if (!a.isFile()) return false;
         if (!b.isFile()) return false;
