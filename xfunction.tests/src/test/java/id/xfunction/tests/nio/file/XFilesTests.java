@@ -27,6 +27,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.Duration;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -53,7 +54,8 @@ public class XFilesTests {
     @Test
     public void test_watchForStringInFile() throws Exception {
         Path tmpFile = Files.createTempFile("test", "");
-        var future = XFiles.watchForLineInFile(tmpFile, s -> s.contains("hello"));
+        var future =
+                XFiles.watchForLineInFile(tmpFile, s -> s.contains("hello"), Duration.ofMillis(3));
         assertEquals(false, future.isDone());
         Files.write(tmpFile, ("asdsa" + NL + "d").getBytes(), StandardOpenOption.APPEND);
         XThread.sleep(200);
@@ -67,7 +69,7 @@ public class XFilesTests {
         XThread.sleep(200);
         assertEquals("dhello", future.get());
 
-        future = XFiles.watchForLineInFile(tmpFile, s -> s.contains("hel"));
+        future = XFiles.watchForLineInFile(tmpFile, s -> s.contains("hel"), Duration.ofMillis(13));
         assertEquals(false, future.isDone());
 
         future.cancel(false);

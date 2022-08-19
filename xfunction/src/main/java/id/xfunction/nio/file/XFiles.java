@@ -17,23 +17,21 @@
  */
 package id.xfunction.nio.file;
 
+import id.xfunction.Preconditions;
 import id.xfunction.function.Unchecked;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
-import java.nio.file.StandardWatchEventKinds;
-import java.nio.file.WatchEvent;
-import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.time.Duration;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ForkJoinPool;
@@ -143,17 +141,23 @@ public class XFiles {
     /**
      * Setup a watcher on a file for a particular line.
      *
-     * <p>It monitors file for all new incoming lines. Once it finds a line which matches the
-     * predicate it completes the future with that line.
+     * <p>It polls file with given delay for all new incoming lines. Once it finds a line which
+     * matches the predicate it completes the future with that line.
+     *
+     * <p>Initially this function was implemented with {@link WatchService}. This was more efficient
+     * since we avoided unnecessary polls when file is not changed. Unfortunately in certain
+     * conditions {@link WatchService} could stuck waiting for events forever although the file was
+     * changed already multiple of times. Querying the file size somehow affects this and unblocks
+     * the events.
+     *
+     * <p>Such behavior was observed in Windows10, Java 17 with log file which was actively written
+     * but WatchService was not emiting anything.
      */
-    public static Future<String> watchForLineInFile(Path file, Predicate<String> matchPredicate)
+    public static Future<String> watchForLineInFile(
+            Path filePath, Predicate<String> matchPredicate, Duration pollDelay)
             throws IOException, InterruptedException {
-        WatchService watchService = FileSystems.getDefault().newWatchService();
-        file.getParent()
-                .register(
-                        watchService,
-                        StandardWatchEventKinds.ENTRY_MODIFY,
-                        StandardWatchEventKinds.ENTRY_DELETE);
+        File file = filePath.toFile();
+        Preconditions.isTrue(file.isFile(), "Not a file " + filePath);
         long[] curPos = {0};
         var future = new CompletableFuture<String>();
         var buf = new StringBuilder();
@@ -163,14 +167,12 @@ public class XFiles {
                         () -> {
                             while (!future.isDone()) {
                                 try {
-                                    WatchKey key = watchService.take();
-                                    for (WatchEvent<?> event : key.pollEvents()) {
-                                        if (!event.context().equals(file.getFileName())) continue;
-                                        if (event.kind() == StandardWatchEventKinds.ENTRY_DELETE)
-                                            future.completeExceptionally(
-                                                    new IOException(
-                                                            "File " + file + " is deleted"));
-                                        var raf = new RandomAccessFile(file.toFile(), "r");
+                                    Thread.sleep(pollDelay.toMillis());
+                                    if (!file.exists())
+                                        future.completeExceptionally(
+                                                new IOException("File " + file + " is deleted"));
+                                    if (curPos[0] == file.length()) continue;
+                                    try (var raf = new RandomAccessFile(file, "r")) {
                                         raf.seek(curPos[0]);
                                         int separatorLenSoFar = 0;
                                         while (raf.getFilePointer() < raf.length()) {
@@ -198,9 +200,6 @@ public class XFiles {
                                             }
                                         }
                                     }
-                                    if (!key.reset())
-                                        future.completeExceptionally(
-                                                new IOException("Could not reset the key"));
                                 } catch (Exception e) {
                                     future.completeExceptionally(e);
                                 }
