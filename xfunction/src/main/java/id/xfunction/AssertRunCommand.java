@@ -20,6 +20,7 @@ package id.xfunction;
 import id.xfunction.lang.XExec;
 import id.xfunction.lang.XProcess;
 import id.xfunction.text.WildcardMatcher;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -36,13 +37,14 @@ public class AssertRunCommand {
     private Optional<Consumer<String>> consumer = Optional.empty();
 
     private boolean isWildcardMatching;
+    private boolean isPrintCommandCall = true;
 
     public AssertRunCommand(String... cmd) {
         this.exec = new XExec(cmd);
     }
 
     /** Assert that command output (stdout and stderr) should be equal to expected output */
-    public AssertRunCommand withOutput(String expectedOutput) {
+    public AssertRunCommand assertOutput(String expectedOutput) {
         this.expectedOutput = Optional.of(expectedOutput);
         return this;
     }
@@ -51,13 +53,13 @@ public class AssertRunCommand {
      * Assert that command output (stdout and stderr) should be equal to to expected output stored
      * inside the given resource file
      */
-    public AssertRunCommand withOutputFromResource(String absoluteResourcePath) {
+    public AssertRunCommand assertOutputFromResource(String absoluteResourcePath) {
         this.expectedOutput = Optional.of(RESOURCE_UTILS.readResource(absoluteResourcePath));
         return this;
     }
 
     /** Assert that command after execution should return give code */
-    public AssertRunCommand withReturnCode(int code) {
+    public AssertRunCommand assertReturnCode(int code) {
         this.expectedCode = Optional.of(code);
         return this;
     }
@@ -86,12 +88,24 @@ public class AssertRunCommand {
         return this;
     }
 
+    /**
+     * By default the command call which will be executed is printed to the System.out. It is done
+     * to help debug problems if any. This method disables such behavior.
+     */
+    public AssertRunCommand withPrintCommandCall(boolean isEnabled) {
+        isPrintCommandCall = isEnabled;
+        return this;
+    }
+
     public void run() {
         run(proc -> {});
     }
 
     public void run(Consumer<XProcess> procConsumer) {
         XProcess proc = exec.run();
+        if (isPrintCommandCall) {
+            System.out.println(Arrays.toString(exec.getCommand()));
+        }
         proc.outputAsync(false);
         procConsumer.accept(proc);
         int actualCode = proc.await();

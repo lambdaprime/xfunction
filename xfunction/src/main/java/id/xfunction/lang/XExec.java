@@ -82,6 +82,10 @@ public class XExec {
         return this;
     }
 
+    public String[] getCommand() {
+        return cmd;
+    }
+
     /** Run the command with given input if any */
     public XProcess run() {
         try {
