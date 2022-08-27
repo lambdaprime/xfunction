@@ -21,6 +21,7 @@ import static java.util.stream.Collectors.joining;
 
 import id.xfunction.Preconditions;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Flow;
 import java.util.concurrent.Flow.Processor;
@@ -44,15 +45,22 @@ import java.util.function.Function;
 public class TransformProcessor<T, R> extends SubmissionPublisher<R> implements Processor<T, R> {
 
     private Subscription subscription;
-    private Function<T, R> transformer;
+    private Function<T, Optional<R>> transformer;
     private String ctorStackTrace;
 
-    public TransformProcessor(Function<T, R> transformer) {
+    /**
+     * @see #TransformProcessor(Function, Executor, int)
+     */
+    public TransformProcessor(Function<T, Optional<R>> transformer) {
         this(transformer, ForkJoinPool.commonPool(), Flow.defaultBufferSize());
     }
 
+    /**
+     * @param transformer Transforms input message and publishes it to subscribers. If transformer
+     *     returns empty message it will be ignored.
+     */
     public TransformProcessor(
-            Function<T, R> transformer, Executor executor, int maxBufferCapacity) {
+            Function<T, Optional<R>> transformer, Executor executor, int maxBufferCapacity) {
         super(executor, maxBufferCapacity);
         this.transformer = transformer;
         // debugging subscriber issues may be difficult since they operate
@@ -75,17 +83,31 @@ public class TransformProcessor<T, R> extends SubmissionPublisher<R> implements 
 
     @Override
     public void onNext(T item) {
-        submit(transformer.apply(item));
-        subscription.request(1);
+        try {
+            transformer.apply(item).ifPresent(this::submit);
+        } catch (Exception e) {
+            includeSource(e);
+            throw e;
+        } finally {
+            subscription.request(1);
+        }
     }
 
     @Override
     public void onError(Throwable throwable) {
+        includeSource(throwable);
         closeExceptionally(throwable);
     }
 
     @Override
     public void onComplete() {
         close();
+    }
+
+    private void includeSource(Throwable throwable) {
+        throwable.addSuppressed(
+                new Exception(
+                        "Original exception belongs to processor which was created at "
+                                + ctorStackTrace));
     }
 }

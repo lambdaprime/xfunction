@@ -84,8 +84,11 @@ public class MergeProcessor<T> extends SubmissionPublisher<T> {
             public void onNext(T item) {
                 LOGGER.entering("onNext");
                 if (noSubscribers()) return;
-                submit(item);
-                subscription.request(1);
+                try {
+                    submit(item);
+                } finally {
+                    subscription.request(1);
+                }
             }
 
             @Override
