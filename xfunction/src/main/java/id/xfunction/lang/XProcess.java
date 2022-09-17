@@ -133,6 +133,16 @@ public class XProcess {
     }
 
     /**
+     * Block until process finishes and then check its return code. If it is non 0 then throw an
+     * exception with data from stderr.
+     */
+    public XProcess stderrThrow() {
+        var code = await();
+        if (code == 0) return this;
+        throw new RuntimeException(stderr());
+    }
+
+    /**
      * Consumes stderr stream into internal buffer which later can be obtained through {@link
      * XProcess#stderr()} or ignores it. This call is async.
      *

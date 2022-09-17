@@ -17,6 +17,8 @@
  */
 package id.xfunction;
 
+import static java.util.stream.Collectors.joining;
+
 import id.xfunction.lang.XExec;
 import id.xfunction.lang.XProcess;
 import id.xfunction.text.WildcardMatcher;
@@ -104,7 +106,9 @@ public class AssertRunCommand {
     public void run(Consumer<XProcess> procConsumer) {
         XProcess proc = exec.run();
         if (isPrintCommandCall) {
-            System.out.println(Arrays.toString(exec.getCommand()));
+            System.out.println(
+                    "Executing command with following parameters: "
+                            + Arrays.stream(exec.getCommand()).collect(joining(" ")));
         }
         proc.outputAsync(false);
         procConsumer.accept(proc);
