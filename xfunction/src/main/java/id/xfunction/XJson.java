@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.stream.Stream;
 
@@ -87,7 +88,16 @@ public class XJson {
                 else throw new XRE("Type %s is not supported", type);
                 vstr = "[" + vstr + "]";
             }
-            buf.add("\"" + k + "\": " + vstr);
+            if (v instanceof Optional) {
+                Optional opt = (Optional) v;
+                if (opt.isPresent()) {
+                    buf.add(unmap(asString(k, opt.get())));
+                } else {
+                    buf.add("\"" + k + "\": " + "\"Optional.empty\"");
+                }
+            } else {
+                buf.add("\"" + k + "\": " + vstr);
+            }
         }
         return "{ " + buf.toString() + " }";
     }
@@ -244,5 +254,12 @@ public class XJson {
             json += jsons[i].substring(1);
         }
         return json;
+    }
+
+    /** Strip "{" and "}" */
+    private static String unmap(String json) {
+        if (json.isEmpty()) return json;
+        if (json.charAt(0) != '{') return json;
+        return json.substring(1, json.length() - 1).strip();
     }
 }

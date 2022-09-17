@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 public class XJsonTests {
@@ -77,7 +78,7 @@ public class XJsonTests {
                 resourceUtils.readResource(getClass(), "json-nested"),
                 XJson.asString(
                         "obj1", new Obj(),
-                        "obj2", new Obj(),
+                        "obj2", Optional.of(new Obj()),
                         "k3", List.of("sg", "dfg", "dsfg")));
     }
 
