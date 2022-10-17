@@ -18,6 +18,7 @@
 package id.xfunction.text;
 
 import id.xfunction.Preconditions;
+import id.xfunction.XByte;
 
 /** Ellipsize the text. For example "aaaaaaaaa" -&gt; "aaaa...aaa". It is thread safe. */
 public class Ellipsizer {
@@ -49,5 +50,15 @@ public class Ellipsizer {
     public String ellipsizeHead(String text) {
         if (text.length() <= maxLength) return text;
         return "..." + text.substring(text.length() - (maxLength - 3));
+    }
+
+    public String ellipsizeMiddle(byte[] array) {
+        if (array.length * 2 <= maxLength) return XByte.toHex(array);
+        var buf = new byte[maxLength / 2 + 1];
+        var len1 = (buf.length + 1) / 2;
+        System.arraycopy(array, 0, buf, 0, len1);
+        var len2 = buf.length / 2;
+        System.arraycopy(array, array.length - len2, buf, len1, len2);
+        return ellipsizeMiddle(XByte.toHex(buf));
     }
 }

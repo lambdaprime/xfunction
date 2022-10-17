@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 public class EllipsizerTests {
 
     @Test
-    public void test_substitute() {
+    public void test_heppy() {
         Ellipsizer ellipsizer = new Ellipsizer(5);
         assertEquals("aaa", ellipsizer.ellipsizeMiddle("aaa"));
         assertEquals("aaaaa", ellipsizer.ellipsizeMiddle("aaaaa"));
@@ -55,5 +55,10 @@ public class EllipsizerTests {
         assertEquals("...bbcccc", ellipsizer.ellipsizeHead("aaaaabbbbcccc"));
 
         assertThrows(PreconditionException.class, () -> new Ellipsizer(4));
+
+        assertEquals("61...1", new Ellipsizer(6).ellipsizeMiddle("aaaaaaaaaaaaa".getBytes()));
+        assertEquals("61...61", new Ellipsizer(7).ellipsizeMiddle("aaaaaaaaaaaaa".getBytes()));
+        assertEquals("616...61", new Ellipsizer(8).ellipsizeMiddle("aaaaaaaaaaaaa".getBytes()));
+        assertEquals("616...161", new Ellipsizer(9).ellipsizeMiddle("aaaaaaaaaaaaa".getBytes()));
     }
 }
