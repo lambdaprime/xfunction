@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /** Assert execution of an external command. */
@@ -113,7 +114,10 @@ public class AssertRunCommand {
         proc.outputAsync(false);
         procConsumer.accept(proc);
         int actualCode = proc.await();
-        String actualOutput = proc.stdout() + "\n" + proc.stderr() + "\n";
+        var actualOutput =
+                Stream.of(proc.stdout(), proc.stderr())
+                        .filter(s -> s != null && !s.isBlank())
+                        .collect(Collectors.joining("\n"));
         consumer.ifPresent(c -> c.accept(actualOutput));
         expectedCode.ifPresent(
                 expectedCode -> {
