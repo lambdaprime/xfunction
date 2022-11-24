@@ -30,7 +30,7 @@ public class XExecTests {
 
     @Test
     public void test_run() throws Exception {
-        XProcess result = new XExec("echo", "hello").run();
+        XProcess result = new XExec("echo", "hello").start();
         List<String> out = result.stdoutAsStream().collect(toList());
         List<String> err = result.stderrAsStream().collect(toList());
         assertEquals(1, out.size());
@@ -41,7 +41,7 @@ public class XExecTests {
 
     @Test
     public void test_run_with_error() throws Exception {
-        XProcess result = new XExec("ls /asdff").run();
+        XProcess result = new XExec("ls /asdff").start();
         List<String> out = result.stdoutAsStream().collect(toList());
         List<String> err = result.stderrAsStream().collect(toList());
         assertEquals(0, out.size());
@@ -52,7 +52,7 @@ public class XExecTests {
 
     @Test
     public void test_stdoutAsString() {
-        XProcess result = new XExec("echo", "hello").run();
+        XProcess result = new XExec("echo", "hello").start();
         String out = result.stdout();
         assertEquals("hello", out);
     }

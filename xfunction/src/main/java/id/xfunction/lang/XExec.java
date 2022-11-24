@@ -19,14 +19,11 @@ package id.xfunction.lang;
 
 import id.xfunction.text.QuotesTokenizer;
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 /** Additions to standard java.lang.ProcessBuilder */
@@ -34,8 +31,7 @@ public class XExec {
 
     private String[] cmd;
     private Stream<String> input;
-    private Optional<File> workingDirectory = Optional.empty();
-    private Map<String, String> vars = Collections.emptyMap();
+    private ProcessBuilder processBuilder;
 
     /**
      * Constructor which accepts the command to run. First item of the array should be the command
@@ -43,6 +39,7 @@ public class XExec {
      */
     public XExec(String... cmd) {
         this.cmd = cmd;
+        processBuilder = new ProcessBuilder(cmd);
     }
 
     /**
@@ -51,9 +48,15 @@ public class XExec {
      */
     public XExec(List<String> cmd) {
         this.cmd = cmd.toArray(new String[0]);
+        processBuilder = new ProcessBuilder(cmd);
     }
 
-    /** Constructor which accepts the full command line to run */
+    /**
+     * Constructor which accepts the full command line to run.
+     *
+     * <p>It supports quotes so command like "ls \"/tmp/Program Files\"" will be processed like "ls"
+     * "/tmp/Program Files" instead of "ls" "/tmp/Program" "Files"
+     */
     public XExec(String cmd) {
         this(new QuotesTokenizer().tokenize(cmd));
     }
@@ -66,19 +69,19 @@ public class XExec {
 
     /** Sets the working directory for the process */
     public XExec withDirectory(String workingDirectory) {
-        this.workingDirectory = Optional.of(new File(workingDirectory));
+        processBuilder.directory(new File(workingDirectory));
         return this;
     }
 
     /** Sets the working directory for the process */
     public XExec withDirectory(Path workingDirectory) {
-        this.workingDirectory = Optional.of(workingDirectory.toAbsolutePath().toFile());
+        processBuilder.directory(workingDirectory.toAbsolutePath().toFile());
         return this;
     }
 
     /** Adds following variables into environment */
     public XExec withEnvironmentVariables(Map<String, String> vars) {
-        this.vars = vars;
+        processBuilder.environment().putAll(vars);
         return this;
     }
 
@@ -86,10 +89,14 @@ public class XExec {
         return cmd;
     }
 
+    public ProcessBuilder getProcessBuilder() {
+        return processBuilder;
+    }
+
     /** Run the command with given input if any */
-    public XProcess run() {
+    public XProcess start() {
         try {
-            Process p = runProcess();
+            Process p = processBuilder.start();
             if (input != null) {
                 PrintStream ps = new PrintStream(p.getOutputStream(), true);
                 input.forEach(ps::println);
@@ -102,12 +109,5 @@ public class XExec {
             throw new RuntimeException(
                     "Encountered error executing command: " + Arrays.toString(cmd), e);
         }
-    }
-
-    private Process runProcess() throws IOException {
-        ProcessBuilder pb = new ProcessBuilder(cmd);
-        if (workingDirectory.isPresent()) pb.directory(workingDirectory.get());
-        if (!vars.isEmpty()) pb.environment().putAll(vars);
-        return pb.start();
     }
 }

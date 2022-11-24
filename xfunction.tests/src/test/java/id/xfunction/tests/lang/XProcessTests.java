@@ -31,17 +31,17 @@ public class XProcessTests {
 
     @Test
     public void test_await() {
-        assertEquals(0, new XExec("ls").run().await());
+        assertEquals(0, new XExec("ls").start().await());
     }
 
     @Test
     public void test_stdoutAsString() {
-        assertEquals("test", new XExec("echo", "test").run().stdout());
+        assertEquals("test", new XExec("echo", "test").start().stdout());
     }
 
     @Test
     public void test_flushStdout() {
-        XProcess proc = new XExec("echo", "test").run();
+        XProcess proc = new XExec("echo", "test").start();
         proc.stdoutAsync(false).await();
         proc.stdout();
         proc.stdout();
@@ -50,7 +50,7 @@ public class XProcessTests {
 
     @Test
     public void test_flushStderr() {
-        XProcess proc = new XExec("pwd", "-z").run();
+        XProcess proc = new XExec("pwd", "-z").start();
         proc.stderrAsync(false).await();
         proc.stderr();
         proc.stderr();
@@ -62,19 +62,19 @@ public class XProcessTests {
     @Test
     public void test_await_not_hangs() throws Exception {
         XExec xe = new XExec("printf \"%120000d\" 12");
-        XProcess proc = xe.run();
+        XProcess proc = xe.start();
         System.out.println(proc.outputAsync(true).await());
     }
 
     @Test
     public void test_forward() {
-        XProcess proc = new XExec("echo", "test").run();
+        XProcess proc = new XExec("echo", "test").start();
         proc.forwardOutputAsync().await();
     }
 
     @Test
     public void test_forward_and_flush_together() {
-        XProcess proc = new XExec("echo", "test").run();
+        XProcess proc = new XExec("echo", "test").start();
         proc.outputAsync(false);
         Assertions.assertThrows(IllegalStateException.class, () -> proc.forwardOutputAsync());
     }
