@@ -19,11 +19,15 @@ package id.xfunction.tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import id.xfunction.RetryException;
 import id.xfunction.XUtils;
 import id.xfunction.function.Unchecked;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.Test;
 
 public class XUtilsTests {
@@ -82,6 +86,22 @@ public class XUtilsTests {
         assertEquals("sd", XUtils.unquote("\"sd\"  "));
         assertEquals("sd", XUtils.unquote("  \"sd\"  "));
         assertEquals("  sd  ", XUtils.unquote("  sd  "));
+    }
+
+    @Test
+    public void test_retry() throws InterruptedException, ExecutionException {
+        var out = new ArrayList<Integer>();
+        var res =
+                XUtils.retryIndefinitelyAsync(
+                        () -> {
+                            out.add(1);
+                            if (out.size() < 4) throw new RetryException();
+                            return "done";
+                        },
+                        Duration.ofMillis(1));
+        System.out.println(res.toString() + out.toString());
+        res.get();
+        assertEquals("[1, 1, 1, 1]", out.toString());
     }
 
     public static void main(String[] args) {

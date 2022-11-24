@@ -17,11 +17,16 @@
  */
 package id.xfunction;
 
+import id.xfunction.function.ThrowingSupplier;
+import id.xfunction.lang.XThread;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.security.MessageDigest;
+import java.time.Duration;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ForkJoinPool;
+import java.util.function.BooleanSupplier;
 
 /** Set of miscellaneous functions. */
 public class XUtils {
@@ -114,5 +119,46 @@ public class XUtils {
         if (st.charAt(0) == '"' && st.charAt(st.length() - 1) == '"')
             return st.substring(1, st.length() - 1);
         return s;
+    }
+
+    /**
+     * Asynchronous version of {@link #retryIndefinitely(ThrowingSupplier, Duration)} which returns
+     * a {@link CompletableFuture} that completes only when supplier returns a value or future is
+     * cancelled.
+     */
+    public static <R> CompletableFuture<R> retryIndefinitelyAsync(
+            ThrowingSupplier<R, RetryException> supplier, Duration delay) {
+        var future = new CompletableFuture<R>();
+        ForkJoinPool.commonPool()
+                .submit(
+                        () -> {
+                            future.complete(retry(supplier, delay, () -> !future.isCancelled()));
+                        });
+        return future;
+    }
+
+    /**
+     * Calls supplier and returns its value.
+     *
+     * <p>Every time supplier throws {@link RetryException} it is called again. It repeats
+     * indefinitely till supplier either returns a value or throws {@link RuntimeException}.
+     */
+    public static <R> R retryIndefinitely(
+            ThrowingSupplier<R, RetryException> supplier, Duration delay) {
+        return retry(supplier, delay, () -> true);
+    }
+
+    private static <R> R retry(
+            ThrowingSupplier<R, RetryException> supplier,
+            Duration delay,
+            BooleanSupplier retryTest) {
+        while (retryTest.getAsBoolean()) {
+            try {
+                return supplier.get();
+            } catch (RetryException e) {
+                XThread.sleep(delay.toMillis());
+            }
+        }
+        return null;
     }
 }
