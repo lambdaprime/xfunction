@@ -19,5 +19,5 @@ package id.xfunction.function;
 
 @FunctionalInterface
 public interface ThrowingSupplier<R, E extends Exception> {
-    R run() throws E;
+    R get() throws E;
 }

@@ -56,7 +56,7 @@ public class Unchecked {
      */
     public static <R, E extends Exception> R get(ThrowingSupplier<R, E> s) {
         try {
-            return s.run();
+            return s.get();
         } catch (RuntimeException ex) {
             throw ex;
         } catch (Exception ex) {
