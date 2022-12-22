@@ -69,7 +69,7 @@ public class XLogger extends Logger {
     }
 
     static {
-        load(System.getProperty("java.util.logging.config.file", "logging.properties"));
+        load();
     }
 
     /** Returns {@link java.util.logging.Logger} with given class name as a logger name. */
@@ -107,6 +107,16 @@ public class XLogger extends Logger {
         final InputStream inputStream = ClassLoader.getSystemResourceAsStream(propertyResource);
         if (inputStream == null) return;
         Unchecked.run(() -> LogManager.getLogManager().readConfiguration(inputStream));
+    }
+
+    /**
+     * Initializes {@link java.util.logging} with default settings as described in {@link XLogger}
+     *
+     * <p>Allows {@link XLogger} explicitly to reset any {@link java.util.logging} configuration
+     * changes.
+     */
+    public static void load() {
+        load(System.getProperty("java.util.logging.config.file", "logging.properties"));
     }
 
     /** Reset {@link LogManager} to default configuration */
