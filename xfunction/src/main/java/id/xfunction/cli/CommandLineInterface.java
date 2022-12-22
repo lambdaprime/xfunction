@@ -19,6 +19,7 @@ package id.xfunction.cli;
 
 import id.xfunction.concurrent.DaemonThreadFactory;
 import id.xfunction.io.CompositeOutputStream;
+import id.xfunction.lang.XExec;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -61,7 +62,7 @@ public class CommandLineInterface {
         }
     }
 
-    /** Print user message to press Enter and wait */
+    /** Print user message "Press Enter to continue..." and wait */
     public void askPressEnter() {
         out.print("Press Enter to continue...");
         waitPressEnter();
@@ -69,33 +70,33 @@ public class CommandLineInterface {
 
     /**
      * When this method is called for the first time it returns false. All consecutive calls will
-     * return false as well except when user press any key since the time when this method was
+     * return false as well except when user press Enter key since the time when this method was
      * called last time.
      *
      * <p>It allows you to execute some action repeatedly without blocking it to wait for user to
-     * press any key:
+     * press Enter key:
      *
      * <pre>{@code
-     * while (!wasKeyPressed()) {
+     * while (!wasEnterKeyPressed()) {
      *     action();
      * }
      * }</pre>
      *
      * <p>Here action() will be executed indefinitely until user press any key.
      */
-    public boolean wasKeyPressed() {
+    public boolean wasEnterKeyPressed() {
         if (keyPressWatchdog == null) {
             keyPressWatchdog =
                     new DaemonThreadFactory()
                             .newThread(
                                     () -> {
                                         try {
-                                            System.in.read();
+                                            in.read();
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }
                                     });
-            keyPressWatchdog.setName("keyPressWatchdog");
+            keyPressWatchdog.setName("EnterKeyPressWatchdog");
             keyPressWatchdog.start();
         }
         if (!keyPressWatchdog.isAlive()) {
@@ -106,23 +107,22 @@ public class CommandLineInterface {
     }
 
     /** Show message to the user and return what he enters */
-    @SuppressWarnings("resource")
     public String read(String msg) {
         out.print(msg);
         return read();
     }
 
-    /** Read a line and returns it */
+    /** Read a line until user enters and return it */
     public String read() {
         return scanner.next();
     }
 
-    /** Read an integer and returns it */
+    /** Read an integer entered by the user and return it */
     public int readInt() {
         return scanner.nextInt();
     }
 
-    /** Read password safely from the user */
+    /** Read password entered safely from the user */
     public String readPassword(String fmt, Object... args) {
         return new String(System.console().readPassword(fmt, args));
     }
@@ -192,5 +192,31 @@ public class CommandLineInterface {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Enable or disable echo to stdout for any key user press on keyboard.
+     *
+     * <p>This operation works only in systems with "stty" installed. If "stty" is not found or if
+     * it returns error code the {@link Exception} will be thrown.
+     */
+    public static void echo(boolean enabled) throws Exception {
+        var exec = new XExec("stty " + (enabled ? "" : "-") + "echo");
+        exec.getProcessBuilder().redirectInput(ProcessBuilder.Redirect.INHERIT);
+        exec.start().stderrThrow();
+    }
+
+    /**
+     * Usually any read operation on {@link System#in} blocks until user press Enter (new line).
+     * This operation allows to disable such behavior so that any key which user press on keyboard
+     * will be immediately available.
+     *
+     * <p>This operation works only in systems with "stty" installed. If "stty" is not found or if
+     * it returns error code the {@link Exception} will be thrown.
+     */
+    public static void nonBlockingSystemInput() throws Exception {
+        var exec = new XExec("stty -icanon min 1");
+        exec.getProcessBuilder().redirectInput(ProcessBuilder.Redirect.INHERIT);
+        exec.start().stderrThrow();
     }
 }

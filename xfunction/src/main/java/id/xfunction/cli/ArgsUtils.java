@@ -29,9 +29,11 @@ public class ArgsUtils {
      *
      * <p>If option has no argument then it is added to Properties with an empty string as a value.
      *
-     * <p>Each option should start from -, or --.
+     * <p>Each option inside args should start from "-", or "--".
      *
      * <p>Options may accept arguments in one of the following ways: -option arg, -option=arg
+     *
+     * <p>When options are collected then leading "-" is removed.
      */
     public Properties collectOptions(String[] args) throws ArgumentParsingException {
         Properties props = new Properties();
