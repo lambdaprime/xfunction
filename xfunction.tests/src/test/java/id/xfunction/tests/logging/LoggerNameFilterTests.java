@@ -32,16 +32,16 @@ import org.junit.jupiter.api.Test;
 public class LoggerNameFilterTests {
 
     @Test
-    public void test_deny_all() throws IOException {
+    public void test_allow_all_by_default() throws IOException {
         LoggerNameFilter filter = new LoggerNameFilter();
         LogRecord record1 = new LogRecord(Level.INFO, "gg");
         Assertions.assertFalse(filter.isLoggable(record1));
         record1.setLoggerName("gg");
-        Assertions.assertFalse(filter.isLoggable(record1));
+        Assertions.assertEquals(true, filter.isLoggable(record1));
     }
 
     @Test
-    public void test_allow_whitelisted() throws IOException {
+    public void test_allowlisted() throws IOException {
         Path config = Files.createTempFile("log", "");
         Files.writeString(
                 config, "id.xfunction.logging.filter = id.kk, sun.net", StandardOpenOption.CREATE);
@@ -49,8 +49,8 @@ public class LoggerNameFilterTests {
         LoggerNameFilter filter = new LoggerNameFilter();
         LogRecord record1 = new LogRecord(Level.INFO, "gg");
         record1.setLoggerName("id.kk.ll");
-        Assertions.assertTrue(filter.isLoggable(record1));
+        Assertions.assertEquals(true, filter.isLoggable(record1));
         record1.setLoggerName("id.k1k.ll");
-        Assertions.assertFalse(filter.isLoggable(record1));
+        Assertions.assertEquals(false, filter.isLoggable(record1));
     }
 }

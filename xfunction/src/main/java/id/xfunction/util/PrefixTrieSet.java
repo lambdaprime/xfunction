@@ -58,17 +58,22 @@ import java.util.function.Predicate;
  *
  * <p>Complexity is O(L) where L is length of the item.
  *
+ * <p>Adding empty string is not allowed since empty string is a prefix of all possible strings.
+ * This would mean that Trie with empty string will match all strings and can cause a confusion.
+ *
  * <p>This collection is not thread safe.
  */
 public class PrefixTrieSet extends AbstractSet<String> {
 
     private Node root = new Node();
     private int size;
-    private boolean isAdded;
+    private boolean isAdded, isMatched;
 
+    /** Adding empty string throws an exception */
     @Override
     public boolean add(String str) {
         Preconditions.notNull(str);
+        Preconditions.isTrue(!str.isBlank(), "Empty string not allowed");
         isAdded = false;
         add(root, (str + '\0').toCharArray(), 0);
         if (isAdded) size++;
@@ -113,16 +118,20 @@ public class PrefixTrieSet extends AbstractSet<String> {
      * If no such item exist returns 0
      */
     public int prefixMatches(String str) {
+        isMatched = false;
         return prefixMatches(root, str.toCharArray(), 0);
     }
 
     private int prefixMatches(Node n, char[] a, int i) {
+        if (n.childs.containsKey('\0')) {
+            isMatched = true;
+            return 0;
+        }
         if (i == a.length) return 0;
         Node next = n.childs.get(a[i]);
         if (next == null) return 0;
-        if (next.childs.containsKey('\0')) return 1;
         int ret = prefixMatches(next, a, i + 1);
-        return ret == 0 ? 0 : ret + 1;
+        return isMatched ? ret + 1 : 0;
     }
 
     // based on DFS

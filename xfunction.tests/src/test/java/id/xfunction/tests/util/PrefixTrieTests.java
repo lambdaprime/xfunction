@@ -21,9 +21,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import id.xfunction.PreconditionException;
 import id.xfunction.util.PrefixTrieSet;
 import java.util.Arrays;
 import java.util.List;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class PrefixTrieTests {
@@ -108,5 +110,16 @@ public class PrefixTrieTests {
         assertEquals(0, trie.size());
         assertFalse(trie.contains("test"));
         assertEquals(0, trie.prefixMatches("fdd"));
+    }
+
+    @Test
+    public void test_empty_string() {
+        PrefixTrieSet trie = new PrefixTrieSet();
+        assertFalse(trie.contains(""));
+        assertEquals(0, trie.prefixMatches(""));
+        trie.add("s");
+        Assertions.assertThrows(PreconditionException.class, () -> trie.add(""));
+        assertFalse(trie.contains(""));
+        assertEquals(0, trie.prefixMatches(""));
     }
 }

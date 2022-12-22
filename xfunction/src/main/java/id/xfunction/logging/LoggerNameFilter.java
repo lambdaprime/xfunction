@@ -18,8 +18,8 @@
 package id.xfunction.logging;
 
 import id.xfunction.util.PrefixTrieSet;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.logging.Filter;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
@@ -32,15 +32,18 @@ import java.util.stream.Collectors;
  *
  * <p>It will ignore all log records which are not satisfying its filtering list of prefixes.
  *
- * <p>To use this filter you need to enable it in logging.properties and then specify list of logger
- * name prefixes which you are interested in:
+ * <p>By default this list is empty so all logger names will satisfying this list and will be
+ * logged.
+ *
+ * <p>To change this filter you need to enable it in logging.properties and then specify list of
+ * logger full names or their name prefixes:
  *
  * <pre>{@code
  * java.util.logging.ConsoleHandler.filter = id.xfunction.logging.LoggerNameFilter
  * id.xfunction.logging.filter = id, sun.net
  * }</pre>
  *
- * <p>It allows to exclude specific logger names by providing their complete names:
+ * <p>To exclude specific logger you need to provide its full name or name prefix:
  *
  * <pre>{@code
  * id.xfunction.logging.excludedLoggers = id.HelloWorld
@@ -52,28 +55,25 @@ import java.util.stream.Collectors;
 public class LoggerNameFilter implements Filter {
 
     private PrefixTrieSet namePrefixes;
-    private Set<String> excludedLoggers;
+    private PrefixTrieSet excludedLoggers;
 
     public LoggerNameFilter() {
         namePrefixes =
-                Pattern.compile(",")
-                        .splitAsStream(
-                                Optional.ofNullable(
-                                                LogManager.getLogManager()
-                                                        .getProperty("id.xfunction.logging.filter"))
-                                        .orElse(""))
-                        .map(String::trim)
+                getPropertyList("id.xfunction.logging.filter").stream()
                         .collect(Collectors.toCollection(PrefixTrieSet::new));
         excludedLoggers =
-                Pattern.compile(",")
-                        .splitAsStream(
-                                Optional.ofNullable(
-                                                LogManager.getLogManager()
-                                                        .getProperty(
-                                                                "id.xfunction.logging.excludedLoggers"))
-                                        .orElse(""))
-                        .map(String::trim)
-                        .collect(Collectors.toSet());
+                getPropertyList("id.xfunction.logging.excludedLoggers").stream()
+                        .collect(Collectors.toCollection(PrefixTrieSet::new));
+    }
+
+    private static List<String> getPropertyList(String propertyName) {
+        return Pattern.compile(",")
+                .splitAsStream(
+                        Optional.ofNullable(LogManager.getLogManager().getProperty(propertyName))
+                                .orElse(""))
+                .map(String::trim)
+                .filter(s -> !s.isBlank())
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -81,8 +81,8 @@ public class LoggerNameFilter implements Filter {
         String name = record.getLoggerName();
         if (record.getLevel().intValue() >= Level.WARNING.intValue()) return true;
         if (name == null) return false;
-        if (namePrefixes.isEmpty()) return false;
-        if (excludedLoggers.contains(name)) return false;
+        if (excludedLoggers.prefixMatches(name) != 0) return false;
+        if (namePrefixes.isEmpty()) return true;
         return namePrefixes.prefixMatches(name) != 0;
     }
 }
