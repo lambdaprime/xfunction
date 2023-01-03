@@ -27,8 +27,9 @@ public class Preconditions {
      *
      * @throws PreconditionException with a message if obj is null
      */
-    public static void notNull(Object obj, String message) throws PreconditionException {
-        if (obj == null) throw new PreconditionException(message);
+    public static void notNull(Object obj, String message, Object... param)
+            throws PreconditionException {
+        if (obj == null) throw new PreconditionException(message, param);
     }
 
     /**
@@ -45,8 +46,9 @@ public class Preconditions {
      *
      * @throws PreconditionException with a message if obj is not null
      */
-    public static void isNull(Object obj, String message) throws PreconditionException {
-        if (obj != null) throw new PreconditionException(message);
+    public static void isNull(Object obj, String message, Object... param)
+            throws PreconditionException {
+        if (obj != null) throw new PreconditionException(message, param);
     }
 
     /**
@@ -64,7 +66,17 @@ public class Preconditions {
      * @throws PreconditionException with a message if b is false
      */
     public static void isTrue(boolean b, String message) throws PreconditionException {
-        if (!b) throw new PreconditionException(message);
+        isTrue(b, "", "");
+    }
+
+    /**
+     * Preconditional check.
+     *
+     * @throws PreconditionException with a message if b is false
+     */
+    public static void isTrue(boolean b, String message, Object... param)
+            throws PreconditionException {
+        if (!b) throw new PreconditionException(message, param);
     }
 
     /**
@@ -99,10 +111,12 @@ public class Preconditions {
      *
      * @throws PreconditionException if two values are not equal
      */
-    public static <T> void equals(T expected, T actual) throws PreconditionException {
+    public static void equals(Object expected, Object actual) throws PreconditionException {
         isTrue(
                 Objects.equals(expected, actual),
-                String.format("expected value %s, actual value %s", expected, actual));
+                "expected value %s, actual value %s",
+                expected,
+                actual);
     }
 
     /**
@@ -129,9 +143,43 @@ public class Preconditions {
      *
      * @throws PreconditionException if two values are not equal
      */
-    public static <T> void equals(T expected, T actual, String msg) throws PreconditionException {
+    public static void equals(Object expected, Object actual, String msg)
+            throws PreconditionException {
         if (!Objects.equals(expected, actual))
             throw new PreconditionException(msg, expected, actual);
+    }
+
+    /**
+     * Preconditional check for equality with custom additional message
+     *
+     * @throws PreconditionException if two values are not equal
+     */
+    public static void equals(long expected, long actual, String msg, Object... param)
+            throws PreconditionException {
+        if (expected != actual)
+            throw new PreconditionException(String.format(msg, param), expected, actual);
+    }
+
+    /**
+     * Preconditional check for equality with custom additional message
+     *
+     * @throws PreconditionException if two values are not equal
+     */
+    public static void equals(double expected, double actual, String msg, Object... param)
+            throws PreconditionException {
+        if (expected != actual)
+            throw new PreconditionException(String.format(msg, param), expected, actual);
+    }
+
+    /**
+     * Preconditional check for equality with custom additional message
+     *
+     * @throws PreconditionException if two values are not equal
+     */
+    public static void equals(Object expected, Object actual, String msg, Object... param)
+            throws PreconditionException {
+        if (!Objects.equals(expected, actual))
+            throw new PreconditionException(String.format(msg, param), expected, actual);
     }
 
     /**

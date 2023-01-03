@@ -156,31 +156,59 @@ public class XLogger extends Logger {
         super.exiting(className, sourceMethod, Objects.toString(result));
     }
 
+    /**
+     * In {@link java.util.logging} to log {@link Level#INFO} messages you need explicitly pass the
+     * corresponding log {@link Level} to log method. This method does it automatically.
+     */
     @Override
     public void info(String msg) {
         super.log(Level.INFO, msg);
     }
 
+    /**
+     * In {@link java.util.logging} to log {@link Level#INFO} messages you need explicitly pass the
+     * corresponding log {@link Level} to log method. This method does it automatically.
+     */
     public void info(String msg, Object... param) {
         super.log(Level.INFO, msg, param);
     }
 
+    /**
+     * In {@link java.util.logging} to log {@link Level#WARNING} messages you need explicitly pass
+     * the corresponding log {@link Level} to log method. This method does it automatically.
+     */
     public void warning(String msg, Object... param) {
         super.log(Level.WARNING, msg, param);
     }
 
+    /**
+     * In {@link java.util.logging} to log {@link Level#SEVERE} messages you need explicitly pass
+     * the corresponding log {@link Level} to log method. This method does it automatically.
+     */
     public void severe(String msg, Object... param) {
         super.log(Level.SEVERE, msg, param);
     }
 
+    /**
+     * In {@link java.util.logging} to log {@link Level#SEVERE} messages you need explicitly pass
+     * the corresponding log {@link Level} to log method. This method does it automatically.
+     */
     public void severe(String msg, Throwable t) {
         super.log(Level.SEVERE, msg, t);
     }
 
+    /**
+     * In {@link java.util.logging} to log {@link Level#SEVERE} messages you need explicitly pass
+     * the corresponding log {@link Level} to log method. This method does it automatically.
+     */
     public void severe(Throwable t) {
         super.log(Level.SEVERE, t.getMessage(), t);
     }
 
+    /**
+     * In {@link java.util.logging} to log {@link Level#FINE} messages you need explicitly pass the
+     * corresponding log {@link Level} to log method. This method does it automatically.
+     */
     public void fine(String msg, Object... param) {
         super.log(Level.FINE, msg, param);
     }
