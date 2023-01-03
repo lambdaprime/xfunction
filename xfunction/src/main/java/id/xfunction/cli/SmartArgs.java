@@ -83,7 +83,8 @@ public class SmartArgs {
     public void parse(String[] args) throws ArgumentParsingException {
         for (int i = 0; i < args.length; i++) {
             boolean expectValue = handlers.containsKey(args[i]);
-            if (expectValue && i + 1 == args.length) throw new ArgumentParsingException();
+            if (expectValue && i + 1 == args.length)
+                throw new ArgumentParsingException("Option value is missing");
             if (!expectValue && !defaultHandler.apply(args[i])) return;
             if (!expectValue) continue;
             handlers.get(args[i]).accept(args[i + 1]);

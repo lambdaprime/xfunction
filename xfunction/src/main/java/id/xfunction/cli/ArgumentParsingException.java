@@ -21,10 +21,6 @@ public class ArgumentParsingException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public ArgumentParsingException() {
-        super();
-    }
-
     public ArgumentParsingException(String message) {
         super(message);
     }
