@@ -28,7 +28,7 @@ public class FilePredicates {
     /**
      * Return file predicate which checks if content of a given file equals content of target file.
      */
-    public static Predicate<Path> isFileEqual(Path target) {
+    public static Predicate<Path> isContentEquals(Path target) {
         var targetFile = target.toFile();
         Preconditions.isTrue(targetFile.isFile(), "Not a file " + target.toAbsolutePath());
         return input -> {
@@ -53,5 +53,10 @@ public class FilePredicates {
                 if (inputPath.getFileName().toString().endsWith(ext)) return true;
             return false;
         };
+    }
+
+    /** Return file predicate which checks if a given file name matches regular expression */
+    public static Predicate<Path> match(String regexp) {
+        return inputPath -> inputPath.getFileName().toString().matches(regexp);
     }
 }
