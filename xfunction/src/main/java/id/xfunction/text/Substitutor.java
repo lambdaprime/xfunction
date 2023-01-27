@@ -80,6 +80,7 @@ public class Substitutor {
     }
 
     private boolean substituteFile(Path file, Map<String, String> mapping) throws IOException {
+        if (!file.toFile().isFile()) return false;
         Path tmp = Files.createTempFile(file.toAbsolutePath().getParent(), "tmp", "");
         var isChanged = false;
         try (BufferedReader r = new BufferedReader(new FileReader(file.toFile()));

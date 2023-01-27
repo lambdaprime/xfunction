@@ -34,9 +34,24 @@ public class XJsonStringBuilder {
 
     private List<Object> pairs = new ArrayList<>();
 
+    public XJsonStringBuilder() {}
+
+    /** Required by Eclipse toString method generator. This method does nothing. */
     public XJsonStringBuilder(Object obj) {}
 
     public XJsonStringBuilder append(String fieldName, Object fieldValue) {
+        pairs.add(fieldName);
+        pairs.add(fieldValue);
+        return this;
+    }
+
+    public XJsonStringBuilder append(String fieldName, long fieldValue) {
+        pairs.add(fieldName);
+        pairs.add(fieldValue);
+        return this;
+    }
+
+    public XJsonStringBuilder append(String fieldName, double fieldValue) {
         pairs.add(fieldName);
         pairs.add(fieldValue);
         return this;

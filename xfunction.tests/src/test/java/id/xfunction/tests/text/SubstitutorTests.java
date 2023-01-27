@@ -57,15 +57,22 @@ public class SubstitutorTests {
 
     @Test
     public void test_substitute_file() throws IOException {
-        Path path = Files.createTempFile("tmp", "");
-        Files.writeString(path, "a{A}a{A}" + System.lineSeparator() + "b{B}b");
+        Path path = Files.createTempDirectory("tmp");
+        Path file1 = path.resolve("test");
+        String text = "a{A}a{A}" + System.lineSeparator() + "b{B}b";
+        Files.writeString(file1, text);
+        Path file2 = Files.createDirectory(path.resolve("dir1")).resolve("test");
+        Files.writeString(file2, text);
         Substitutor substitutor = new Substitutor();
         substitutor.substitute(
                 path,
                 Map.of(
                         "{A}", "a",
                         "{B}", "b"));
-        List<String> lines = Files.readAllLines(path);
-        assertEquals("[aaaa, bbb]", lines.toString());
+        List<String> lines = Files.readAllLines(file1);
+        String expected = "[aaaa, bbb]";
+        assertEquals(expected, lines.toString());
+        lines = Files.readAllLines(file2);
+        assertEquals(expected, lines.toString());
     }
 }
