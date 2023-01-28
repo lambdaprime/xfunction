@@ -140,7 +140,7 @@ public class XJsonTests {
     @Test
     public void test_asJson_array_objects() {
         assertEquals(
-                resourceUtils.readResource(getClass(), "json-array"),
+                resourceUtils.readResource(getClass(), "json-string-array"),
                 XJson.asString(
                         "obj1", new Obj(),
                         "obj2", new Obj(),

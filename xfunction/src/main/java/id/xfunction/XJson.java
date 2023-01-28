@@ -17,7 +17,6 @@
  */
 package id.xfunction;
 
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
@@ -70,18 +69,17 @@ public class XJson {
             if (v == null) continue;
             String vstr = jsonToString(v);
             if (vstr == null) vstr = "";
-            vstr = quote(vstr);
+            if (!(v instanceof Number)) vstr = quote(vstr);
             if (v instanceof Map) {
                 vstr = asString((Map<?, ?>) v);
             } else if (v instanceof Collection) {
-                Collection<?> c = (Collection<?>) v;
-                vstr = c.stream().map(XJson::jsonToString).map(XJson::quote).collect(joining(", "));
-                vstr = "[" + vstr + "]";
+                vstr = "[" + asJsonArray((Collection<?>) v) + "]";
             } else if (v.getClass().isArray()) {
                 Class<?> type = v.getClass().getComponentType();
                 if (type == int.class) vstr = asJsonArray((int[]) v);
                 else if (type == byte.class) vstr = asJsonArray((byte[]) v);
                 else if (type == double.class) vstr = asJsonArray((double[]) v);
+                else if (type == float.class) vstr = asJsonArray((float[]) v);
                 else if (type == boolean.class) vstr = asJsonArray((boolean[]) v);
                 else if (type == long.class) vstr = asJsonArray((long[]) v);
                 else if (!type.isPrimitive()) vstr = asJsonArray((Object[]) v);
@@ -141,7 +139,9 @@ public class XJson {
     private static String asJsonArray(Object[] a) {
         StringBuilder buf = new StringBuilder();
         for (Object i : a) {
-            buf.append(quote(jsonToString(i)) + ", ");
+            String s = jsonToString(i);
+            if (!(i instanceof Number)) s = quote(s);
+            buf.append(s + ", ");
         }
         if (buf.length() != 0) {
             buf.setLength(buf.length() - 2);
@@ -152,7 +152,7 @@ public class XJson {
     private static String asJsonArray(long[] a) {
         StringBuilder buf = new StringBuilder();
         for (long i : a) {
-            buf.append("\"" + jsonToString(i) + "\", ");
+            buf.append(jsonToString(i) + ", ");
         }
         if (buf.length() != 0) {
             buf.setLength(buf.length() - 2);
@@ -174,7 +174,18 @@ public class XJson {
     private static String asJsonArray(double[] a) {
         StringBuilder buf = new StringBuilder();
         for (double i : a) {
-            buf.append("\"" + jsonToString(i) + "\", ");
+            buf.append(jsonToString(i) + ", ");
+        }
+        if (buf.length() != 0) {
+            buf.setLength(buf.length() - 2);
+        }
+        return buf.toString();
+    }
+
+    private static String asJsonArray(float[] a) {
+        StringBuilder buf = new StringBuilder();
+        for (double i : a) {
+            buf.append(jsonToString(i) + ", ");
         }
         if (buf.length() != 0) {
             buf.setLength(buf.length() - 2);
@@ -185,10 +196,20 @@ public class XJson {
     private static String asJsonArray(int[] a) {
         StringBuilder buf = new StringBuilder();
         for (int i : a) {
-            buf.append("\"" + jsonToString(i) + "\", ");
+            buf.append(jsonToString(i) + ", ");
         }
         if (buf.length() != 0) {
             buf.setLength(buf.length() - 2);
+        }
+        return buf.toString();
+    }
+
+    private static String asJsonArray(Collection<?> collection) {
+        StringJoiner buf = new StringJoiner(", ");
+        for (Object item : collection) {
+            String s = jsonToString(item);
+            if (!(item instanceof Number)) s = quote(s);
+            buf.add(s);
         }
         return buf.toString();
     }
