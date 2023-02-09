@@ -43,6 +43,15 @@ public class LazyInitializer<T> implements Supplier<T> {
         return value;
     }
 
+    public void ifInitialized(ThrowingConsumer<T, Exception> consumer) {
+        if (value == null) return;
+        try {
+            consumer.accept(value);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public String toString() {
         return value == null ? "<not yet initialized>" : value.toString();

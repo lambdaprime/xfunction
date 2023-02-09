@@ -3,10 +3,12 @@
 - ThrowingRunnable, ThrowingSupplier, ThrowingFunction and others
 - functions to convert lambdas which throw checked exceptions to unchecked ones
 - currying for lambdas
-- XML query/update utilities using XPath
-- md5 method which returns String
+- preconditions
+- [prefix trie](https://en.wikipedia.org/wiki/Trie) collection
+- XML query/update utilities using [XPath](https://en.wikipedia.org/wiki/XPath)
+- functions to delete/copy folders recursively
+- md5 function which returns String in HEX format (instead of byte[])
 - extension for HttpClient.Builder which allows to make insecure connections
-- prefix trie collection
 - ...
 
 # Requirements

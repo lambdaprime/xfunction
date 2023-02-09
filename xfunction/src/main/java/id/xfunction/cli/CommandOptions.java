@@ -24,6 +24,8 @@ import java.util.function.Predicate;
 /**
  * Provides access to command line options. Options have key-value structure.
  *
+ * <p>This class is only relying on {@link Properties} and so it is thread-safe.
+ *
  * @author lambdaprime intid@protonmail.com
  */
 public class CommandOptions {
@@ -108,6 +110,16 @@ public class CommandOptions {
                 .map(String::toLowerCase)
                 .filter(Predicate.isEqual("true"))
                 .isPresent();
+    }
+
+    /** Adds new option */
+    public void addOption(String name, boolean value) {
+        addOption(name, "" + value);
+    }
+
+    /** Adds new option */
+    private void addOption(String name, String value) {
+        options.put(name, value);
     }
 
     @Override

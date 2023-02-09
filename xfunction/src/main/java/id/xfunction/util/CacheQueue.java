@@ -22,8 +22,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 
 /**
- * Cache implementation in form of a FIFO queue. Ordinary {@link java.util.Queue} does not delete
- * elements automatically - this cache does.
+ * Cache implementation in form of a FIFO queue which caches only N last added items. Ordinary
+ * {@link java.util.Queue} does not delete elements automatically - this cache does.
  *
  * <ul>
  *   <li>provides O(1) access time to the items

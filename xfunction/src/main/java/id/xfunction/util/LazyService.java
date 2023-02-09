@@ -18,7 +18,7 @@
 package id.xfunction.util;
 
 /**
- * Naive implementation of service lifecycle.
+ * Simple implementation of service lifecycle.
  *
  * <p>Lifecycle phases:
  *
