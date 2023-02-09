@@ -32,6 +32,9 @@ import java.util.LinkedHashMap;
  *   <li>never exceed its defined maximum size
  * </ul>
  *
+ * <p>It is based on {@link LinkedHashMap} (and relies on {@link LinkedHashMap#removeEldestEntry})
+ * so all {@link LinkedHashMap} properties applies to {@link CacheQueue}.
+ *
  * @author lambdaprime intid@protonmail.com
  */
 public class CacheQueue<T> implements Collection<T> {
