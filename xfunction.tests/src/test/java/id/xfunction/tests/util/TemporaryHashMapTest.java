@@ -52,13 +52,13 @@ public class TemporaryHashMapTest {
         for (int i = 0; i < 1000; i++) {
             map.put("" + i, "val" + i);
         }
-        XThread.sleep(2);
+        XThread.sleep(3);
         map.put("k", "val");
         Assertions.assertEquals(1, map.size());
         Assertions.assertEquals("{k=val}", map.toString());
         Assertions.assertEquals("val", map.get("k"));
         Assertions.assertEquals(null, map.get("k2"));
-        XThread.sleep(2);
+        XThread.sleep(3);
         map.cleanupExpired();
         Assertions.assertEquals(true, map.isEmpty());
 
