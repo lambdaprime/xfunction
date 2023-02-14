@@ -1,6 +1,8 @@
 /*
  * Copyright 2020 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,26 +20,25 @@ package id.xfunction.tests.cli;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.Properties;
-
+import id.xfunction.cli.ArgumentParsingException;
+import id.xfunction.cli.CommandOptions;
 import org.junit.jupiter.api.Test;
 
-import id.xfunction.cli.ArgsUtils;
-import id.xfunction.cli.ArgumentParsingException;
-
-public class ArgsUtilsTest {
-    
-    private ArgsUtils utils = new ArgsUtils();
+public class CommandOptionsTest {
 
     @Test
     public void test_collectOptions() {
-        assertThrows(ArgumentParsingException.class, () ->
-        utils.collectOptions(new String[] {"-k" , "value", "arg1", "arg2", "arg3"}));
-        
-        Properties props = utils.collectOptions(new String[] {"-k1" , "value", "--k2", "arg2", "-k3"});
+        assertThrows(
+                ArgumentParsingException.class,
+                () ->
+                        CommandOptions.collectOptions(
+                                new String[] {"-k", "value", "arg1", "arg2", "arg3"}));
+
+        CommandOptions props =
+                CommandOptions.collectOptions(new String[] {"-k1", "value", "--k2", "arg2", "-k3"});
         assertEquals("{k1=value, k2=arg2, k3=}", props.toString());
-        
-        props = utils.collectOptions(new String[] {"-k1=value", "--k2==arg2", "-k3="});
+
+        props = CommandOptions.collectOptions(new String[] {"-k1=value", "--k2==arg2", "-k3="});
         assertEquals("{k1=value, k2==arg2, k3=}", props.toString());
     }
 }

@@ -1,5 +1,6 @@
 /*
- * Copyright 2020 xfunction project
+ * Copyright 2020 lambdaprime
+ * 
  * Website: https://github.com/lambdaprime/xfunction
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,14 +21,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
 /**
- * Java default thread factory does not allow you to
- * specify the name for threads it creates.
- * This thread factory does.
+ * Java default thread factory does not allow you to specify the name for threads it creates. This
+ * thread factory does.
  */
 public class NamedThreadFactory implements ThreadFactory {
 
     private final String name;
-    
+
     /**
      * @param name threads will be created with this name
      */
@@ -41,5 +41,4 @@ public class NamedThreadFactory implements ThreadFactory {
         t.setName(name);
         return t;
     }
-
 }

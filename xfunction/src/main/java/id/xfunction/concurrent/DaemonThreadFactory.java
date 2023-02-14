@@ -1,5 +1,6 @@
 /*
- * Copyright 2020 xfunction project
+ * Copyright 2020 lambdaprime
+ * 
  * Website: https://github.com/lambdaprime/xfunction
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,8 +21,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
 /**
- * This thread factory uses Java default thread factory
- * to create a thread and then marks thread as daemon thread. 
+ * This thread factory uses Java default thread factory to create a thread and then marks thread as
+ * daemon thread.
  */
 public class DaemonThreadFactory implements ThreadFactory {
 
@@ -31,5 +32,4 @@ public class DaemonThreadFactory implements ThreadFactory {
         t.setDaemon(true);
         return t;
     }
-
 }

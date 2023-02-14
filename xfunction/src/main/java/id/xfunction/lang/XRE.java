@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,18 +18,17 @@
 package id.xfunction.lang;
 
 /**
- * <p>An alias for XRuntimeException which is very useful in Java scripting.</p>
- * 
+ * An alias for XRuntimeException which is very useful in Java scripting.
+ *
  * <pre>{@code
  * throw new XRE("Message");
  * }</pre>
- * 
+ *
  * Instead super long:
- * 
+ *
  * <pre>{@code
  * throw new XRuntimeException("Message");
  * }</pre>
- *
  */
 public class XRE extends XRuntimeException {
 
@@ -36,15 +37,15 @@ public class XRE extends XRuntimeException {
     public XRE() {
         super();
     }
-    
+
     public XRE(String message) {
-        super(message);
+        super(XRuntimeException.class.getName() + ": " + message);
     }
 
-    public XRE(String fmt, Object...objs) {
-        super(fmt, objs);
+    public XRE(String fmt, Object... objs) {
+        super(XRuntimeException.class.getName() + ": " + fmt, objs);
     }
-    
+
     public XRE(Throwable t) {
         super(t);
     }

@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,5 +19,5 @@ package id.xfunction.function;
 
 @FunctionalInterface
 public interface ThrowingSupplier<R, E extends Exception> {
-    R run() throws E;
+    R get() throws E;
 }

@@ -1,6 +1,8 @@
 /*
  * Copyright 2021 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,19 +20,17 @@ package id.xfunction.nio.file;
 import java.nio.file.Path;
 import java.util.Optional;
 
-/**
- * Additions to standard java.nio.file.Paths
- */
+/** Additions to standard java.nio.file.Paths */
 public class XPaths {
 
     /**
-     * <p>Usually extension of the file is part of its file name.
-     * This function splits file name on two-value array:
-     * 
+     * Usually extension of the file is part of its file name. This function splits file name on
+     * two-value array:
+     *
      * <pre>array[0] = file name (without extension)
      * array[1] = file extension (or null if extension is absent)
      * </pre>
-     * 
+     *
      * <p>If filename starts with '.' it means it has no extension.
      */
     public static String[] splitFileName(String fileName) {
@@ -40,16 +40,17 @@ public class XPaths {
         }
         return new String[] {fileName.substring(0, pos), fileName.substring(pos + 1)};
     }
-    
+
     /**
-     * <p>Append postfix into file name.
+     * Append postfix into file name.
+     *
      * <p>Postfix is appended to the file name excluding its extension:
-     * 
+     *
      * <pre>{@code
      * append(Paths.get("/tmp/a.png"), "-cropped")
      * }</pre>
-     * 
-     * Will produce:  "/tmp/a-cropped.png"
+     *
+     * Will produce: "/tmp/a-cropped.png"
      */
     public static Path append(Path path, String postfix) {
         String[] fileName = splitFileName(path.getFileName().toString());

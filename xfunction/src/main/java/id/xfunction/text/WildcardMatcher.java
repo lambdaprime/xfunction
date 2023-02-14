@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,45 +17,68 @@
  */
 package id.xfunction.text;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 /**
- * <p>Match text with a wildcards (called template) with any other
- * text.</p>
- * 
- * <p>This matcher supports only one possible wildcard symbol which
- * is '*'.</p>
- * 
- * <p>That way you don't need to worry to escape any symbols in your
- * template like in case when using regexps.</p>
- * 
- * <p>For example given template "lol*lol":</p>
- * 
+ * Match text with a wildcards (called template) with any other text.
+ *
+ * <p>This matcher supports only one possible wildcard symbol which is '*'.
+ *
+ * <p>That way you don't need to worry to escape any symbols in your template like in case when
+ * using regexps.
+ *
+ * <p>For example given template "lol*lol":
+ *
  * <ul>
- * <li>lolasdlol - match</li>
- * <li>looooollol - does not match</li>
+ *   <li>lolasdlol - match
+ *   <li>looooollol - does not match
  * </ul>
- * 
- * <p>Worst case complexity is O(n^m)</p>
- * 
+ *
+ * <p>Worst case complexity is O(n^m)
  */
 public class WildcardMatcher {
 
-    private String template;
+    public static class Result {
+
+        /** Template for which matching failed */
+        public Optional<String> template = Optional.empty();
+
+        public boolean isMatches() {
+            return !template.isPresent();
+        }
+    }
+
+    private List<String> templates;
 
     public WildcardMatcher(String template) {
-        this.template = template;
+        this.templates = Arrays.asList(template);
     }
 
-    /**
-     * Check if given text matches current template.
-     */
+    public WildcardMatcher(List<String> templates) {
+        this.templates = templates;
+    }
+
+    /** Check if given text matches all templates. */
     public boolean matches(String str) {
-        return matches(str, 0, 0);
+        return match(str).isMatches();
     }
 
-    private boolean matches(String str, int si, int ti) {
+    /** Match given text against all templates and return result */
+    public Result match(String str) {
+        for (String template : templates) {
+            Result result = new Result();
+            result.template = Optional.of(template);
+            if (!matches(template, str, 0, 0)) return result;
+        }
+        return new Result();
+    }
+
+    private boolean matches(String template, String str, int ti, int si) {
         while (si < str.length() && ti < template.length()) {
             if (template.charAt(ti) == '*') {
-                boolean ret = matches(str, si, ti + 1);
+                boolean ret = matches(template, str, ti + 1, si);
                 if (ret) return true;
                 si++;
                 continue;

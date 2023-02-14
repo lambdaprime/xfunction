@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,10 +19,12 @@ package id.xfunction.concurrent;
 
 import static java.util.stream.Collectors.toList;
 
+import id.xfunction.function.Unchecked;
 import java.util.List;
 import java.util.concurrent.AbstractExecutorService;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Semaphore;
@@ -28,16 +32,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import id.xfunction.function.Unchecked;
-
 /**
- * <p>BlockingExecutorService keeps pool of worker threads which read tasks
- * from the blocking queue.</p>
- * 
- * <p>If blocking queue is bounded then thread submitting a new task to this
- * executor will block until new space in queue became available (with standard
- * ThreadPoolExecutor such task will be rejected).</p>
- * 
+ * BlockingExecutorService keeps pool of worker threads which read tasks from the blocking queue.
+ *
+ * <p>If blocking queue is bounded then thread submitting a new task to this executor will block
+ * until new space in queue became available (with standard ThreadPoolExecutor such task will be
+ * rejected).
  */
 public class BlockingExecutorService extends AbstractExecutorService {
 
@@ -48,15 +48,15 @@ public class BlockingExecutorService extends AbstractExecutorService {
     private volatile boolean isShutdown;
     private BlockingQueue<Runnable> queue;
     private List<WorkerThread> workers;
-    
-    private class WorkerThread extends Thread  {
+
+    private class WorkerThread extends Thread {
         @Override
         public void run() {
             try {
                 semaphore.acquire();
                 Runnable r;
                 while ((r = queue.take()) != EOQ) {
-//                    System.out.println("pick up new item from queue");
+                    //                    System.out.println("pick up new item from queue");
                     r.run();
                 }
                 // put it back for other workers
@@ -68,21 +68,22 @@ public class BlockingExecutorService extends AbstractExecutorService {
             }
         }
     }
-    
+
     /**
      * Creates executor with bounded queue of given capacity.
-     * 
-     * @param maximumPoolSize number of worker threads which will be created and be waiting
-     * for a new tasks
+     *
+     * @param maximumPoolSize number of worker threads which will be created and be waiting for a
+     *     new tasks
      * @param capacity size of the internal queue from which worker will pick up the tasks
      */
     public BlockingExecutorService(int maximumPoolSize, int capacity) {
         this.queue = new ArrayBlockingQueue<>(capacity);
         this.semaphore = new Semaphore(maximumPoolSize);
-        this.workers = Stream.generate(() -> new WorkerThread())
-                .peek(Thread::start)
-                .limit(maximumPoolSize)
-                .collect(toList());
+        this.workers =
+                Stream.generate(() -> new WorkerThread())
+                        .peek(Thread::start)
+                        .limit(maximumPoolSize)
+                        .collect(toList());
     }
 
     public BlockingExecutorService(int capacity) {
@@ -92,9 +93,12 @@ public class BlockingExecutorService extends AbstractExecutorService {
     @Override
     public void shutdown() {
         isShutdown = true;
-        Executors.defaultThreadFactory().newThread(() -> {
-            Unchecked.run(() -> queue.put(EOQ));
-        }).start();
+        Executors.defaultThreadFactory()
+                .newThread(
+                        () -> {
+                            Unchecked.run(() -> queue.put(EOQ));
+                        })
+                .start();
     }
 
     @Override
@@ -112,14 +116,25 @@ public class BlockingExecutorService extends AbstractExecutorService {
         return semaphore.availablePermits() == workers.size();
     }
 
+    /**
+     * This call blocks indefinitely if there are some pending tasks in the queue which is yet to be
+     * taken.
+     *
+     * <p>If the queue is empty it behaves as {@link ExecutorService#awaitTermination(long,
+     * TimeUnit)}
+     */
     @Override
-    public boolean awaitTermination(long timeout, TimeUnit unit)
-            throws InterruptedException {
-        boolean isTerminated = semaphore.tryAcquire(workers.size(), timeout, unit);
+    public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
+        boolean isTerminated = false;
+        int numOfPermits = workers.size();
+        while (true) {
+            isTerminated = semaphore.tryAcquire(numOfPermits, timeout, unit);
+            if (isTerminated && queue.peek() != EOQ) {
+                semaphore.release(numOfPermits);
+            } else break;
+        }
         if (isTerminated) return true;
-        return workers.stream()
-                .map(Thread::isAlive)
-                .noneMatch(Predicate.isEqual(true));
+        return workers.stream().map(Thread::isAlive).noneMatch(Predicate.isEqual(true));
     }
 
     @Override
@@ -127,5 +142,4 @@ public class BlockingExecutorService extends AbstractExecutorService {
         if (isShutdown) return;
         Unchecked.run(() -> queue.put(command));
     }
-
 }

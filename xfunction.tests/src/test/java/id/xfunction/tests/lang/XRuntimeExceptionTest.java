@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,18 +19,20 @@ package id.xfunction.tests.lang;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import id.xfunction.lang.XRE;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import id.xfunction.lang.XRE;
 
 public class XRuntimeExceptionTest {
 
     @Test
     public void test_throw() {
-        RuntimeException ex = Assertions.assertThrows(XRE.class, () -> {
-            throw new XRE("msg %s %d", "a1", 3);
-        });
-        assertEquals("msg a1 3", ex.getMessage());
+        RuntimeException ex =
+                Assertions.assertThrows(
+                        XRE.class,
+                        () -> {
+                            throw new XRE("msg %s %d", "a1", 3);
+                        });
+        assertEquals("id.xfunction.lang.XRuntimeException: msg a1 3", ex.getMessage());
     }
 }

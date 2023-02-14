@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,19 +17,18 @@
  */
 package id.xfunction.tests;
 
-import static java.util.stream.Collectors.toSet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.Set;
-
-import org.junit.jupiter.api.Test;
-
+import id.xfunction.RetryException;
 import id.xfunction.XUtils;
 import id.xfunction.function.Unchecked;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
+import org.junit.jupiter.api.Test;
 
 public class XUtilsTests {
 
@@ -42,20 +43,22 @@ public class XUtilsTests {
 
     @Test
     public void test_md5Sum() throws Exception {
-        assertEquals("F368382E27B21F0D6DB6693DEBE94A14",
-            XUtils.md5Sum("I can see what you want").toUpperCase());
-        assertEquals("2DDAFC008B12810D7148E3E6943598AC",
-            XUtils.md5Sum("A state of trance").toUpperCase());
-        assertEquals("31CF05BEC43849BED31296557B064071",
-            XUtils.md5Sum("until the sky falls down").toUpperCase());
+        assertEquals(
+                "F368382E27B21F0D6DB6693DEBE94A14",
+                XUtils.md5Sum("I can see what you want").toUpperCase());
+        assertEquals(
+                "2DDAFC008B12810D7148E3E6943598AC",
+                XUtils.md5Sum("A state of trance").toUpperCase());
+        assertEquals(
+                "31CF05BEC43849BED31296557B064071",
+                XUtils.md5Sum("until the sky falls down").toUpperCase());
     }
 
     @Test
     public void test_md5Sum_file() throws Exception {
         Path file = Files.createTempFile("gg", "");
         Files.writeString(file, "very long string".repeat(100));
-        assertEquals("05ee552a62cdfeb6b21ac40f401c5eed",
-            XUtils.md5Sum(file.toFile()));
+        assertEquals("05ee552a62cdfeb6b21ac40f401c5eed", XUtils.md5Sum(file.toFile()));
         file.toFile().delete();
     }
 
@@ -85,10 +88,26 @@ public class XUtilsTests {
         assertEquals("  sd  ", XUtils.unquote("  sd  "));
     }
 
+    @Test
+    public void test_retry() throws InterruptedException, ExecutionException {
+        var out = new ArrayList<Integer>();
+        var res =
+                XUtils.retryIndefinitelyAsync(
+                        () -> {
+                            out.add(1);
+                            if (out.size() < 4) throw new RetryException();
+                            return "done";
+                        },
+                        Duration.ofMillis(1));
+        System.out.println(res.toString() + out.toString());
+        res.get();
+        assertEquals("[1, 1, 1, 1]", out.toString());
+    }
+
     public static void main(String[] args) {
         XUtils.printMemoryConsumption(100);
         new XUtilsTests().testSafe();
-        
+
         byte[] b = "test".getBytes();
         System.out.println("fff");
         System.out.println(Arrays.toString(b));

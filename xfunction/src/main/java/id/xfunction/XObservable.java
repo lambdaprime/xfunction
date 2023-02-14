@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,27 +17,24 @@
  */
 package id.xfunction;
 
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
 /**
- * Allows you to register to the objects which
- * will send you notification once something has
+ * Allows you to register to the objects which will send you notification once something has
  * changed. Performs single threaded simple notification.
- * 
- * <p>Java deprecated Observable since Java 9. The alternatives they
- * propose are:</p>
- * 
+ *
+ * <p>Java deprecated Observable since Java 9. The alternatives they propose are:
+ *
  * <ul>
- * <li>javabeans - requires you to add dependency on java.desktop</li>
- * <li>flow - requires you to define onComplete and others</li>
- * <li>java.util.concurrent - for messaging between the threads</li>
+ *   <li>javabeans - requires you to add dependency on java.desktop
+ *   <li>flow - requires you to define onComplete and others
+ *   <li>java.util.concurrent - for messaging between the threads
  * </ul>
- * 
- * <p>Which may be not exactly what you need if you are
- * looking for simple notification in non GUI application.</p>
+ *
+ * <p>Which may be not exactly what you need if you are looking for simple notification in non GUI
+ * application.
  */
 public class XObservable<T> {
 

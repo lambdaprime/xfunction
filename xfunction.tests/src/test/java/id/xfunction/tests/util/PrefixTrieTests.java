@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -19,12 +21,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import id.xfunction.PreconditionException;
+import id.xfunction.util.PrefixTrieSet;
 import java.util.Arrays;
 import java.util.List;
-
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import id.xfunction.util.PrefixTrieSet;
 
 public class PrefixTrieTests {
 
@@ -43,9 +45,11 @@ public class PrefixTrieTests {
         trie.add("mis");
         trie.add("ippi");
         assertEquals(10, trie.size());
-        assertEquals("[hello, hello1, hello1$, ippi, mis, missis, mississippi, world, world1, world1$]", trie.toString());
+        assertEquals(
+                "[hello, hello1, hello1$, ippi, mis, missis, mississippi, world, world1, world1$]",
+                trie.toString());
     }
-    
+
     @Test
     public void test_add_same() {
         PrefixTrieSet trie = new PrefixTrieSet();
@@ -106,5 +110,16 @@ public class PrefixTrieTests {
         assertEquals(0, trie.size());
         assertFalse(trie.contains("test"));
         assertEquals(0, trie.prefixMatches("fdd"));
+    }
+
+    @Test
+    public void test_empty_string() {
+        PrefixTrieSet trie = new PrefixTrieSet();
+        assertFalse(trie.contains(""));
+        assertEquals(0, trie.prefixMatches(""));
+        trie.add("s");
+        Assertions.assertThrows(PreconditionException.class, () -> trie.add(""));
+        assertFalse(trie.contains(""));
+        assertEquals(0, trie.prefixMatches(""));
     }
 }

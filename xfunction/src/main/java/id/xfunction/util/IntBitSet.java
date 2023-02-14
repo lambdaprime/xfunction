@@ -1,6 +1,8 @@
 /*
  * Copyright 2022 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,22 +17,18 @@
  */
 package id.xfunction.util;
 
+import id.xfunction.Preconditions;
 import java.util.BitSet;
-
-import id.xfunction.XAsserts;
 
 /**
  * BitSet implementation which uses ints to represent words.
- * 
- * <p>Java standard {@link BitSet} uses long as a word which means if you need to
- * obtain all words as an array of integers you will need to create a new int
- * array and copy all bits from BitSet.
- * 
+ *
+ * <p>Java standard {@link BitSet} uses long as a word which means if you need to obtain all words
+ * as an array of integers you will need to create a new int array and copy all bits from BitSet.
+ *
  * <p>When this is done very often it can decrease performance.
- * 
- * <p>This class is using int as word so it is possible to obtain array of integers
- * with no cost.
- * 
+ *
+ * <p>This class is using int as word so it is possible to obtain array of integers with no cost.
  */
 public class IntBitSet {
 
@@ -46,9 +44,18 @@ public class IntBitSet {
         this.array = new int[(len + LEN) / LEN];
     }
 
+    /**
+     * @param array creates new {@link IntBitSet} backed up by given array
+     */
+    public IntBitSet(int[] array) {
+        this.len = array.length;
+        this.array = array;
+    }
+
+    /** Flips all bits between [fromIndex, toIndex) */
     public void flip(int fromIndex, int toIndex) {
-        XAsserts.assertLess(fromIndex, len, "Out of range");
-        XAsserts.assertLessOrEqual(toIndex, len, "Out of range");
+        Preconditions.isLess(fromIndex, len, "Out of range");
+        Preconditions.isLessOrEqual(toIndex, len, "Out of range");
         if (fromIndex == toIndex) return;
         int idxA = index(fromIndex);
         int len = toIndex - fromIndex;
@@ -57,9 +64,9 @@ public class IntBitSet {
             return;
         }
         int idxB = index(fromIndex + len - 1);
-        XAsserts.assertLessOrEqual(idxA, idxB, "Negative value");
-        XAsserts.assertLess(idxA, array.length, "Out of range");
-        XAsserts.assertLess(idxB, array.length, "Out of range");
+        Preconditions.isLessOrEqual(idxA, idxB, "Negative value");
+        Preconditions.isLess(idxA, array.length, "Out of range");
+        Preconditions.isLess(idxB, array.length, "Out of range");
         if (idxA == idxB) {
             array[idxA] = flip(array[idxA], fromIndex % LEN, toIndex % LEN);
             return;
@@ -78,8 +85,9 @@ public class IntBitSet {
         return word;
     }
 
+    /** Flip single bit by its position */
     public void flip(int i) {
-        XAsserts.assertLess(i, len, "Out of range");
+        Preconditions.isLess(i, len, "Out of range");
         int idx = index(i);
         int n = array[idx];
         n ^= 1 << (i % LEN);
@@ -96,7 +104,23 @@ public class IntBitSet {
     private int index(int bitPosition) {
         return bitPosition / LEN;
     }
-    
+
+    /**
+     * Returns the index of the first bit that is set to true that occurs on or after the specified
+     * starting index. If no such bit exists then return -1
+     */
+    public int nextSetBit(int fromIndex) {
+        int idx = index(fromIndex);
+        while (idx < array.length) {
+            int n = array[idx];
+            n &= 1 << (fromIndex % LEN);
+            if (n != 0) return fromIndex;
+            fromIndex++;
+            idx = index(fromIndex);
+        }
+        return -1;
+    }
+
     public String toBinaryString() {
         int i = array.length - 1;
         while (i >= 0 && array[i] == 0) i--;

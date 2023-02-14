@@ -4,7 +4,6 @@ First we need publish main project to staging repo.
 
 Run following command in the root folder of the project:
 
-gradle clean build
 gradle publish \
  -Ppublish=true \
  -Psigning.secretKeyRingFile=XXX \
@@ -34,7 +33,23 @@ buildscript {
 
 }
 
+plugins {
+    id 'java'
+    id 'com.diffplug.spotless' version '6.7.2'
+}
+
 apply plugin: 'io.codearte.nexus-staging'
+
+allprojects {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+}
 
 nexusStaging {
     serverUrl = "https://s01.oss.sonatype.org/service/local/"
@@ -52,5 +67,3 @@ props.each { prop ->
     project.ext.set(prop.key, prop.value)
 }
 ins.close()
-
-apply from: '../build.gradle'

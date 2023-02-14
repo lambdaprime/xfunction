@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -25,7 +27,7 @@ public class UncheckedTests {
     int m() throws Exception {
         return 0;
     }
-    
+
     @Test
     public void test_getInt() throws Exception {
         int v = getInt(() -> 12);

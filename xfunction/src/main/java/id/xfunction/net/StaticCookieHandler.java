@@ -1,6 +1,8 @@
 /*
  * Copyright 2020 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -27,9 +29,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
- * Static cookie handler with predefined set of cookies
- * which cannot be changed. Requests to add new cookies
- * are ignored.
+ * Static cookie handler with predefined set of cookies which cannot be changed. Requests to add new
+ * cookies are ignored.
  */
 public class StaticCookieHandler extends CookieHandler {
 
@@ -38,34 +39,30 @@ public class StaticCookieHandler extends CookieHandler {
 
     /**
      * Creates cookie manager with given cookies.
-     * 
+     *
      * @param cookies string of cookies in format "name=value; name=value; ...; name=value"
      */
     public StaticCookieHandler(String cookies) {
-         this(PATTERN.splitAsStream(cookies)
-             .collect(toList()));
+        this(PATTERN.splitAsStream(cookies).collect(toList()));
     }
 
     /**
      * Creates cookie manager with given list of cookies.
-     * 
+     *
      * @param cookies list of cookies where each cookie in format "name=value"
      */
     public StaticCookieHandler(List<String> cookies) {
-         this.cookies = cookies;
+        this.cookies = cookies;
     }
 
     @Override
-    public Map<String, List<String>> get(URI uri,
-            Map<String, List<String>> requestHeaders) throws IOException
-    {
+    public Map<String, List<String>> get(URI uri, Map<String, List<String>> requestHeaders)
+            throws IOException {
         Map<String, List<String>> m = new HashMap<>(requestHeaders);
         m.put("Cookie", cookies);
         return Collections.unmodifiableMap(m);
     }
 
     @Override
-    public void put(URI uri, Map<String, List<String>> responseHeaders)
-            throws IOException { }
-
+    public void put(URI uri, Map<String, List<String>> responseHeaders) throws IOException {}
 }

@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,35 +17,34 @@
  */
 package id.xfunction;
 
-/**
- * <p>Exception which is thrown by {@link XAsserts} methods.
- */
-public class XAssertException extends RuntimeException {
+/** Exception which is thrown by {@link Preconditions} methods. */
+public class PreconditionException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
-    private static final String EQUALS_MESSAGE_FORMAT = "%s: expected value <%s>, actual value <%s>";
-    
-    public XAssertException(String message) {
+    private static final String EQUALS_MESSAGE_FORMAT =
+            "%s: expected value <%s>, actual value <%s>";
+
+    public PreconditionException(String message) {
         super(message);
     }
 
-    public XAssertException(Throwable t) {
+    public PreconditionException(Throwable t) {
         super(t);
     }
 
-    public XAssertException(String fmt, Object...objs) {
+    public PreconditionException(String fmt, Object... objs) {
         super(String.format(fmt, objs));
     }
-    
-    public XAssertException(double expected, double actual) {
-        super(String.format(EQUALS_MESSAGE_FORMAT, "Assertion error", expected, actual));
+
+    public PreconditionException(double expected, double actual) {
+        super(String.format(EQUALS_MESSAGE_FORMAT, "Predondition error", expected, actual));
     }
-    
-    public XAssertException(String message, double expected, double actual) {
+
+    public PreconditionException(String message, double expected, double actual) {
         super(String.format(EQUALS_MESSAGE_FORMAT, message, expected, actual));
     }
 
-    public <T> XAssertException(String message, T expected, T actual) {
+    public <T> PreconditionException(String message, T expected, T actual) {
         super(String.format(EQUALS_MESSAGE_FORMAT, message, expected, actual));
     }
 }

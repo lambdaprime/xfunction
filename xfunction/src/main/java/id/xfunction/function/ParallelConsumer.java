@@ -1,6 +1,8 @@
 /*
  * Copyright 2020 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -21,13 +23,11 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-
 /**
- * <P>Parallel streams may partition the stream in any order which means
- * that there is no guarantee that items which are in the top of the
- * stream will be processed first. Here is an example:</p>
- * 
- * <pre>{@code 
+ * Parallel streams may partition the stream in any order which means that there is no guarantee
+ * that items which are in the top of the stream will be processed first. Here is an example:
+ *
+ * <pre>{@code
  * AtomicInteger c = new AtomicInteger();
  * Consumer<Integer> consumer = s -> {
  *     if (c.incrementAndGet() < 15)
@@ -41,9 +41,9 @@ import java.util.function.Consumer;
  *     .forEach(consumer);
  * System.out.println("Total: "  + c);
  * }</pre>
- * 
+ *
  * May produce:
- * 
+ *
  * <pre>
  * Parallel stream:
  * 656
@@ -62,13 +62,13 @@ import java.util.function.Consumer;
  * 77
  * Total: 1000
  * </pre>
- * 
- * <p>The output of course differs every time you run the code.</p>
- * 
- * <p>Parallel consumer on the other hand allows you to process items of
- * the stream in parallel but guaranteeing that items will be taken in order.</p>
- * 
- * <pre>{@code 
+ *
+ * <p>The output of course differs every time you run the code.
+ *
+ * <p>Parallel consumer on the other hand allows you to process items of the stream in parallel but
+ * guaranteeing that items will be taken in order.
+ *
+ * <pre>{@code
  * System.out.println("Parallel consumer:");
  * c.set(0);
  * try (ParallelConsumer<Integer> pconsumer = new ParallelConsumer<>(consumer)) {
@@ -78,9 +78,9 @@ import java.util.function.Consumer;
  * }
  * System.out.println("Total: "  + c);
  * }</pre>
- * 
+ *
  * May produce:
- * 
+ *
  * <pre>
  * Parallel consumer:
  * 0
@@ -99,27 +99,27 @@ import java.util.function.Consumer;
  * 11
  * Total: 1000
  * </pre>
-
- * <p>It is achieved by making consumers to take items from the internal
- * queue.</p>
- * 
- * <p>If your application finishes but does not terminate it may be because:</p>
- * 
+ *
+ * <p>It is achieved by making consumers to take items from the internal queue.
+ *
+ * <p>If your application finishes but does not terminate it may be because:
+ *
  * <ul>
- * <li>you are leaking parallel consumers (make sure to close them)</li>
- * <li>one of your consumers still running preventing JVM from stopping</li>
+ *   <li>you are leaking parallel consumers (make sure to close them)
+ *   <li>one of your consumers still running preventing JVM from stopping
  * </ul>
- * 
- * All exceptions in worker threads by default will be printed to stderr unless the
- * exception handler is defined.
+ *
+ * All exceptions in worker threads by default will be printed to stderr unless the exception
+ * handler is defined.
  */
 public class ParallelConsumer<T> implements Consumer<T>, AutoCloseable {
 
     private ExecutorService executor;
     private Consumer<T> consumer;
-    private Thread.UncaughtExceptionHandler exHandler = (t, ex) -> {
-        ex.printStackTrace();
-    };
+    private Thread.UncaughtExceptionHandler exHandler =
+            (t, ex) -> {
+                ex.printStackTrace();
+            };
 
     public ParallelConsumer(Consumer<T> consumer) {
         this(consumer, ForkJoinPool.getCommonPoolParallelism());
@@ -132,18 +132,19 @@ public class ParallelConsumer<T> implements Consumer<T>, AutoCloseable {
 
     public ParallelConsumer(Consumer<T> consumer, Thread.UncaughtExceptionHandler exHandler) {
         this(consumer, ForkJoinPool.getCommonPoolParallelism());
-        this.exHandler = exHandler;        
+        this.exHandler = exHandler;
     }
-    
+
     @Override
     public void accept(T t) {
-        executor.submit(() -> {
-            try {
-                consumer.accept(t);
-            } catch (Throwable e) {
-                exHandler.uncaughtException(Thread.currentThread(), e);
-            }
-        });
+        executor.submit(
+                () -> {
+                    try {
+                        consumer.accept(t);
+                    } catch (Throwable e) {
+                        exHandler.uncaughtException(Thread.currentThread(), e);
+                    }
+                });
     }
 
     @Override

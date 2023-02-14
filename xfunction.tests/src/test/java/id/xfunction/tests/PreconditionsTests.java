@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,40 +15,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package id.xfunction.tests;
 
+import id.xfunction.PreconditionException;
+import id.xfunction.Preconditions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import id.xfunction.XAssertException;
-import id.xfunction.XAsserts;
-
-public class XAssertsTests {
+public class PreconditionsTests {
 
     @Test
     public void test_assertTrue() {
-        Assertions.assertThrows(XAssertException.class, () -> XAsserts.assertTrue(false));
+        Assertions.assertThrows(PreconditionException.class, () -> Preconditions.isTrue(false));
     }
 
     @Test
     public void test_assertTrue_happy() {
-        XAsserts.assertTrue(true);
+        Preconditions.isTrue(true);
     }
 
     @Test
     public void test_assertNotNull() {
-        Assertions.assertThrows(XAssertException.class, () -> XAsserts.assertNotNull(null));
+        Assertions.assertThrows(PreconditionException.class, () -> Preconditions.notNull(null));
     }
 
     @Test
     public void test_assertNotNull_happy() {
-        XAsserts.assertNotNull("test");
+        Preconditions.notNull("test");
     }
-    
+
     @Test
     public void test_assertEquals() {
-        XAsserts.assertEquals(null, null);
-        Assertions.assertThrows(XAssertException.class, () -> XAsserts.assertEquals(null, "test"));
+        Preconditions.equals(null, null);
+        Assertions.assertThrows(
+                PreconditionException.class, () -> Preconditions.equals(null, "test"));
     }
 }

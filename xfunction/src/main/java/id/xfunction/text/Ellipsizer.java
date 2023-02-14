@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,29 +17,28 @@
  */
 package id.xfunction.text;
 
-import id.xfunction.XAsserts;
+import id.xfunction.Preconditions;
+import id.xfunction.XByte;
 
-/**
- * Ellipsize the text. For example "aaaaaaaaa" -&gt; "aaaa...aaa".
- * It is thread safe.
- */
+/** Ellipsize the text. For example "aaaaaaaaa" -&gt; "aaaa...aaa". It is thread safe. */
 public class Ellipsizer {
 
     private int maxLength;
 
     /**
-     * @param maxLength Maximum length of the text after it will be
-     * ellipsized. Must be greater than 4.
+     * @param maxLength Maximum length of the text after it will be ellipsized. Must be greater than
+     *     4.
      */
     public Ellipsizer(int maxLength) {
-        XAsserts.assertTrue(maxLength >= 5, String.format(
-            "maxLength %d is too low and should be at least 5", maxLength));
+        Preconditions.isTrue(
+                maxLength >= 5,
+                String.format("maxLength %d is too low and should be at least 5", maxLength));
         this.maxLength = maxLength;
     }
 
     public String ellipsizeMiddle(String text) {
         if (text.length() <= maxLength) return text;
-        int size = maxLength/2 - 1;
+        int size = maxLength / 2 - 1;
         StringBuilder buf = new StringBuilder();
         buf.append(text, 0, size);
         buf.append("...");
@@ -51,4 +52,13 @@ public class Ellipsizer {
         return "..." + text.substring(text.length() - (maxLength - 3));
     }
 
+    public String ellipsizeMiddle(byte[] array) {
+        if (array.length * 2 <= maxLength) return XByte.toHex(array);
+        byte[] buf = new byte[maxLength / 2 + 1];
+        int len1 = (buf.length + 1) / 2;
+        System.arraycopy(array, 0, buf, 0, len1);
+        int len2 = buf.length / 2;
+        System.arraycopy(array, array.length - len2, buf, len1, len2);
+        return ellipsizeMiddle(XByte.toHex(buf));
+    }
 }

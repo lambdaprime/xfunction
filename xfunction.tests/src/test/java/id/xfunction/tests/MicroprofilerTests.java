@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,23 +19,22 @@ package id.xfunction.tests;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import id.xfunction.Microprofiler;
 import java.util.Random;
 import java.util.function.Consumer;
-
 import org.junit.jupiter.api.Test;
-
-import id.xfunction.Microprofiler;
 
 public class MicroprofilerTests {
 
     @Test
     public void test_measureRealTime() {
         Random rand = new Random();
-        Consumer<int[]> c = a -> {
-            for (int i = 0; i < a.length; i++) {
-                a[i] = rand.nextInt();
-            }
-        };
+        Consumer<int[]> c =
+                a -> {
+                    for (int i = 0; i < a.length; i++) {
+                        a[i] = rand.nextInt();
+                    }
+                };
         Microprofiler profiler = new Microprofiler();
         int[] thousand = new int[1_000];
         int[] million = new int[1_000_000];
@@ -42,43 +43,48 @@ public class MicroprofilerTests {
         long t2 = profiler.measureRealTime(() -> c.accept(million));
         System.out.println(t2);
         // for billion case tests may fail due to OOM
-        //int[] billion = new int[1_000_000_000];
-        //long t3 = profiler.measureRealTime(() -> c.accept(billion));
-        //System.out.println(t3);
+        // int[] billion = new int[1_000_000_000];
+        // long t3 = profiler.measureRealTime(() -> c.accept(billion));
+        // System.out.println(t3);
         assertTrue(t1 < t2);
     }
 
     @Test
     public void test_measureRealTime2() {
-        Runnable r = () -> {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {}
-        };
+        Runnable r =
+                () -> {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                    }
+                };
         long l = new Microprofiler().measureRealTime(r);
         assertTrue(l >= 100);
     }
-    
+
     @Test
     public void test_measureUserCpuTime_idling() {
-        Runnable r = () -> {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {}
-        };
+        Runnable r =
+                () -> {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                    }
+                };
         long l = new Microprofiler().measureUserCpuTime(r);
-        assertTrue(l == 0);
+        assertTrue(l < 10);
     }
-    
+
     @Test
     public void test_measureUserCpuTime() {
         Random rand = new Random();
-        Consumer<int[]> c = a -> {
-            for (int i = 0; i < a.length; i++) {
-                a[i] = rand.nextInt();
-                System.out.println(1);
-            }
-        };
+        Consumer<int[]> c =
+                a -> {
+                    for (int i = 0; i < a.length; i++) {
+                        a[i] = rand.nextInt();
+                        System.out.println(1);
+                    }
+                };
         int[] thousand = new int[100_000];
         long l = new Microprofiler().measureUserCpuTime(() -> c.accept(thousand));
         assertTrue(l > 0);

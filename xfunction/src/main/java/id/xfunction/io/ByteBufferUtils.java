@@ -1,6 +1,8 @@
 /*
  * Copyright 2019 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -20,8 +22,9 @@ import java.nio.ByteBuffer;
 public class ByteBufferUtils {
 
     /**
-     * Shifts portion of the buffer between [start, end) to the head of the ByteBuffer.
-     * The existing elements will be overwritten.
+     * Shifts portion of the buffer between [start, end) to the head of the ByteBuffer. The existing
+     * elements will be overwritten.
+     *
      * @return same buf with position set to the length of the portion shifted
      */
     public ByteBuffer shiftToHead(ByteBuffer buf, int start, int end) {

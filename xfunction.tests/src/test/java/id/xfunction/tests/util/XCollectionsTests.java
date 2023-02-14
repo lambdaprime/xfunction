@@ -1,6 +1,8 @@
 /*
  * Copyright 2021 lambdaprime
  * 
+ * Website: https://github.com/lambdaprime/xfunction
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,13 +19,11 @@ package id.xfunction.tests.util;
 
 import static java.util.stream.Collectors.toSet;
 
+import id.xfunction.util.XCollections;
 import java.util.Set;
 import java.util.stream.Stream;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import id.xfunction.util.XCollections;
 
 public class XCollectionsTests {
 
@@ -32,7 +32,7 @@ public class XCollectionsTests {
         Set<Integer> s1 = Stream.of(1, 2, 3).collect(toSet());
         Set<Integer> s2 = Stream.of(1, 4, 5).collect(toSet());
         Assertions.assertEquals(true, XCollections.hasIntersection(s1, s2));
-        
+
         s2 = Stream.of(4, 5).collect(toSet());
         Assertions.assertEquals(false, XCollections.hasIntersection(s1, s2));
     }
