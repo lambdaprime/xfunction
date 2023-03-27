@@ -15,9 +15,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package id.xfunction;
+package id.xfunction.retry;
 
 /**
  * @author lambdaprime intid@protonmail.com
  */
-public class RetryException extends Exception {}
+public class RetryException extends RuntimeException {
+
+    public RetryException() {}
+
+    public RetryException(Exception e) {
+        super(e);
+    }
+}

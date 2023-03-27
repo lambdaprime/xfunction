@@ -33,4 +33,5 @@ module id.xfunction {
     exports id.xfunction.text;
     exports id.xfunction.util;
     exports id.xfunction.util.stream;
+    exports id.xfunction.retry;
 }
