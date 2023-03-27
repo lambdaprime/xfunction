@@ -41,8 +41,12 @@ public class XPathsTests {
         Path tmpFolder = XFiles.TEMP_FOLDER.get();
         assertEquals(
                 tmpFolder.resolve("a-cropped.png"),
-                XPaths.append(tmpFolder.resolve("a.png"), "-cropped"));
+                XPaths.appendToFileName(tmpFolder.resolve("a.png"), "-cropped"));
         assertEquals(
-                tmpFolder.resolve("a-cropped"), XPaths.append(tmpFolder.resolve("a"), "-cropped"));
+                tmpFolder.resolve("a-cropped"),
+                XPaths.appendToFileName(tmpFolder.resolve("a"), "-cropped"));
+        assertEquals(
+                tmpFolder.resolve("a.png-cropped"),
+                XPaths.appendToFullFileName(tmpFolder.resolve("a.png"), "-cropped"));
     }
 }

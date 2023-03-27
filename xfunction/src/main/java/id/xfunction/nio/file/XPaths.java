@@ -47,14 +47,30 @@ public class XPaths {
      * <p>Postfix is appended to the file name excluding its extension:
      *
      * <pre>{@code
-     * append(Paths.get("/tmp/a.png"), "-cropped")
+     * appendToFileName(Paths.get("/tmp/a.png"), "-cropped")
      * }</pre>
      *
      * Will produce: "/tmp/a-cropped.png"
      */
-    public static Path append(Path path, String postfix) {
+    public static Path appendToFileName(Path path, String postfix) {
         String[] fileName = splitFileName(path.getFileName().toString());
         fileName[1] = Optional.ofNullable(fileName[1]).map(ext -> "." + ext).orElse("");
         return path.resolveSibling(fileName[0] + postfix + fileName[1]);
+    }
+
+    /**
+     * Append postfix into full file name.
+     *
+     * <p>Postfix is appended to the file name including its extension:
+     *
+     * <pre>{@code
+     * appendToFullFileName(Paths.get("/tmp/a.png"), "-cropped")
+     * }</pre>
+     *
+     * Will produce: "/tmp/a.png-cropped"
+     */
+    public static Path appendToFullFileName(Path path, String postfix) {
+        var folder = path.getParent();
+        return folder.resolve(path.getFileName() + postfix);
     }
 }
