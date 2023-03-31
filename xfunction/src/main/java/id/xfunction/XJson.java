@@ -215,6 +215,7 @@ public class XJson {
     }
 
     private static String quote(String value) {
+        if (value.equals("null")) return value;
         if (value.isEmpty() || value.charAt(0) != '{') return XUtils.quote(value);
         return value;
     }
@@ -237,6 +238,7 @@ public class XJson {
         } else {
             return asString(
                     m.entrySet().stream()
+                            .map(e -> e.getValue() == null ? Map.entry(e.getKey(), "null") : e)
                             .collect(toMap(e -> jsonToString(e.getKey()), Entry::getValue))
                             .entrySet()
                             .stream()

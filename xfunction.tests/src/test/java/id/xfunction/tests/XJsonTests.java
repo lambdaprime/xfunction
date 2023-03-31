@@ -70,6 +70,11 @@ public class XJsonTests {
         assertEquals(
                 resourceUtils.readResource(getClass(), "json-map"),
                 XJson.asString("k1", 123, "k2", "ggg", "k3", m));
+
+        m.put("abs2", null);
+        assertEquals(
+                resourceUtils.readResource(getClass(), "json-map-null"),
+                XJson.asString("k1", 123, "k2", "ggg", "k3", m));
     }
 
     @Test
