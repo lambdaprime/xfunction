@@ -164,6 +164,17 @@ public class XProcess {
         return this;
     }
 
+    /** Consumes stderr stream and forwards it to consumer. This call is async. */
+    public XProcess stderrAsync(Consumer<String> consumer) {
+        consumeStderr();
+        if (!process.isAlive()) return this;
+        executor.execute(
+                () -> {
+                    stderr.forEach(consumer);
+                });
+        return this;
+    }
+
     /** Consumes stderr stream and forwards it to System.err This call is async. */
     public XProcess forwardStderrAsync() {
         consumeStderr();
