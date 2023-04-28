@@ -82,6 +82,7 @@ public class XJson {
                 else if (type == float.class) vstr = asJsonArray((float[]) v);
                 else if (type == boolean.class) vstr = asJsonArray((boolean[]) v);
                 else if (type == long.class) vstr = asJsonArray((long[]) v);
+                else if (type == short.class) vstr = asJsonArray((short[]) v);
                 else if (!type.isPrimitive()) vstr = asJsonArray((Object[]) v);
                 else throw new XRE("Type %s is not supported", type);
                 vstr = "[" + vstr + "]";
@@ -194,6 +195,17 @@ public class XJson {
     }
 
     private static String asJsonArray(int[] a) {
+        StringBuilder buf = new StringBuilder();
+        for (int i : a) {
+            buf.append(jsonToString(i) + ", ");
+        }
+        if (buf.length() != 0) {
+            buf.setLength(buf.length() - 2);
+        }
+        return buf.toString();
+    }
+
+    private static String asJsonArray(short[] a) {
         StringBuilder buf = new StringBuilder();
         for (int i : a) {
             buf.append(jsonToString(i) + ", ");

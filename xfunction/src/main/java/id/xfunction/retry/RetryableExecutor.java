@@ -24,6 +24,16 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ForkJoinPool;
 import java.util.function.BooleanSupplier;
 
+/**
+ * The retry mechanism which is based on {@link RetryException}.
+ *
+ * <p>This executor calls user function and every time it throws {@link RetryException} the call
+ * repeats. It gives more control to the users on how to handle the retry and what actions no
+ * perform between the retries. User can add application specific logging or even depending on
+ * certain conditions decide not to retry anymore (not to throw {@link RetryException}).
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class RetryableExecutor {
 
     /**
