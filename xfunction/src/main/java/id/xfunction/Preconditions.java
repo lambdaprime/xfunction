@@ -66,7 +66,7 @@ public class Preconditions {
      * @throws PreconditionException with a message if b is false
      */
     public static void isTrue(boolean b, String message) throws PreconditionException {
-        isTrue(b, "", "");
+        isTrue(b, message, "");
     }
 
     /**
