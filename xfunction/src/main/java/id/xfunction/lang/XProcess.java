@@ -27,6 +27,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -47,6 +48,8 @@ public class XProcess {
     private ExecutorService executor = Executors.newFixedThreadPool(2);
     private boolean isStderrConsumed;
     private boolean isStdoutConsumed;
+    private Semaphore stdoutSemaphore = new Semaphore(1);
+    private Semaphore stderrSemaphore = new Semaphore(1);
 
     public XProcess(Process process) {
         this.process = process;
@@ -65,21 +68,22 @@ public class XProcess {
     /**
      * Returns standard output as a string. This call will consume stdout stream meaning that you
      * can call it only once. If you want to call it multiple times make sure to call {@link
-     * #stdoutAsync(boolean)} first and wait until process will finish.
+     * #stdoutAsync(boolean)} or {@link #forwardStdoutAsync(boolean)} first.
      *
      * @see #stdoutAsync(boolean)
      * @throws IllegalStateException if called more than once
      */
-    public synchronized String stdout() {
-        if (isStdoutConsumed)
-            try {
-                // wait for flushStdout to finish if it is
-                // running now
-                process.waitFor();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        return stdoutAsString.orElseGet(() -> stdout.collect(joining("\n")));
+    public String stdout() {
+        try {
+            stdoutSemaphore.acquire();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            return stdoutAsString.orElseGet(() -> stdout.collect(joining("\n")));
+        } finally {
+            stdoutSemaphore.release();
+        }
     }
 
     /**
@@ -91,31 +95,34 @@ public class XProcess {
      * preserves the output.
      */
     public XProcess stdoutAsync(boolean ignore) {
+        return stdoutAsync(l -> {}, ignore);
+    }
+
+    /**
+     * Consumes stdout stream by forwarding it to System.out. This call is async.
+     *
+     * @param ignore save forwarded output into internal buffer which later can be obtained through
+     *     {@link XProcess#stdout()} or ignore it
+     */
+    public XProcess forwardStdoutAsync(boolean ignore) {
+        return stdoutAsync(System.out::println, ignore);
+    }
+
+    /** Consumes stdout stream by forwarding it to consumer. This call is async. */
+    public XProcess stdoutAsync(Consumer<String> consumer) {
+        return stdoutAsync(consumer, true);
+    }
+
+    private XProcess stdoutAsync(Consumer<String> consumer, boolean ignore) {
         consumeStdout();
-        if (!process.isAlive()) return this;
         executor.execute(
                 () -> {
                     if (ignore) {
-                        stdout.forEach(l -> {});
+                        stdout.forEach(consumer);
                     } else {
-                        stdoutAsString = Optional.of(stdout.collect(joining("\n")));
+                        stdoutAsString = Optional.of(stdout.peek(consumer).collect(joining("\n")));
                     }
-                });
-        return this;
-    }
-
-    /** Consumes stdout stream and forwards it to System.out This call is async. */
-    public XProcess forwardStdoutAsync() {
-        return stdoutAsync(System.out::println);
-    }
-
-    /** Consumes stdout stream and forwards it to consumer. This call is async. */
-    public XProcess stdoutAsync(Consumer<String> consumer) {
-        consumeStdout();
-        if (!process.isAlive()) return this;
-        executor.execute(
-                () -> {
-                    stdout.forEach(consumer);
+                    stdoutSemaphore.release();
                 });
         return this;
     }
@@ -123,13 +130,22 @@ public class XProcess {
     /**
      * Returns standard error output as a string. This call will consume stderr stream meaning that
      * you can call it only once. If you want to call it multiple times make sure to call {@link
-     * XProcess#stderrAsync(boolean)} first.
+     * XProcess#stderrAsync(boolean)} or {@link #forwardStderrAsync(boolean)} first.
      *
      * @see #stderrAsync(boolean)
      * @throws IllegalStateException if called more than once
      */
     public String stderr() {
-        return stderrAsString.orElseGet(() -> stderr.collect(joining("\n")));
+        try {
+            stderrSemaphore.acquire();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            return stderrAsString.orElseGet(() -> stderr.collect(joining("\n")));
+        } finally {
+            stderrSemaphore.release();
+        }
     }
 
     /**
@@ -151,39 +167,36 @@ public class XProcess {
      * preserves the output.
      */
     public XProcess stderrAsync(boolean ignore) {
+        return stderrAsync(l -> {}, ignore);
+    }
+
+    /** Consumes stderr stream by forwarding it to consumer. This call is async. */
+    public XProcess stderrAsync(Consumer<String> consumer) {
+        return stderrAsync(consumer, true);
+    }
+
+    private XProcess stderrAsync(Consumer<String> consumer, boolean ignore) {
         consumeStderr();
-        if (!process.isAlive()) return this;
         executor.execute(
                 () -> {
                     if (ignore) {
-                        stderr.forEach(l -> {});
+                        stderr.forEach(consumer);
                     } else {
-                        stderrAsString = Optional.of(stderr.collect(joining("\n")));
+                        stderrAsString = Optional.of(stderr.peek(consumer).collect(joining("\n")));
                     }
+                    stderrSemaphore.release();
                 });
         return this;
     }
 
-    /** Consumes stderr stream and forwards it to consumer. This call is async. */
-    public XProcess stderrAsync(Consumer<String> consumer) {
-        consumeStderr();
-        if (!process.isAlive()) return this;
-        executor.execute(
-                () -> {
-                    stderr.forEach(consumer);
-                });
-        return this;
-    }
-
-    /** Consumes stderr stream and forwards it to System.err This call is async. */
-    public XProcess forwardStderrAsync() {
-        consumeStderr();
-        if (!process.isAlive()) return this;
-        executor.execute(
-                () -> {
-                    stderr.forEach(System.err::println);
-                });
-        return this;
+    /**
+     * Consumes stderr stream by forwarding it to System.err This call is async.
+     *
+     * @param ignore save forwarded stderr into internal buffer which later can be obtained through
+     *     {@link XProcess#stderr()} or ignore it
+     */
+    public XProcess forwardStderrAsync(boolean ignore) {
+        return stderrAsync(System.err::println, ignore);
     }
 
     /**
@@ -203,14 +216,16 @@ public class XProcess {
     }
 
     /**
-     * Forwards stdout and stderr to System.out and System.err respectively.
+     * Consumes stdout and stderr by forwarding them to System.out and System.err respectively.
      *
+     * @param ignore save forwarded outputs into internal buffers which later can be obtained
+     *     through {@link #stdout()} and {@link #stderr()} or ignore it
      * @see #forwardStderrAsync()
      * @see #forwardOutputAsync()
      */
-    public XProcess forwardOutputAsync() {
-        forwardStderrAsync();
-        forwardStdoutAsync();
+    public XProcess forwardOutputAsync(boolean ignore) {
+        forwardStderrAsync(ignore);
+        forwardStdoutAsync(ignore);
         return this;
     }
 
@@ -270,12 +285,14 @@ public class XProcess {
     }
 
     private void consumeStdout() {
-        if (isStdoutConsumed) throw new IllegalStateException("Stdout has a consumer already");
+        if (isStdoutConsumed || !stdoutSemaphore.tryAcquire())
+            throw new IllegalStateException("Stdout has a consumer already");
         isStdoutConsumed = true;
     }
 
     private void consumeStderr() {
-        if (isStderrConsumed) throw new IllegalStateException("Stderr has a consumer already");
+        if (isStderrConsumed || !stderrSemaphore.tryAcquire())
+            throw new IllegalStateException("Stderr has a consumer already");
         isStderrConsumed = true;
     }
 }

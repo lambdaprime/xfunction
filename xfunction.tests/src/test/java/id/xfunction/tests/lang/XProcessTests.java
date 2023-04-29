@@ -46,6 +46,17 @@ public class XProcessTests {
         proc.stdout();
         proc.stdout();
         assertEquals("test", proc.stdout());
+
+        proc = new XExec("echo", "test").start();
+        proc.stdoutAsync(false);
+        proc.stdout();
+        proc.stdout();
+        assertEquals("test", proc.stdout());
+
+        proc = new XExec("echo", "test").start();
+        var out = new StringBuilder();
+        proc.stdoutAsync(out::append).await();
+        assertEquals("test", out.toString());
     }
 
     @Test
@@ -69,13 +80,13 @@ public class XProcessTests {
     @Test
     public void test_forward() {
         XProcess proc = new XExec("echo", "test").start();
-        proc.forwardOutputAsync().await();
+        proc.forwardOutputAsync(true).await();
     }
 
     @Test
     public void test_forward_and_flush_together() {
         XProcess proc = new XExec("echo", "test").start();
         proc.outputAsync(false);
-        Assertions.assertThrows(IllegalStateException.class, () -> proc.forwardOutputAsync());
+        Assertions.assertThrows(IllegalStateException.class, () -> proc.forwardOutputAsync(true));
     }
 }
