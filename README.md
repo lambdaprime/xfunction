@@ -25,7 +25,7 @@ Gradle:
 
 ```
 dependencies {
-  implementation 'io.github.lambdaprime:id.xfunction:21.0'
+  implementation 'io.github.lambdaprime:id.xfunction:22.0'
 }
 ```
 

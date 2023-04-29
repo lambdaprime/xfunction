@@ -220,8 +220,8 @@ public class XProcess {
      *
      * @param ignore save forwarded outputs into internal buffers which later can be obtained
      *     through {@link #stdout()} and {@link #stderr()} or ignore it
-     * @see #forwardStderrAsync()
-     * @see #forwardOutputAsync()
+     * @see #forwardStderrAsync(boolean)
+     * @see #forwardOutputAsync(boolean)
      */
     public XProcess forwardOutputAsync(boolean ignore) {
         forwardStderrAsync(ignore);

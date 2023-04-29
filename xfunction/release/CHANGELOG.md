@@ -1,3 +1,13 @@
+# Version 22
+
+- Allow forwardStdoutAsync to save output to internal buffer to query it later +fixing race condition between stdoutAsync and stdout
+- Adding support for short to XJson
+- Include message to PreconditionException when isTrue fails
+- Allow users to consume stderr
+- Fix XJson to use null as literal based on  ECMA-404_2nd_edition_december_2017.pdf
+
+[xfunction-22.0.jar](https://github.com/lambdaprime/xfunction/raw/master/xfunction/release/xfunction-22.0.jar)
+
 # Version 21
 
 - Adding appendToFullFileName
@@ -24,3 +34,7 @@
 - Renaming "run" method of ThrowingSupplier to "get", similar to original Supplier class
 
 [xfunction-20.0.jar](https://github.com/lambdaprime/xfunction/raw/master/xfunction/release/xfunction-20.0.jar)
+
+# Previous versions
+
+Changelog for previous versions were published in github Releases but then migrated here.
