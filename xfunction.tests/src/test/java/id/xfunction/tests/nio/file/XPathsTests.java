@@ -23,6 +23,7 @@ import id.xfunction.nio.file.XFiles;
 import id.xfunction.nio.file.XPaths;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
@@ -48,5 +49,8 @@ public class XPathsTests {
         assertEquals(
                 tmpFolder.resolve("a.png-cropped"),
                 XPaths.appendToFullFileName(tmpFolder.resolve("a.png"), "-cropped"));
+        assertEquals(
+                "a.png-cropped",
+                XPaths.appendToFullFileName(Paths.get("a.png"), "-cropped").toString());
     }
 }

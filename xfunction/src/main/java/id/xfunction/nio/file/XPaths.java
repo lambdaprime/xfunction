@@ -18,6 +18,7 @@
 package id.xfunction.nio.file;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 /** Additions to standard java.nio.file.Paths */
@@ -71,6 +72,7 @@ public class XPaths {
      */
     public static Path appendToFullFileName(Path path, String postfix) {
         var folder = path.getParent();
-        return folder.resolve(path.getFileName() + postfix);
+        var file = Paths.get(path.getFileName() + postfix);
+        return (folder == null) ? file : folder.resolve(file);
     }
 }
