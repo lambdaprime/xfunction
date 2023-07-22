@@ -32,12 +32,15 @@ public class CommandOptions {
 
     private Properties options;
 
-    private CommandOptions(Properties options) {
+    /**
+     * @see #collectOptions(String[]) for creating {@link CommandOptions} from main(String[] args)
+     */
+    public CommandOptions(Properties options) {
         this.options = options;
     }
 
     /**
-     * Collect command options from list of arguments.
+     * Collect command options from list of arguments. Can be used with main(String[] args)
      *
      * <p>Each option may have zero or one argument.
      *

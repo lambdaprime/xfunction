@@ -55,7 +55,11 @@ public class FilePredicates {
         };
     }
 
-    /** Return file predicate which checks if a given file name matches regular expression */
+    /**
+     * Return file predicate which checks if a given file name matches regular expression.
+     *
+     * <p>To match only image files following regexp can be used ".*\\.(png|jpg)".
+     */
     public static Predicate<Path> match(String regexp) {
         return inputPath -> inputPath.getFileName().toString().matches(regexp);
     }

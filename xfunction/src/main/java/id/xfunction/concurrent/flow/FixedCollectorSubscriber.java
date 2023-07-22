@@ -34,6 +34,16 @@ import java.util.concurrent.Future;
  *   <li>future which is maintained by this subscriber completes
  * </ul>
  *
+ * <p>Example:
+ *
+ * <pre>{@code
+ * // subscriber collects 5 items to ArrayList and then cancels subscription
+ * var subscriber = new FixedCollectorSubscriber<>(new ArrayList<String>(), 5);
+ * publisher.subscribe(subscriber);
+ * // wait for 5 items and print them to console
+ * System.out.println(subscriber.getFuture().get().toString());
+ * }</pre>
+ *
  * @author lambdaprime intid@protonmail.com
  */
 public class FixedCollectorSubscriber<T, C extends Collection<T>> extends SimpleSubscriber<T> {

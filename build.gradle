@@ -65,5 +65,6 @@ subprojects {
 // gradlew requires execution of gradle-wrapper.jar which trustworthy needs to
 // be checked everytime when it is updated (otherwise it do not seems secure)
 // To avoid using it we rely on manual version check
-if ("$gradle.gradleVersion" != "8.0.2")
-  throw new RuntimeException("Running gradle version $gradle.gradleVersion, required 8.0.2");
+def requiredGradleVersion = "8.1.1"
+if ("$gradle.gradleVersion" != "$requiredGradleVersion")
+  throw new RuntimeException("Running gradle version $gradle.gradleVersion, required $requiredGradleVersion");

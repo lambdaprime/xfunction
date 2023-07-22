@@ -37,4 +37,20 @@ public class ByteBufferUtils {
         buf.position(end - start);
         return buf;
     }
+
+    /**
+     * If input {@link ByteBuffer} is direct (keeps data in native memory) it will copy all data to
+     * byte array (inside Java Heap) and return it. Otherwise it will return {@link
+     * ByteBuffer#array()}
+     */
+    public byte[] asBytes(ByteBuffer data) {
+        byte[] b = null;
+        if (data.hasArray()) {
+            b = data.array();
+        } else {
+            b = new byte[data.capacity()];
+            data.get(b, 0, b.length);
+        }
+        return b;
+    }
 }

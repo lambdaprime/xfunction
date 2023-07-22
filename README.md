@@ -11,6 +11,8 @@
 - extension for HttpClient.Builder which allows to make insecure connections
 - ...
 
+**xfunction** has zero dependencies on any other libraries.
+
 # Requirements
 
 Java 8+
