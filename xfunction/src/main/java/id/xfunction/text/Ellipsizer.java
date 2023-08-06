@@ -20,7 +20,11 @@ package id.xfunction.text;
 import id.xfunction.Preconditions;
 import id.xfunction.XByte;
 
-/** Ellipsize the text. For example "aaaaaaaaa" -&gt; "aaaa...aaa". It is thread safe. */
+/**
+ * Ellipsize the text. For example "aaaaaaaaa" -&gt; "aaaa...aaa". It is thread safe.
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class Ellipsizer {
 
     private int maxLength;

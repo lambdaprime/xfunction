@@ -30,6 +30,8 @@ import javax.net.ssl.X509TrustManager;
  * Provides additional features for HttpClient.Builder.
  *
  * <p>Requires Java 11 or higher.
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 // Implementing HttpClient.Builder may require to recompile each time
 // when new method would be added

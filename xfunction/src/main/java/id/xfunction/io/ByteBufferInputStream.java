@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
+/**
+ * @author lambdaprime intid@protonmail.com
+ */
 public class ByteBufferInputStream extends InputStream {
 
     private ByteBuffer buf;

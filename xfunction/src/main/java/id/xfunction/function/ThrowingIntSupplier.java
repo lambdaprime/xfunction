@@ -17,6 +17,9 @@
  */
 package id.xfunction.function;
 
+/**
+ * @author lambdaprime intid@protonmail.com
+ */
 @FunctionalInterface
 public interface ThrowingIntSupplier<E extends Exception> {
     int run() throws E;

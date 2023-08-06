@@ -17,6 +17,9 @@
  */
 package id.xfunction.cli;
 
+/**
+ * @author lambdaprime intid@protonmail.com
+ */
 public class ArgumentParsingException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;

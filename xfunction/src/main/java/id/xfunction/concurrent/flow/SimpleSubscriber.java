@@ -23,10 +23,13 @@ import id.xfunction.PreconditionException;
 import id.xfunction.Preconditions;
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;
 
-/** Simple implementation for {@link Subscriber} interface which can be subscribed only once. */
+/**
+ * Simple implementation for {@link Subscriber} interface which can be subscribed only once.
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class SimpleSubscriber<T> implements ReplayableSubscriber<T> {
 
     private int initNumOfMessages = 1;

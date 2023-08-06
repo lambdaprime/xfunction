@@ -62,6 +62,8 @@ import java.util.function.Predicate;
  * This would mean that Trie with empty string will match all strings and can cause a confusion.
  *
  * <p>This collection is not thread safe.
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class PrefixTrieSet extends AbstractSet<String> {
 

@@ -22,7 +22,11 @@ import java.util.List;
 import java.util.concurrent.AbstractExecutorService;
 import java.util.concurrent.TimeUnit;
 
-/** Executes all tasks on same thread which submits them. */
+/**
+ * Executes all tasks on same thread which submits them.
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class SameThreadExecutorService extends AbstractExecutorService {
 
     private boolean isShutdown;

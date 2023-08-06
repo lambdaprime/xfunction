@@ -17,6 +17,9 @@
  */
 package id.xfunction.function;
 
+/**
+ * @author lambdaprime intid@protonmail.com
+ */
 @FunctionalInterface
 public interface ThrowingFunction<A, R, E extends Exception> {
     R apply(A a) throws E;

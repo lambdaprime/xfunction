@@ -36,6 +36,8 @@ import java.util.Optional;
  * implementation which implements Serializable and not with Collection interface. For example you
  * cannot store Set but you can store HashSet since Set does not implement Serializable and HashSet
  * does.
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class ObjectStore<T extends Serializable> {
 

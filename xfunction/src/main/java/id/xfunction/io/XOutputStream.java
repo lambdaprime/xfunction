@@ -25,6 +25,8 @@ import java.util.List;
 /**
  * Implements an OutputStream by extending ByteArrayOutputStream with methods which allows you to
  * get all written data in one of the formats available.
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class XOutputStream extends ByteArrayOutputStream {
 

@@ -18,7 +18,6 @@
 package id.xfunction.util;
 
 import id.xfunction.Preconditions;
-import java.util.BitSet;
 
 /**
  * BitSet implementation which uses ints to represent words.
@@ -29,6 +28,8 @@ import java.util.BitSet;
  * <p>When this is done very often it can decrease performance.
  *
  * <p>This class is using int as word so it is possible to obtain array of integers with no cost.
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class IntBitSet {
 

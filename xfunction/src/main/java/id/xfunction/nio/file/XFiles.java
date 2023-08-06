@@ -38,7 +38,11 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
 import java.util.function.Predicate;
 
-/** Additions to standard java.nio.file.Files */
+/**
+ * Additions to standard java.nio.file.Files
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class XFiles {
 
     /** System temporary folder location if it was found */

@@ -65,6 +65,8 @@ import java.util.stream.LongStream;
  * // since it is not sequence of numbers between [1, 10] but between [4, 13]
  * System.out.println(seq.getMissing(1, 13));
  * }</pre>
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class LongNumberSequence {
 

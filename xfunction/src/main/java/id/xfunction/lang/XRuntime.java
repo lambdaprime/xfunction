@@ -19,7 +19,11 @@ package id.xfunction.lang;
 
 import id.xfunction.function.ThrowingRunnable;
 
-/** Additions to standard java.lang.Runtime */
+/**
+ * Additions to standard java.lang.Runtime
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class XRuntime {
 
     /**

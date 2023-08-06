@@ -26,7 +26,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-/** Additions to standard java.lang.ProcessBuilder */
+/**
+ * Additions to standard java.lang.ProcessBuilder
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class XExec {
 
     private String[] cmd;

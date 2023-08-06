@@ -48,6 +48,8 @@ import java.util.logging.Logger;
  *
  * <p>This class also enhance Logger with methods accepting varargs instead of Object[]. It means
  * that you don't need to provide source class name in each call. Same for info logging methods.
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class XLogger extends Logger {
 

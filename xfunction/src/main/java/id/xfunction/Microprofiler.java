@@ -24,7 +24,11 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
 
-/** Measures different execution time of functions. */
+/**
+ * Measures different execution time of functions.
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class Microprofiler {
 
     private Optional<ThreadMXBean> mxbean = Optional.empty();

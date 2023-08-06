@@ -63,6 +63,8 @@ import java.util.function.Function;
  *     .parse(new String[] {"-k" , "value", "arg1", "arg2", "arg3"});
  * // all positional arguments now available in positionalArgs
  * }</pre>
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class SmartArgs {
 

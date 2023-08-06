@@ -35,6 +35,8 @@ import java.util.Map;
  * <p>Calls are done thru MethodHandle and not reflection which supposed to be faster.
  *
  * <p>Overloaded methods are not supported.
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class MethodCaller {
 

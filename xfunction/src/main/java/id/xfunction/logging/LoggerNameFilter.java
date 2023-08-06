@@ -51,6 +51,8 @@ import java.util.stream.Collectors;
  *
  * <p>This may be useful in case you don't want to ignore logs from all classes with specific prefix
  * (ex. id), except for the one class (id.HelloWorld).
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class LoggerNameFilter implements Filter {
 

@@ -29,6 +29,8 @@ import java.util.List;
  * <p>This class can be used within Eclipse as toString method generator. Generated toString will
  * produce JSON representation of an object. To set it up open Source - Generate toString - Code
  * style - Custom toString builder and select this class.
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class XJsonStringBuilder {
 

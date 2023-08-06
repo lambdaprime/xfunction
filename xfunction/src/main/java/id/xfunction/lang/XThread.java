@@ -19,7 +19,11 @@ package id.xfunction.lang;
 
 import id.xfunction.function.Unchecked;
 
-/** Additions to standard java.lang.Thread */
+/**
+ * Additions to standard java.lang.Thread
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class XThread {
 
     /**

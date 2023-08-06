@@ -24,7 +24,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 
-/** Allows to monitor {@link InputStream} read progress */
+/**
+ * Allows to monitor {@link InputStream} read progress
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class ProgressMonitorInputStream extends InputStream {
 
     private long length;

@@ -29,6 +29,8 @@ package id.xfunction.lang;
  * <pre>{@code
  * throw new XRuntimeException("Message");
  * }</pre>
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class XRE extends XRuntimeException {
 

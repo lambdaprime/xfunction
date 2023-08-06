@@ -23,6 +23,8 @@ import java.util.concurrent.ThreadFactory;
 /**
  * This thread factory uses Java default thread factory to create a thread and then marks thread as
  * daemon thread.
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class DaemonThreadFactory implements ThreadFactory {
 

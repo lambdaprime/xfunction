@@ -22,6 +22,8 @@ import java.util.function.Supplier;
 /**
  * Supplier which performs initialization of internal variable when it will be requested for the
  * first time.
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class LazyInitializer<T> implements Supplier<T> {
     private T value;

@@ -31,6 +31,8 @@ import java.util.regex.Pattern;
 /**
  * Static cookie handler with predefined set of cookies which cannot be changed. Requests to add new
  * cookies are ignored.
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class StaticCookieHandler extends CookieHandler {
 

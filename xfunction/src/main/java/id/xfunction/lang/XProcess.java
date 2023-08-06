@@ -37,6 +37,8 @@ import java.util.stream.Stream;
  *
  * <p>Some commands may block until you start reading their stdout or stderr. This may be problem
  * when you just want to run a command ignoring its output. Use flush methods in that case.
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class XProcess {
     private Process process;

@@ -40,7 +40,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-/** Set of functions to process XML */
+/**
+ * Set of functions to process XML
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class Xml {
 
     /** Run XPath query to a given file and return results as a list */

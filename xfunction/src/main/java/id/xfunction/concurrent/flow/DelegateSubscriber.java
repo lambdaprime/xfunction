@@ -28,6 +28,8 @@ import java.util.concurrent.Flow.Subscription;
  *
  * <p>It allows to override behavior of the original subscriber without redefining all methods of it
  * but only those which are of the interest.
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class DelegateSubscriber<T> implements Subscriber<T> {
 

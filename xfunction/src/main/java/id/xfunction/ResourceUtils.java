@@ -31,6 +31,9 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Stream;
 
+/**
+ * @author lambdaprime intid@protonmail.com
+ */
 public class ResourceUtils {
 
     private IoUtils ioUtils = new IoUtils();

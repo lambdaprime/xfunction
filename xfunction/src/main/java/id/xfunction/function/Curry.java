@@ -44,6 +44,8 @@ package id.xfunction.function;
  *     .map(curry2nd(this.m, 5))
  *     .collect(toList());
  * }</pre>
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class Curry {
 

@@ -33,7 +33,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Predicate;
 
-/** Performs string substitution according to the given mapping. */
+/**
+ * Performs string substitution according to the given mapping.
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class Substitutor {
 
     private boolean hasRegexpSupport;

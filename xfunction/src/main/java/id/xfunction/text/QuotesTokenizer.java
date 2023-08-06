@@ -34,6 +34,8 @@ import java.util.List;
  * <p>For example: "a \"b \\\"c\\\" d\"" -&gt; a", "b \"c\" d"
  *
  * <p>You can use this class if you need to split command line string on list of arguments.
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class QuotesTokenizer {
 

@@ -20,7 +20,11 @@ package id.xfunction.concurrent;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ForkJoinPool;
 
-/** Future which delays its completion for a given amount of time */
+/**
+ * Future which delays its completion for a given amount of time
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class DelayedCompletableFuture<T> extends CompletableFuture<T> {
 
     /**

@@ -19,7 +19,11 @@ package id.xfunction;
 
 import java.util.Objects;
 
-/** Set of assertions */
+/**
+ * Set of assertions
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class Preconditions {
 
     /**

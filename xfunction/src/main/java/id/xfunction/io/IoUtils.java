@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+/**
+ * @author lambdaprime intid@protonmail.com
+ */
 public class IoUtils {
 
     /** Pipes input stream to output stream */

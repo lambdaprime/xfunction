@@ -24,7 +24,11 @@ import java.io.InputStreamReader;
 import java.util.Random;
 import java.util.stream.Stream;
 
-/** Additions to standard java.util.stream.Stream */
+/**
+ * Additions to standard java.util.stream.Stream
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class XStream {
 
     /**

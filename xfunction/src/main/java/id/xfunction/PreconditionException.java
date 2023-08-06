@@ -17,7 +17,11 @@
  */
 package id.xfunction;
 
-/** Exception which is thrown by {@link Preconditions} methods. */
+/**
+ * Exception which is thrown by {@link Preconditions} methods.
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class PreconditionException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;

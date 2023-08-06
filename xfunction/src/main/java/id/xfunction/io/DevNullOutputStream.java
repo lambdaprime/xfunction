@@ -20,7 +20,11 @@ package id.xfunction.io;
 import java.io.IOException;
 import java.io.OutputStream;
 
-/** Output stream implementation which does not write anywhere */
+/**
+ * Output stream implementation which does not write anywhere
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class DevNullOutputStream extends OutputStream {
 
     @Override

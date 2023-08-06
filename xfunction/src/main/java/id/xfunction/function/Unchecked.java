@@ -47,6 +47,8 @@ import java.util.function.Supplier;
  * <pre>{@code
  * getInt(this::m);
  * }</pre>
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class Unchecked {
 

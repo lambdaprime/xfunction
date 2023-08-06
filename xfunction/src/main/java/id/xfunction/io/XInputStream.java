@@ -25,7 +25,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
-/** Creates an InputStream from different types of inputs. */
+/**
+ * Creates an InputStream from different types of inputs.
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class XInputStream extends InputStream {
 
     private Iterator<Integer> iterator;

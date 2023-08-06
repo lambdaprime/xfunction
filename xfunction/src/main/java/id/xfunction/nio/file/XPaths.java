@@ -21,7 +21,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-/** Additions to standard java.nio.file.Paths */
+/**
+ * Additions to standard java.nio.file.Paths
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class XPaths {
 
     /**

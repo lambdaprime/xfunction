@@ -22,7 +22,11 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.function.Predicate;
 
-/** File predicates */
+/**
+ * File predicates
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class FilePredicates {
 
     /**

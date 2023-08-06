@@ -36,6 +36,8 @@ import java.util.Optional;
  * </ul>
  *
  * <p>Worst case complexity is O(n^m)
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class WildcardMatcher {
 

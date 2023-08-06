@@ -25,6 +25,8 @@ package id.xfunction.lang;
  * <pre>{@code
  * throw new XRuntimeException("Command %s failed: %s", cmd, error);
  * }</pre>
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class XRuntimeException extends RuntimeException {
 

@@ -33,7 +33,11 @@ import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.stream.Stream;
 
-/** Set of functions to work with JSON format */
+/**
+ * Set of functions to work with JSON format
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class XJson {
 
     private static final int MAX_FRACTION_LEN = 10;

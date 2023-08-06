@@ -29,7 +29,11 @@ import java.io.PrintStream;
 import java.nio.file.Path;
 import java.util.Scanner;
 
-/** Set of functions to work with command line interface */
+/**
+ * Set of functions to work with command line interface
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class CommandLineInterface {
 
     private PrintStream out;

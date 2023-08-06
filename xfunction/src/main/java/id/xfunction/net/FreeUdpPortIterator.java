@@ -27,7 +27,11 @@ import java.nio.channels.DatagramChannel;
 import java.util.Iterator;
 import java.util.Optional;
 
-/** Iterates over free UDP ports available in the system and binds to first found. */
+/**
+ * Iterates over free UDP ports available in the system and binds to first found.
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class FreeUdpPortIterator implements Iterator<DatagramChannel> {
 
     private int currentPort;

@@ -17,6 +17,9 @@
  */
 package id.xfunction.function;
 
+/**
+ * @author lambdaprime intid@protonmail.com
+ */
 @FunctionalInterface
 public interface ThrowingConsumer<T, E extends Exception> {
     void accept(T t) throws E;

@@ -20,6 +20,9 @@ package id.xfunction.logging;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+/**
+ * @author lambdaprime intid@protonmail.com
+ */
 public class TracingToken {
 
     private static final String DELIM = "-";

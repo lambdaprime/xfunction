@@ -109,8 +109,10 @@ import java.util.function.Consumer;
  *   <li>one of your consumers still running preventing JVM from stopping
  * </ul>
  *
- * All exceptions in worker threads by default will be printed to stderr unless the exception
+ * <p>All exceptions in worker threads by default will be printed to stderr unless the exception
  * handler is defined.
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class ParallelConsumer<T> implements Consumer<T>, AutoCloseable {
 

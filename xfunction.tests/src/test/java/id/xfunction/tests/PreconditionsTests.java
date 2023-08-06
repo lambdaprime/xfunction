@@ -27,7 +27,10 @@ public class PreconditionsTests {
     @Test
     public void test_assertTrue() {
         Assertions.assertThrows(PreconditionException.class, () -> Preconditions.isTrue(false));
-        var e = Assertions.assertThrows(PreconditionException.class, () -> Preconditions.isTrue(false, "message test"));
+        var e =
+                Assertions.assertThrows(
+                        PreconditionException.class,
+                        () -> Preconditions.isTrue(false, "message test"));
         e.printStackTrace();
         Assertions.assertEquals("message test", e.getMessage());
     }

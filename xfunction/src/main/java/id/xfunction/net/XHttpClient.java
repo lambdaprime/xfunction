@@ -29,6 +29,8 @@ import java.util.stream.Stream;
  * HttpRequest with proper BodyHandlers.
  *
  * <p>Requires Java 11 or higher.
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class XHttpClient {
 

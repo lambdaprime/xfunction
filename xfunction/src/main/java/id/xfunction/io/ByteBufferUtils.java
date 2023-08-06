@@ -19,6 +19,9 @@ package id.xfunction.io;
 
 import java.nio.ByteBuffer;
 
+/**
+ * @author lambdaprime intid@protonmail.com
+ */
 public class ByteBufferUtils {
 
     /**

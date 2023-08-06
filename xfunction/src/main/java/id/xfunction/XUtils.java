@@ -23,7 +23,11 @@ import java.io.InputStream;
 import java.security.MessageDigest;
 import java.util.concurrent.ForkJoinPool;
 
-/** Set of miscellaneous functions. */
+/**
+ * Set of miscellaneous functions.
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class XUtils {
 
     /**

@@ -19,7 +19,11 @@ package id.xfunction.util;
 
 import java.util.Set;
 
-/** Additions to standard java.util.Collections */
+/**
+ * Additions to standard java.util.Collections
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class XCollections {
 
     /** Check if two sets share one or more similar elements */

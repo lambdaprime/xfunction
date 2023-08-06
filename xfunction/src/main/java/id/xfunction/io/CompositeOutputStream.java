@@ -20,7 +20,11 @@ package id.xfunction.io;
 import java.io.IOException;
 import java.io.OutputStream;
 
-/** Composite stream forwards all output to all streams it consist of. */
+/**
+ * Composite stream forwards all output to all streams it consist of.
+ *
+ * @author lambdaprime intid@protonmail.com
+ */
 public class CompositeOutputStream extends OutputStream {
 
     private OutputStream[] streams;

@@ -20,6 +20,9 @@ package id.xfunction;
 import java.nio.ByteBuffer;
 import java.util.regex.Pattern;
 
+/**
+ * @author lambdaprime intid@protonmail.com
+ */
 public class XByte {
 
     private static final String[] HEX_CODES = {

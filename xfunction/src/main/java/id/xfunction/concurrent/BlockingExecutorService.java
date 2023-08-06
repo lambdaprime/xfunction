@@ -38,6 +38,8 @@ import java.util.stream.Stream;
  * <p>If blocking queue is bounded then thread submitting a new task to this executor will block
  * until new space in queue became available (with standard ThreadPoolExecutor such task will be
  * rejected).
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class BlockingExecutorService extends AbstractExecutorService {
 

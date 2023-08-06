@@ -35,6 +35,8 @@ import java.util.function.Consumer;
  *
  * <p>Which may be not exactly what you need if you are looking for simple notification in non GUI
  * application.
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class XObservable<T> {
 

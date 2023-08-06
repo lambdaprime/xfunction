@@ -17,6 +17,9 @@
  */
 package id.xfunction.function;
 
+/**
+ * @author lambdaprime intid@protonmail.com
+ */
 @FunctionalInterface
 public interface ThrowingRunnable<E extends Exception> {
     void run() throws E;

@@ -26,6 +26,9 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.function.BiConsumer;
 
+/**
+ * @author lambdaprime intid@protonmail.com
+ */
 class RecursiveFileVisitor implements FileVisitor<Path> {
     private Path srcPath;
     private Path dstPath;
