@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import id.xfunction.XByte;
+import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 public class XByteTests {
@@ -49,5 +50,12 @@ public class XByteTests {
         assertEquals(
                 0b01110000_11000000_01010000,
                 Integer.toUnsignedLong(XByte.reverseBitsInBytes(0b00001110_00000011_00001010)));
+
+        assertEquals("[-54, -2]", Arrays.toString(XByte.copyToByteArray(0xca, 0xfe)));
+
+        assertEquals("cafe0000", Integer.toHexString(XByte.toInt(0xca, 0xfe)));
+        assertEquals("cafebabe", Integer.toHexString(XByte.toInt(0xca, 0xfe, 0xba, 0xbe)));
+
+        assertEquals("cafe", Integer.toHexString(Short.toUnsignedInt(XByte.toShort(0xca, 0xfe))));
     }
 }

@@ -121,7 +121,7 @@ public class XByte {
                         .filter(s -> !s.isEmpty())
                         .mapToInt(s -> Integer.valueOf(s, 16))
                         .toArray();
-        return castToByteArray(array);
+        return copyToByteArray(array);
     }
 
     /**
@@ -152,8 +152,16 @@ public class XByte {
     /**
      * Java does not allow you to specify byte literals in form of 0xff (which is int literal in
      * Java). This methods accepts integer literals and cast them to bytes.
+     *
+     * <p>It allows you to create byte[] from int literals like:
+     *
+     * <pre>{@code
+     * var cafe = XByte.copyToByteArray(0xca, 0xfe);
+     * // instead of
+     * var cafe = new byte[]{(byte)0xca, (byte)0xfe};
+     * }</pre>
      */
-    public static byte[] castToByteArray(int... values) {
+    public static byte[] copyToByteArray(int... values) {
         byte[] res = new byte[values.length];
         for (int i = 0; i < res.length; i++) {
             res[i] = (byte) values[i];
@@ -179,5 +187,29 @@ public class XByte {
         i = ((i & 0xcccccccc) >> 2) | ((i & 0x33333333) << 2);
         i = ((i & 0xf0f0f0f0) >> 4) | ((i & 0x0f0f0f0f) << 4);
         return i;
+    }
+
+    public static int toInt(int byte1st) {
+        return byte1st << 24;
+    }
+
+    public static int toInt(int byte1st, int byte2nd) {
+        return toInt(byte1st) | byte2nd << 16;
+    }
+
+    public static int toInt(int byte1st, int byte2nd, int byte3rd) {
+        return toInt(byte1st, byte2nd) | byte3rd << 8;
+    }
+
+    public static int toInt(int byte1st, int byte2nd, int byte3rd, int byte4st) {
+        return toInt(byte1st, byte2nd, byte3rd) | byte4st;
+    }
+
+    public static short toShort(int byte1st) {
+        return (short) (byte1st << 8);
+    }
+
+    public static short toShort(int byte1st, int byte2nd) {
+        return (short) (toShort(byte1st) | byte2nd);
     }
 }
