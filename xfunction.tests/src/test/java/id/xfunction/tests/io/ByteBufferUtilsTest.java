@@ -18,6 +18,7 @@
 package id.xfunction.tests.io;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import id.xfunction.io.ByteBufferUtils;
 import java.nio.ByteBuffer;
@@ -29,7 +30,11 @@ public class ByteBufferUtilsTest {
     public void test_shiftToHead() throws Exception {
         ByteBuffer buf = ByteBuffer.wrap(new byte[] {0xa, 0xa, 0xa, 0xa, 0xb, 0xb, 0xb});
         ByteBufferUtils utils = new ByteBufferUtils();
-        utils.shiftToHead(buf, 4, 7);
+        utils.copyToHead(buf, 4, 7);
         assertArrayEquals(new byte[] {0xb, 0xb, 0xb, 0xa, 0xb, 0xb, 0xb}, buf.array());
+
+        var expectedPos = buf.position();
+        assertEquals("0a 0b 0b 0b", utils.asString(buf));
+        assertEquals(expectedPos, buf.position());
     }
 }

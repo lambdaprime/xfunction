@@ -17,6 +17,7 @@
  */
 package id.xfunction.io;
 
+import id.xfunction.XByte;
 import java.nio.ByteBuffer;
 
 /**
@@ -25,12 +26,12 @@ import java.nio.ByteBuffer;
 public class ByteBufferUtils {
 
     /**
-     * Shifts portion of the buffer between [start, end) to the head of the ByteBuffer. The existing
+     * Copies portion of the buffer between [start, end) to the head of the ByteBuffer. The existing
      * elements will be overwritten.
      *
      * @return same buf with position set to the length of the portion shifted
      */
-    public ByteBuffer shiftToHead(ByteBuffer buf, int start, int end) {
+    public ByteBuffer copyToHead(ByteBuffer buf, int start, int end) {
         ByteBuffer newBuf = buf.duplicate();
         newBuf.rewind();
         buf.position(start);
@@ -55,5 +56,16 @@ public class ByteBufferUtils {
             data.get(b, 0, b.length);
         }
         return b;
+    }
+
+    /** Return content of {@link ByteBuffer} as hexadecimal pairs string */
+    public String asString(ByteBuffer byteBuffer) {
+        byteBuffer = byteBuffer.duplicate();
+        var buf = new StringBuilder();
+        for (int i = byteBuffer.position(); i < byteBuffer.capacity(); i++) {
+            buf.append(XByte.toHexPair(byteBuffer.get()) + " ");
+        }
+        if (byteBuffer.capacity() != 0) buf.setLength(buf.length() - 1);
+        return buf.toString();
     }
 }

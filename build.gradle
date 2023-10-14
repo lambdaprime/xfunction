@@ -26,6 +26,9 @@ subprojects {
 
   sourceCompatibility = '11'
   targetCompatibility = '11'
+  tasks.withType(JavaCompile) {
+    options.release = 11
+  }
 
   // setup spotless config for all subprojects
   def spotlessConfig = {
