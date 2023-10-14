@@ -30,6 +30,25 @@ import java.util.function.Predicate;
  */
 public class CommandOptions {
 
+    public static class Config {
+        private boolean ignoreParsingExceptions;
+
+        /**
+         * Options which cannot be parsed are ignored (no exception is thrown).
+         *
+         * <p>This allows to support positional arguments which otherwise would cause exception. For
+         * example given args string "arg1 arg2 -option val", with {@link
+         * #withIgnoreParsingExceptions()} enabled "arg1", "arg2" will be ignored.
+         *
+         * <p>Positional arguments validation and processing are not covered by {@link
+         * CommandOptions} and needs to be done manually.
+         */
+        public Config withIgnoreParsingExceptions() {
+            this.ignoreParsingExceptions = true;
+            return this;
+        }
+    }
+
     private Properties options;
 
     /**
@@ -52,7 +71,8 @@ public class CommandOptions {
      *
      * <p>When options are collected then leading "-" is removed.
      */
-    public static CommandOptions collectOptions(String[] args) throws ArgumentParsingException {
+    public static CommandOptions collectOptions(Config config, String[] args)
+            throws ArgumentParsingException {
         Properties props = new Properties();
         String curOption = null;
         for (int i = 0; i < args.length; i++) {
@@ -67,6 +87,7 @@ public class CommandOptions {
                 props.put(option, "");
             }
             if (!arg.startsWith("-")) {
+                if (config.ignoreParsingExceptions) continue;
                 throw new ArgumentParsingException(
                         "Option \'"
                                 + arg
@@ -87,6 +108,11 @@ public class CommandOptions {
         return new CommandOptions(props);
     }
 
+    /** Similar to {@link #collectOptions(String[])} except uses default {@link Config} settings */
+    public static CommandOptions collectOptions(String[] args) throws ArgumentParsingException {
+        return collectOptions(new Config(), args);
+    }
+
     /**
      * If given option is not available it throws {@link ArgumentParsingException} with missing
      * option name.
@@ -105,6 +131,11 @@ public class CommandOptions {
     /** Some options may be optional. Use this method to obtain them. */
     public Optional<String> getOption(String optionName) {
         return Optional.ofNullable(options.getProperty(optionName));
+    }
+
+    /** Some options may be optional. Use this method to obtain them. */
+    public Optional<Integer> getOptionInt(String optionName) {
+        return Optional.ofNullable(options.getProperty(optionName)).map(Integer::parseInt);
     }
 
     /** Check if optionName is set to "true": -optionName=true */

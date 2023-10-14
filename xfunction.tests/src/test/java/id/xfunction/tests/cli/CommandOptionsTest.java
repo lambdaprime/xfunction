@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import id.xfunction.cli.ArgumentParsingException;
 import id.xfunction.cli.CommandOptions;
+import id.xfunction.cli.CommandOptions.Config;
 import org.junit.jupiter.api.Test;
 
 public class CommandOptionsTest {
@@ -33,6 +34,12 @@ public class CommandOptionsTest {
                 () ->
                         CommandOptions.collectOptions(
                                 new String[] {"-k", "value", "arg1", "arg2", "arg3"}));
+        assertEquals(
+                "{arg3=, k=value}",
+                CommandOptions.collectOptions(
+                                new Config().withIgnoreParsingExceptions(),
+                                new String[] {"-k", "value", "arg1", "arg2", "-arg3"})
+                        .toString());
 
         CommandOptions props =
                 CommandOptions.collectOptions(new String[] {"-k1", "value", "--k2", "arg2", "-k3"});
