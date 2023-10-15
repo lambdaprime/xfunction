@@ -26,7 +26,8 @@ import java.util.Optional;
 import java.util.concurrent.Flow.Subscription;
 
 /**
- * Simple implementation for {@link Subscriber} interface which can be subscribed only once.
+ * Simple implementation for {@link java.util.concurrent.Flow.Subscriber} interface which can be
+ * subscribed only once.
  *
  * @author lambdaprime intid@protonmail.com
  */

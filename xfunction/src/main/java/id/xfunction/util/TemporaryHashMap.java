@@ -31,8 +31,8 @@ import java.util.Set;
  *
  * <p>The deletion of expired pairs is passive which means they may not be deleted immediately once
  * they are expired but only during next {@link #put(Object, Object)} or {@link #putAll(Map)}
- * operations. To change it to active users can setup {@link ScheduledExecutorService} to call
- * {@link #cleanupExpired()}.
+ * operations. To change it to active users can setup {@link
+ * java.util.concurrent.ScheduledExecutorService} to call {@link #cleanupExpired()}.
  *
  * <p>Keys are subject to expiration and not values associated with them. It means if user adds pair
  * "key1": "val1", and later replace value to "key1": "val2" this will not affect this pair

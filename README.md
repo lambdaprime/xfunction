@@ -15,7 +15,7 @@
 
 # Requirements
 
-Java 8+
+Java 11+
 
 # Download
 
@@ -27,7 +27,7 @@ Gradle:
 
 ```
 dependencies {
-  implementation 'io.github.lambdaprime:id.xfunction:22.0'
+  implementation 'io.github.lambdaprime:id.xfunction:23.0'
 }
 ```
 

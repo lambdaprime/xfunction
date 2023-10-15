@@ -1,3 +1,16 @@
+# Version 23
+
+- Update Substitutor and support multiline patterns
+- Adding asString to ByteBufferUtils
+- Allow CommandOptions to ignore parsing exceptions
+- Updating headers
+- Adding toInt, toShort to XByte and renaming castToByteArray
+- Adding asBytes, minor comment improvements
+- Adding isWindows
+- Fixing bug in XPaths::appendToFullFileName
+
+[xfunction-23.0.jar](https://github.com/lambdaprime/xfunction/raw/master/xfunction/release/xfunction-23.0.jar)
+
 # Version 22
 
 - Allow forwardStdoutAsync to save output to internal buffer to query it later +fixing race condition between stdoutAsync and stdout

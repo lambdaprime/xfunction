@@ -22,8 +22,9 @@ import id.xfunction.Preconditions;
 /**
  * BitSet implementation which uses ints to represent words.
  *
- * <p>Java standard {@link BitSet} uses long as a word which means if you need to obtain all words
- * as an array of integers you will need to create a new int array and copy all bits from BitSet.
+ * <p>Java standard {@link java.util.BitSet} uses long as a word which means if you need to obtain
+ * all words as an array of integers you will need to create a new int array and copy all bits from
+ * BitSet.
  *
  * <p>When this is done very often it can decrease performance.
  *
