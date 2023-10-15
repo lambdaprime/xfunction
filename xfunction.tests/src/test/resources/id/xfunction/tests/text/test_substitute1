@@ -1,0 +1,6 @@
+    exports aaa;
+    exports bbb;
+    exports ccc to
+            ddd,
+            eee;
+}

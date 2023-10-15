@@ -19,6 +19,9 @@ package id.xfunction.text;
 
 import static java.util.stream.Collectors.toList;
 
+import id.xfunction.function.ThrowingConsumer;
+import id.xfunction.nio.file.XFiles;
+import id.xfunction.nio.file.XPaths;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -27,11 +30,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Performs string substitution according to the given mapping.
@@ -40,7 +47,21 @@ import java.util.function.Predicate;
  */
 public class Substitutor {
 
+    private static class Result {
+        private boolean isUpdated;
+        private String text;
+
+        public Result(String text) {
+            this.text = text;
+        }
+
+        public String getText() {
+            return text;
+        }
+    }
+
     private boolean hasRegexpSupport;
+    private boolean hasBackup;
 
     /** Allow to specify regexps in mapping */
     public Substitutor withRegexpSupport() {
@@ -49,41 +70,55 @@ public class Substitutor {
     }
 
     /**
-     * Creates and returns a new list by iterating over the input list and performing string
-     * substitution as defined in the mapping.
+     * Create backup of the original file when doing any changes. If no changes are done, backup
+     * file is not created. If backup file already exists then it is replaced.
      */
-    public List<String> substitute(List<String> text, Map<String, String> mapping) {
-        return text.stream().map(l -> substitute(l, mapping)).collect(toList());
+    public Substitutor withBackup() {
+        hasBackup = true;
+        return this;
     }
 
     /**
-     * Performs inplace substitution of strings in a given directory or file
-     *
-     * @return list of changed files
+     * Creates and returns a new list by iterating over the input list and performing line by line
+     * string substitution as defined in the mapping.
      */
-    public List<Path> substitute(
+    public List<String> substitutePerLine(List<String> lines, Map<String, String> mapping) {
+        var compiled = compile(mapping);
+        return lines.stream()
+                .map(l -> substitute(l, mapping, compiled))
+                .map(Result::getText)
+                .collect(toList());
+    }
+
+    /** Performs inplace line by line substitution in a given directory or file. */
+    public List<Path> substitutePerLine(Path target, Map<String, String> mapping)
+            throws IOException {
+        return substitutePerLine(target, p -> p.toFile().isFile(), mapping);
+    }
+
+    /**
+     * Equivalent to {@link #substitutePerLine(Path, Map)} except allows to substitute only files
+     * which satisfy given filter.
+     */
+    public List<Path> substitutePerLine(
             Path target, Predicate<Path> fileFilter, Map<String, String> mapping)
             throws IOException {
+        var compiled = compile(mapping);
         var out = new ArrayList<Path>();
-        Files.find(target, Integer.MAX_VALUE, (p, a) -> fileFilter.test(p))
-                .forEach(
-                        file -> {
-                            try {
-                                if (substituteFile(file, mapping)) {
-                                    out.add(file);
-                                }
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        });
+        forEachFile(
+                target,
+                fileFilter,
+                file -> {
+                    if (substitutePerLine(file, mapping, compiled)) {
+                        out.add(file);
+                    }
+                });
         return out;
     }
 
-    public List<Path> substitute(Path target, Map<String, String> mapping) throws IOException {
-        return substitute(target, p -> p.toFile().isFile(), mapping);
-    }
-
-    private boolean substituteFile(Path file, Map<String, String> mapping) throws IOException {
+    private boolean substitutePerLine(
+            Path file, Map<String, String> mapping, Map<Pattern, String> compiledMapping)
+            throws IOException {
         if (!file.toFile().isFile()) return false;
         Path tmp = Files.createTempFile(file.toAbsolutePath().getParent(), "tmp", "");
         var isChanged = false;
@@ -91,21 +126,123 @@ public class Substitutor {
                 BufferedWriter w = new BufferedWriter(new FileWriter(tmp.toFile()))) {
             String l = null;
             while ((l = r.readLine()) != null) {
-                w.write(substitute(l, mapping));
+                var res = substitute(l, mapping, compiledMapping);
+                w.write(res.text);
                 w.write('\n');
+                if (res.isUpdated) isChanged = true;
             }
-            isChanged = tmp.toFile().length() != file.toFile().length();
+        }
+        if (hasBackup) {
+            Files.move(file, getBackupFile(file), StandardCopyOption.REPLACE_EXISTING);
         }
         Files.move(tmp, file, StandardCopyOption.REPLACE_EXISTING);
         return isChanged;
     }
 
+    public static boolean restoreBackup(Path file) throws IOException {
+        var backupFile = getBackupFile(file);
+        if (!backupFile.toFile().isFile()) return false;
+        Files.move(backupFile, file, StandardCopyOption.REPLACE_EXISTING);
+        return true;
+    }
+
+    private static Path getBackupFile(Path file) {
+        return XPaths.appendToFullFileName(file, ".bak");
+    }
+
     /** Substitutes all values and return new string */
     public String substitute(String text, Map<String, String> mapping) {
-        for (Entry<String, String> e : mapping.entrySet()) {
-            if (hasRegexpSupport) text = text.replaceAll(e.getKey(), e.getValue());
-            else text = text.replace(e.getKey(), e.getValue());
+        return substitute(text, mapping, compile(mapping)).text;
+    }
+
+    /**
+     * Equivalent to {@link #substitute(Path, Map)} except allows to substitute only files which
+     * satisfy given filter.
+     */
+    public List<Path> substitute(
+            Path target, Predicate<Path> fileFilter, Map<String, String> mapping)
+            throws IOException {
+        var compiled = compile(mapping);
+        var out = new ArrayList<Path>();
+        forEachFile(
+                target,
+                fileFilter,
+                file -> {
+                    if (substitute(file, mapping, compiled)) {
+                        out.add(file);
+                    }
+                });
+        return out;
+    }
+
+    /**
+     * Performs inplace substitution in a given file or in case of directory, in all files inside
+     * it. It differs from {@link #substitutePerLine(Path, Map)} that it reads entire file in memory
+     * as a single string and performs substitution on such string. This allows to create multiline
+     * mappings and perform multiline substitutions (of course this requires appropriate Java
+     * pattern which should support multiline matching, this can be done by prepending "(?s)(?m)" to
+     * it).
+     */
+    public boolean substitute(Path target, Map<String, String> mapping) throws IOException {
+        var compiled = compile(mapping);
+        return substitute(target, mapping, compiled);
+    }
+
+    private boolean substitute(
+            Path file, Map<String, String> mapping, Map<Pattern, String> compiled)
+            throws IOException {
+        if (!file.toFile().isFile()) return false;
+        var text = Files.readString(file);
+        var res = substitute(text, mapping, compiled);
+        if (!res.isUpdated) return false;
+        if (hasBackup) {
+            Files.copy(file, getBackupFile(file), StandardCopyOption.REPLACE_EXISTING);
+            Files.writeString(file, res.text, StandardOpenOption.TRUNCATE_EXISTING);
+        } else {
+            Files.writeString(file, res.text, StandardOpenOption.TRUNCATE_EXISTING);
         }
-        return text;
+        return true;
+    }
+
+    private void forEachFile(
+            Path target, Predicate<Path> fileFilter, ThrowingConsumer<Path, IOException> proc)
+            throws IOException {
+        XFiles.findFilesRecursively(target, fileFilter)
+                .forEach(
+                        file -> {
+                            try {
+                                proc.accept(file);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        });
+    }
+
+    private Result substitute(
+            String text, Map<String, String> mapping, Map<Pattern, String> compiledMapping) {
+        var result = new Result(text);
+        if (hasRegexpSupport) {
+            for (var e : compiledMapping.entrySet()) {
+                var m = e.getKey().matcher(result.text);
+                if (!m.find()) continue;
+                result.isUpdated = true;
+                result.text = m.replaceAll(e.getValue());
+            }
+        } else {
+            for (var e : mapping.entrySet()) {
+                var pos = text.indexOf(e.getKey());
+                if (pos < 0) continue;
+                result.isUpdated = true;
+                result.text = result.text.replace(e.getKey(), e.getValue());
+            }
+        }
+        return result;
+    }
+
+    private Map<Pattern, String> compile(Map<String, String> mapping) {
+        if (!hasRegexpSupport) return Collections.emptyMap();
+        return mapping.entrySet().stream()
+                .map(e -> Map.entry(Pattern.compile(e.getKey()), e.getValue()))
+                .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
     }
 }

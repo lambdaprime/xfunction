@@ -37,6 +37,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * Additions to standard java.nio.file.Files
@@ -219,5 +220,17 @@ public class XFiles {
             }
         }
         return false;
+    }
+
+    /**
+     * Expands to:
+     *
+     * <pre>{@code
+     * Files.find(root, Integer.MAX_VALUE, (p, a) -> fileFilter.test(p));
+     * }</pre>
+     */
+    public static Stream<Path> findFilesRecursively(Path root, Predicate<Path> fileFilter)
+            throws IOException {
+        return Files.find(root, Integer.MAX_VALUE, (p, a) -> fileFilter.test(p));
     }
 }
