@@ -17,8 +17,6 @@
  */
 package id.xfunction.concurrent.flow;
 
-import static java.util.stream.Collectors.joining;
-
 import id.xfunction.Preconditions;
 import java.util.Arrays;
 import java.util.Optional;
@@ -46,7 +44,7 @@ public class TransformProcessor<T, R> extends SubmissionPublisher<R> implements 
 
     private Subscription subscription;
     private Function<T, Optional<R>> transformer;
-    private String ctorStackTrace;
+    private Exception ctorStackTrace;
 
     /**
      * @see #TransformProcessor(Function, Executor, int)
@@ -68,9 +66,9 @@ public class TransformProcessor<T, R> extends SubmissionPublisher<R> implements 
         // here we store stacktrace from where it was created initially and
         // include it as a hint
         ctorStackTrace =
-                Arrays.stream(new Exception().getStackTrace())
-                        .map(StackTraceElement::toString)
-                        .collect(joining("\n"));
+                new Exception(
+                        "Original exception belongs to the processor which was created with this"
+                                + " stack trace");
     }
 
     @Override
@@ -105,9 +103,7 @@ public class TransformProcessor<T, R> extends SubmissionPublisher<R> implements 
     }
 
     private void includeSource(Throwable throwable) {
-        throwable.addSuppressed(
-                new Exception(
-                        "Original exception belongs to processor which was created at "
-                                + ctorStackTrace));
+        if (Arrays.stream(throwable.getSuppressed()).noneMatch(e -> e == ctorStackTrace))
+            throwable.addSuppressed(ctorStackTrace);
     }
 }

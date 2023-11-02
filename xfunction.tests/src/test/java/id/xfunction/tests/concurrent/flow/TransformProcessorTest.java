@@ -18,9 +18,12 @@
 package id.xfunction.tests.concurrent.flow;
 
 import id.xfunction.concurrent.flow.FixedCollectorSubscriber;
+import id.xfunction.concurrent.flow.SimpleSubscriber;
 import id.xfunction.concurrent.flow.TransformProcessor;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.SubmissionPublisher;
 import java.util.stream.IntStream;
@@ -39,5 +42,37 @@ public class TransformProcessorTest {
         pub.subscribe(proc);
         IntStream.range(0, 5).boxed().forEach(pub::submit);
         Assertions.assertEquals("[0, 1, 2, 3, 4]", subscriber.getFuture().get().toString());
+    }
+
+    @Test
+    public void test_onError() throws Exception {
+        var proc =
+                new TransformProcessor<Integer, String>(
+                        i -> {
+                            throw new RuntimeException("test");
+                        });
+        var pub = new SubmissionPublisher<Integer>(Executors.newSingleThreadExecutor(), 10);
+        var future = new CompletableFuture<Throwable>();
+        proc.subscribe(
+                new SimpleSubscriber<String>() {
+                    @Override
+                    public void onError(Throwable throwable) {
+                        future.complete(throwable);
+                    }
+                });
+        pub.subscribe(proc);
+        pub.submit(12);
+        Assertions.assertEquals("java.lang.RuntimeException: test", future.get().toString());
+        Assertions.assertEquals(1, future.get().getSuppressed().length);
+        var suppressed = future.get().getSuppressed()[0];
+        Assertions.assertEquals(
+                "java.lang.Exception: Original exception belongs to the processor which was created"
+                        + " with this stack trace",
+                suppressed.toString());
+        Assertions.assertEquals(
+                true,
+                Arrays.toString(suppressed.getStackTrace())
+                        .contains(
+                                "id.xfunction.tests/id.xfunction.tests.concurrent.flow.TransformProcessorTest.test_onError(TransformProcessorTest.java:"));
     }
 }
