@@ -40,6 +40,14 @@ public class PreconditionException extends RuntimeException {
         super(String.format(fmt, objs));
     }
 
+    public PreconditionException(long expected, long actual) {
+        super(String.format(EQUALS_MESSAGE_FORMAT, "Predondition error", expected, actual));
+    }
+
+    public PreconditionException(String message, long expected, long actual) {
+        super(String.format(EQUALS_MESSAGE_FORMAT, message, expected, actual));
+    }
+
     public PreconditionException(double expected, double actual) {
         super(String.format(EQUALS_MESSAGE_FORMAT, "Predondition error", expected, actual));
     }

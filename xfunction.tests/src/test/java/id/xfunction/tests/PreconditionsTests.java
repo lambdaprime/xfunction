@@ -19,6 +19,7 @@ package id.xfunction.tests;
 
 import id.xfunction.PreconditionException;
 import id.xfunction.Preconditions;
+import id.xfunction.logging.TracingToken;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -33,11 +34,20 @@ public class PreconditionsTests {
                         () -> Preconditions.isTrue(false, "message test"));
         e.printStackTrace();
         Assertions.assertEquals("message test", e.getMessage());
+
+        e =
+                Assertions.assertThrows(
+                        PreconditionException.class,
+                        () -> Preconditions.isTrue(false, "message test %s", "value"));
+        e.printStackTrace();
+        Assertions.assertEquals("message test value", e.getMessage());
     }
 
     @Test
     public void test_assertTrue_happy() {
         Preconditions.isTrue(true);
+
+        Preconditions.isTrue(true, "Already subscribed");
     }
 
     @Test
@@ -55,5 +65,36 @@ public class PreconditionsTests {
         Preconditions.equals(null, null);
         Assertions.assertThrows(
                 PreconditionException.class, () -> Preconditions.equals(null, "test"));
+
+        var e =
+                Assertions.assertThrows(
+                        PreconditionException.class,
+                        () -> Preconditions.equals(5, 6, "message test"));
+        e.printStackTrace();
+        Assertions.assertEquals(
+                "message test: expected value <5>, actual value <6>", e.getMessage());
+
+        e =
+                Assertions.assertThrows(
+                        PreconditionException.class,
+                        () -> Preconditions.equals(5, 6, "message test %s", "val"));
+        e.printStackTrace();
+        Assertions.assertEquals(
+                "message test val: expected value <5>, actual value <6>", e.getMessage());
+
+        e =
+                Assertions.assertThrows(
+                        PreconditionException.class,
+                        () ->
+                                Preconditions.equals(
+                                        5.,
+                                        6.,
+                                        new TracingToken("token1"),
+                                        "message test %s",
+                                        "val"));
+        e.printStackTrace();
+        Assertions.assertEquals(
+                "token1: message test val: expected value <5.0>, actual value <6.0>",
+                e.getMessage());
     }
 }
