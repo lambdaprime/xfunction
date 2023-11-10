@@ -51,11 +51,17 @@ public class XByteTests {
                 0b01110000_11000000_01010000,
                 Integer.toUnsignedLong(XByte.reverseBitsInBytes(0b00001110_00000011_00001010)));
 
-        assertEquals("[-54, -2]", Arrays.toString(XByte.copyToByteArray(0xca, 0xfe)));
+        assertEquals("[-54, -2]", Arrays.toString(XByte.copyAsByteLiterals(0xca, 0xfe)));
 
         assertEquals("cafe0000", Integer.toHexString(XByte.toInt(0xca, 0xfe)));
         assertEquals("cafebabe", Integer.toHexString(XByte.toInt(0xca, 0xfe, 0xba, 0xbe)));
 
         assertEquals("cafe", Integer.toHexString(Short.toUnsignedInt(XByte.toShort(0xca, 0xfe))));
+
+        assertEquals("00 00 ca fe", XByte.toHexPairs(XByte.copyToByteArray(0xcafe)));
+
+        assertEquals(
+                "00 00 ca fe",
+                XByte.toHexPairs(XByte.toInt(new byte[] {0, 0, (byte) 0xca, (byte) 0xfe})));
     }
 }

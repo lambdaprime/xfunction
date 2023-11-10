@@ -124,7 +124,7 @@ public class XByte {
                         .filter(s -> !s.isEmpty())
                         .mapToInt(s -> Integer.valueOf(s, 16))
                         .toArray();
-        return copyToByteArray(array);
+        return copyAsByteLiterals(array);
     }
 
     /**
@@ -164,12 +164,20 @@ public class XByte {
      * var cafe = new byte[]{(byte)0xca, (byte)0xfe};
      * }</pre>
      */
-    public static byte[] copyToByteArray(int... values) {
-        byte[] res = new byte[values.length];
+    public static byte[] copyAsByteLiterals(int... byteLiterals) {
+        byte[] res = new byte[byteLiterals.length];
         for (int i = 0; i < res.length; i++) {
-            res[i] = (byte) values[i];
+            Preconditions.isLess(byteLiterals[i], 0xff, "Not a byte literal");
+            res[i] = (byte) byteLiterals[i];
         }
         return res;
+    }
+
+    /** Resulting byte array size will be ints.length * Integer.BYTES */
+    public static byte[] copyToByteArray(int... ints) {
+        var buf = ByteBuffer.allocate(ints.length * Integer.BYTES);
+        buf.asIntBuffer().put(ints);
+        return buf.array();
     }
 
     /** Reverse bits in the byte */
@@ -197,15 +205,27 @@ public class XByte {
     }
 
     public static int toInt(int byte1st, int byte2nd) {
-        return toInt(byte1st) | byte2nd << 16;
+        return toInt(byte1st) | (0xff & byte2nd) << 16;
     }
 
     public static int toInt(int byte1st, int byte2nd, int byte3rd) {
-        return toInt(byte1st, byte2nd) | byte3rd << 8;
+        return toInt(byte1st, byte2nd) | (0xff & byte3rd) << 8;
     }
 
     public static int toInt(int byte1st, int byte2nd, int byte3rd, int byte4st) {
-        return toInt(byte1st, byte2nd, byte3rd) | byte4st;
+        return toInt(byte1st, byte2nd, byte3rd) | (0xff & byte4st);
+    }
+
+    /**
+     * Equivalent to:
+     *
+     * <pre>{@code
+     * return toInt(arrayOf4Bytes[0], arrayOf4Bytes[1], arrayOf4Bytes[2], arrayOf4Bytes[3]);
+     * }</pre>
+     */
+    public static int toInt(byte[] arrayOf4Bytes) {
+        Preconditions.equals(4, arrayOf4Bytes.length, "integer size exceeded");
+        return toInt(arrayOf4Bytes[0], arrayOf4Bytes[1], arrayOf4Bytes[2], arrayOf4Bytes[3]);
     }
 
     public static short toShort(int byte1st) {
