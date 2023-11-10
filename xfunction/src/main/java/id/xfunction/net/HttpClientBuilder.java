@@ -39,13 +39,16 @@ public class HttpClientBuilder {
 
     private static final X509TrustManager TRUST_MANAGER =
             new X509TrustManager() {
+                @Override
                 public java.security.cert.X509Certificate[] getAcceptedIssuers() {
                     return new X509Certificate[0];
                 }
 
+                @Override
                 public void checkClientTrusted(
                         java.security.cert.X509Certificate[] certs, String authType) {}
 
+                @Override
                 public void checkServerTrusted(
                         java.security.cert.X509Certificate[] certs, String authType) {}
             };
@@ -64,9 +67,12 @@ public class HttpClientBuilder {
     public HttpClientBuilder insecure() {
         TrustManager[] trustAllCerts = new TrustManager[] {TRUST_MANAGER};
         try {
+            new RuntimeException("WARNING! SSL verification is disabled.").printStackTrace();
             var sc = SSLContext.getInstance("SSL");
             sc.init(null, trustAllCerts, new java.security.SecureRandom());
             builder.sslContext(sc);
+            // javax.net.ssl.SSLHandshakeException: No subject alternative DNS name matching
+            System.setProperty("jdk.internal.httpclient.disableHostnameVerification", "true");
             return this;
         } catch (KeyManagementException | NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
