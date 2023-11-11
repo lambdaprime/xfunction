@@ -21,8 +21,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Iterator;
 import java.util.Random;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Additions to standard java.util.stream.Stream
@@ -57,5 +61,11 @@ public class XStream {
                     }
                 };
         return new BufferedReader(new InputStreamReader(in)).lines();
+    }
+
+    /** Create non parallel, ordered stream from given {@link Iterator} */
+    public static <T> Stream<T> of(Iterator<T> iterator) {
+        return StreamSupport.stream(
+                Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false);
     }
 }

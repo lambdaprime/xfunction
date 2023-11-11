@@ -52,6 +52,8 @@ import java.util.stream.Collectors;
  * <p>This may be useful in case you don't want to ignore logs from all classes with specific prefix
  * (ex. id), except for the one class (id.HelloWorld).
  *
+ * <p>It excludes only logs with {@link Level} below {@link Level#WARNING}.
+ *
  * @author lambdaprime intid@protonmail.com
  */
 public class LoggerNameFilter implements Filter {
@@ -81,8 +83,8 @@ public class LoggerNameFilter implements Filter {
     @Override
     public boolean isLoggable(LogRecord record) {
         String name = record.getLoggerName();
-        if (record.getLevel().intValue() >= Level.WARNING.intValue()) return true;
         if (name == null) return false;
+        if (record.getLevel().intValue() >= Level.WARNING.intValue()) return true;
         if (excludedLoggers.prefixMatches(name) != 0) return false;
         if (namePrefixes.isEmpty()) return true;
         return namePrefixes.prefixMatches(name) != 0;
