@@ -20,6 +20,7 @@ package id.xfunction.logging;
 import id.xfunction.function.Unchecked;
 import java.io.InputStream;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.LogRecord;
@@ -204,7 +205,10 @@ public class XLogger extends Logger {
      * the corresponding log {@link Level} to log method. This method does it automatically.
      */
     public void severe(Throwable t) {
-        super.log(Level.SEVERE, t.getMessage(), t);
+        super.log(
+                Level.SEVERE,
+                Optional.ofNullable(t.getMessage()).orElse(t.getClass().getSimpleName()),
+                t);
     }
 
     /**
