@@ -21,6 +21,7 @@ import java.net.http.HttpClient;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
+import java.util.Arrays;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLParameters;
 import javax.net.ssl.TrustManager;
@@ -67,7 +68,11 @@ public class HttpClientBuilder {
     public HttpClientBuilder insecure() {
         TrustManager[] trustAllCerts = new TrustManager[] {TRUST_MANAGER};
         try {
-            new RuntimeException("WARNING! SSL verification is disabled.").printStackTrace();
+            System.err.println("WARNING! SSL verification is disabled from:");
+            var stackTrace = new RuntimeException().getStackTrace();
+            var maxLength = 4;
+            Arrays.stream(stackTrace).limit(maxLength).forEach(System.err::println);
+            if (stackTrace.length > maxLength) System.err.println("...");
             var sc = SSLContext.getInstance("SSL");
             sc.init(null, trustAllCerts, new java.security.SecureRandom());
             builder.sslContext(sc);
