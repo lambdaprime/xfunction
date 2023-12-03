@@ -180,6 +180,13 @@ public class XByte {
         return buf.array();
     }
 
+    /** Resulting byte array size will be longs.length * Long.BYTES */
+    public static byte[] copyToByteArray(long... longs) {
+        var buf = ByteBuffer.allocate(longs.length * Long.BYTES);
+        buf.asLongBuffer().put(longs);
+        return buf.array();
+    }
+
     /** Reverse bits in the byte */
     public static byte reverseBits(byte b) {
         b = (byte) (((b & 0xaa) >> 1) | ((b & 0x55) << 1));
