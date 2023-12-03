@@ -17,6 +17,7 @@
  */
 package id.xfunction.tests.concurrent.flow;
 
+import id.xfunction.concurrent.SameThreadExecutorService;
 import id.xfunction.concurrent.flow.FixedCollectorSubscriber;
 import id.xfunction.concurrent.flow.SimpleSubscriber;
 import id.xfunction.concurrent.flow.TransformProcessor;
@@ -26,6 +27,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.SubmissionPublisher;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -74,5 +76,23 @@ public class TransformProcessorTest {
                 Arrays.toString(suppressed.getStackTrace())
                         .contains(
                                 "id.xfunction.tests/id.xfunction.tests.concurrent.flow.TransformProcessorTest.test_onError(TransformProcessorTest.java:"));
+    }
+
+    @Test
+    public void test_same_thread() throws Exception {
+        var publisher = new SubmissionPublisher<Integer>(new SameThreadExecutorService(), 1);
+        var proc =
+                new TransformProcessor<Integer, String>(
+                        a -> Optional.of(a.toString()), new SameThreadExecutorService(), 1);
+        var subscriber = new FixedCollectorSubscriber<>(new ArrayList<String>(), 500);
+        proc.subscribe(subscriber);
+        publisher.subscribe(proc);
+        IntStream.range(0, 500).boxed().forEach(publisher::submit);
+        Assertions.assertEquals(
+                IntStream.range(0, 500)
+                        .boxed()
+                        .map(Object::toString)
+                        .collect(Collectors.joining(", ")),
+                subscriber.getFuture().get().toString().replaceAll("\\[|\\]", ""));
     }
 }
