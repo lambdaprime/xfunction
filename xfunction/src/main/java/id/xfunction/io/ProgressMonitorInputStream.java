@@ -31,19 +31,19 @@ import java.nio.file.Path;
  */
 public class ProgressMonitorInputStream extends InputStream {
 
-    private long length;
-    private InputStream in;
+    private long totalBytes;
     private long totalBytesRead;
+    private InputStream in;
 
     public ProgressMonitorInputStream(Path file) throws FileNotFoundException {
         File f = file.toFile();
         this.in = new FileInputStream(f);
-        length = f.length();
+        totalBytes = f.length();
     }
 
-    public ProgressMonitorInputStream(InputStream in, long lengthInBytes) {
+    public ProgressMonitorInputStream(InputStream in, long totalBytes) {
         this.in = in;
-        length = lengthInBytes;
+        this.totalBytes = totalBytes;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class ProgressMonitorInputStream extends InputStream {
 
     /** Returns in % total amount of data which was read from the stream already */
     public int getPercentRead() {
-        return (int) (totalBytesRead / (length / 100));
+        return (int) (totalBytesRead / (totalBytes / 100));
     }
 
     /** Number of bytes which was read already */
@@ -64,6 +64,6 @@ public class ProgressMonitorInputStream extends InputStream {
 
     /** Total number of bytes */
     public long getTotalBytes() {
-        return length;
+        return totalBytes;
     }
 }
