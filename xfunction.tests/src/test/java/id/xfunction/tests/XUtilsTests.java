@@ -21,8 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import id.xfunction.XUtils;
 import id.xfunction.function.Unchecked;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
@@ -35,27 +33,6 @@ public class XUtilsTests {
     @Test
     public void testSafe() {
         Unchecked.get(this::m);
-    }
-
-    @Test
-    public void test_md5Sum() throws Exception {
-        assertEquals(
-                "F368382E27B21F0D6DB6693DEBE94A14",
-                XUtils.md5Sum("I can see what you want").toUpperCase());
-        assertEquals(
-                "2DDAFC008B12810D7148E3E6943598AC",
-                XUtils.md5Sum("A state of trance").toUpperCase());
-        assertEquals(
-                "31CF05BEC43849BED31296557B064071",
-                XUtils.md5Sum("until the sky falls down").toUpperCase());
-    }
-
-    @Test
-    public void test_md5Sum_file() throws Exception {
-        Path file = Files.createTempFile("gg", "");
-        Files.writeString(file, "very long string".repeat(100));
-        assertEquals("05ee552a62cdfeb6b21ac40f401c5eed", XUtils.md5Sum(file.toFile()));
-        file.toFile().delete();
     }
 
     @Test

@@ -17,10 +17,7 @@
  */
 package id.xfunction;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.security.MessageDigest;
+import id.xfunction.function.ThrowingRunnable;
 import java.util.concurrent.ForkJoinPool;
 
 /**
@@ -56,44 +53,6 @@ public class XUtils {
     }
 
     /**
-     * Calculates md5 sum for byte array
-     *
-     * @return md5 sum
-     */
-    public static String md5Sum(byte[] data) throws Exception {
-        MessageDigest md = MessageDigest.getInstance("MD5");
-        byte[] digest = md.digest(data);
-        return XByte.toHex(digest);
-    }
-
-    /**
-     * Calculates md5 sum for input string
-     *
-     * @return md5 sum
-     */
-    public static String md5Sum(String string) throws Exception {
-        return md5Sum(string.getBytes());
-    }
-
-    /**
-     * Calculates md5 sum for a file
-     *
-     * @return md5 sum
-     */
-    public static String md5Sum(File f) throws Exception {
-        Preconditions.isTrue(f.isFile(), "Argument " + f + " is not a file");
-        try (InputStream bais = new FileInputStream(f)) {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] b = new byte[1 << 20];
-            int l = 0;
-            while ((l = bais.read(b)) != -1) {
-                md.update(b, 0, l);
-            }
-            return XByte.toHex(md.digest());
-        }
-    }
-
-    /**
      * Trims the string and:
      *
      * <ul>
@@ -122,5 +81,13 @@ public class XUtils {
 
     public static boolean isWindows() {
         return System.getProperty("os.name", "").toLowerCase().startsWith("win");
+    }
+
+    public static void runSafe(ThrowingRunnable<Exception> runnable) {
+        try {
+            runnable.run();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
