@@ -19,10 +19,13 @@ package id.xfunction.concurrent.flow;
 
 import id.xfunction.PreconditionException;
 import id.xfunction.Preconditions;
+import java.time.Duration;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Flow.Subscription;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 /**
  * Subscriber which collects fixed number of items to target collection.
@@ -51,10 +54,36 @@ public class FixedCollectorSubscriber<T, C extends Collection<T>> extends Simple
     private C targetCollection;
     private CompletableFuture<C> future = new CompletableFuture<C>();
     private int maxSize;
+    private Consumer<T> consumer = msg -> {};
 
     public FixedCollectorSubscriber(C targetCollection, int maxSize) {
+        this(targetCollection, maxSize, Duration.ofDays(Integer.MAX_VALUE));
+    }
+
+    /**
+     * @param timeout complete the future by timeout with whatever number of items received into
+     *     targetCollection (may be less than maxSize)
+     */
+    public FixedCollectorSubscriber(C targetCollection, int maxSize, Duration timeout) {
         this.maxSize = maxSize;
         this.targetCollection = targetCollection;
+        this.future =
+                future.completeOnTimeout(
+                        targetCollection, timeout.toMillis(), TimeUnit.MILLISECONDS);
+    }
+
+    /**
+     * Setup additional message consumer.
+     *
+     * <p>Can be used to print all received messages to {@link System#out}
+     *
+     * <pre>{@code
+     * subscriber.withMessageConsumer(System.out::println);
+     * }</pre>
+     */
+    public FixedCollectorSubscriber<T, C> withMessageConsumer(Consumer<T> consumer) {
+        this.consumer = consumer;
+        return this;
     }
 
     @Override
@@ -79,6 +108,7 @@ public class FixedCollectorSubscriber<T, C extends Collection<T>> extends Simple
     @Override
     public void onNext(T item) {
         targetCollection.add(item);
+        consumer.accept(item);
         if (targetCollection.size() == maxSize) {
             future.complete(targetCollection);
             subscription.cancel();
