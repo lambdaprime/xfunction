@@ -20,8 +20,10 @@ package id.xfunction.lang;
 import static java.util.stream.Collectors.joining;
 
 import id.xfunction.function.Unchecked;
+import id.xfunction.text.Substitutor;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -53,17 +55,33 @@ public class XProcess {
     private Semaphore stdoutSemaphore = new Semaphore(1);
     private Semaphore stderrSemaphore = new Semaphore(1);
 
-    public XProcess(Process process) {
+    public XProcess(Process process, List<String> secrets) {
         this.process = process;
-        this.stdout = new BufferedReader(new InputStreamReader(process.getInputStream())).lines();
-        this.stderr = new BufferedReader(new InputStreamReader(process.getErrorStream())).lines();
+        var maskSecretsFunc = new Substitutor().maskSecretsFunc(secrets);
+        this.stdout =
+                new BufferedReader(new InputStreamReader(process.getInputStream()))
+                        .lines()
+                        .map(maskSecretsFunc);
+        this.stderr =
+                new BufferedReader(new InputStreamReader(process.getErrorStream()))
+                        .lines()
+                        .map(maskSecretsFunc);
     }
 
     /** This ctor supposed to be used in tests when you want to mock results of XExec */
-    public XProcess(Process process, Stream<String> stdout, Stream<String> stderr, int code) {
+    public XProcess(Process process, Stream<String> stdout, Stream<String> stderr, int code) {}
+
+    /** This ctor supposed to be used in tests when you want to mock results of XExec */
+    public XProcess(
+            Process process,
+            Stream<String> stdout,
+            Stream<String> stderr,
+            List<String> secrets,
+            int code) {
         this.process = process;
-        this.stdout = stdout;
-        this.stderr = stderr;
+        var maskSecretsFunc = new Substitutor().maskSecretsFunc(secrets);
+        this.stdout = stdout.map(maskSecretsFunc);
+        this.stderr = stderr.map(maskSecretsFunc);
         this.code = Optional.of(CompletableFuture.completedFuture(code));
     }
 

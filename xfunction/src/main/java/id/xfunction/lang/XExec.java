@@ -36,6 +36,7 @@ public class XExec {
     private String[] cmd;
     private Stream<String> input;
     private ProcessBuilder processBuilder;
+    private List<String> secrets = List.of();
 
     /**
      * Constructor which accepts the command to run. First item of the array should be the command
@@ -89,6 +90,12 @@ public class XExec {
         return this;
     }
 
+    /** List of secrets which will be masked in the command output (both stdout, stderr) */
+    public XExec withMaskedSecrets(String... secrets) {
+        this.secrets = Arrays.asList(secrets);
+        return this;
+    }
+
     public String[] getCommand() {
         return cmd;
     }
@@ -106,7 +113,7 @@ public class XExec {
                 input.forEach(ps::println);
                 ps.close();
             }
-            XProcess result = new XProcess(p);
+            XProcess result = new XProcess(p, secrets);
             return result;
 
         } catch (Exception e) {

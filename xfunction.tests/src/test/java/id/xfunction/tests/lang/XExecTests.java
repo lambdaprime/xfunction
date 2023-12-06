@@ -56,4 +56,15 @@ public class XExecTests {
         String out = result.stdout();
         assertEquals("hello", out);
     }
+
+    @Test
+    public void test_mask_secrets() throws Exception {
+        XProcess result = new XExec("echo", "hello").withMaskedSecrets("ll").start();
+        List<String> out = result.stdoutAsStream().collect(toList());
+        List<String> err = result.stderrAsStream().collect(toList());
+        assertEquals(1, out.size());
+        assertEquals(0, err.size());
+        assertEquals(0, result.code().get().intValue());
+        assertEquals("hexxxxxxxo", out.get(0));
+    }
 }

@@ -19,6 +19,12 @@ dependencies {
   testRuntimeOnly "org.junit.platform:junit-platform-commons:1.7.0"
 }
 
+  sourceCompatibility = '17'
+  targetCompatibility = '17'
+  tasks.withType(JavaCompile) {
+    options.release = 17
+  }
+
 test {
   useJUnitPlatform()
   finalizedBy jacocoTestReport, jacocoTestCoverageVerification

@@ -36,6 +36,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -244,5 +245,20 @@ public class Substitutor {
         return mapping.entrySet().stream()
                 .map(e -> Map.entry(Pattern.compile(e.getKey()), e.getValue()))
                 .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+    }
+
+    /** Finds all secrets in the input text and replaces them with a mask */
+    public String maskSecrets(String text, List<String> secrets) {
+        for (var secret : secrets) {
+            text = text.replace(secret, "xxxxxxx");
+        }
+        return text;
+    }
+
+    /**
+     * @return function which accepts input text and masks all secrets in it
+     */
+    public Function<String, String> maskSecretsFunc(List<String> secrets) {
+        return l -> maskSecrets(l, secrets);
     }
 }
