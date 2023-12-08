@@ -20,16 +20,12 @@ package id.xfunction.concurrent.flow;
 import id.xfunction.Preconditions;
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Flow;
 import java.util.concurrent.Flow.Processor;
 import java.util.concurrent.Flow.Subscription;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.SubmissionPublisher;
 import java.util.function.Function;
 
 /**
- * Processor which can be used to transform publisher messages into different type.
+ * {@link Processor} which can be used to transform publisher messages into different type.
  *
  * <p>Example of transforming integer to String:
  *
@@ -39,27 +35,19 @@ import java.util.function.Function;
  *
  * @param <T> input type
  * @param <R> output type
+ * @author lambdaprime intid@protonmail.com
  */
-public class TransformProcessor<T, R> extends SubmissionPublisher<R> implements Processor<T, R> {
+public class TransformProcessor<T, R> extends SynchronousPublisher<R> implements Processor<T, R> {
 
     private Subscription subscription;
     private Function<T, Optional<R>> transformer;
     private Exception ctorStackTrace;
 
     /**
-     * @see #TransformProcessor(Function, Executor, int)
-     */
-    public TransformProcessor(Function<T, Optional<R>> transformer) {
-        this(transformer, ForkJoinPool.commonPool(), Flow.defaultBufferSize());
-    }
-
-    /**
      * @param transformer Transforms input message and publishes it to subscribers. If transformer
      *     returns empty message it will be ignored.
      */
-    public TransformProcessor(
-            Function<T, Optional<R>> transformer, Executor executor, int maxBufferCapacity) {
-        super(executor, maxBufferCapacity);
+    public TransformProcessor(Function<T, Optional<R>> transformer) {
         this.transformer = transformer;
         // debugging subscriber issues may be difficult since they operate
         // usually on different threads so stacktrace for them not very useful

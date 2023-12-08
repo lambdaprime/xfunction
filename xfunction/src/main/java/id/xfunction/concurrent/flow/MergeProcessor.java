@@ -45,6 +45,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  *       processor will issue {@link Subscriber#onError(Throwable)} instead of {@link
  *       Subscriber#onComplete()} with all the exceptions suppressed inside
  * </ul>
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class MergeProcessor<T> extends SubmissionPublisher<T> {
     private AtomicInteger numOfActiveSubscriptions = new AtomicInteger();

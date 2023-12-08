@@ -30,6 +30,8 @@ import java.util.stream.IntStream;
 /**
  * Subscriber which can be subscribed to multiple publishers and test that each of them publishes
  * certain number of items.
+ *
+ * @author lambdaprime intid@protonmail.com
  */
 public class TestMultiSubscriber implements Subscriber<Integer> {
     private static final XLogger LOGGER = XLogger.getLogger(TestMultiSubscriber.class);

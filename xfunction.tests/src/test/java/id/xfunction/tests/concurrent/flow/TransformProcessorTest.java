@@ -20,6 +20,7 @@ package id.xfunction.tests.concurrent.flow;
 import id.xfunction.concurrent.SameThreadExecutorService;
 import id.xfunction.concurrent.flow.FixedCollectorSubscriber;
 import id.xfunction.concurrent.flow.SimpleSubscriber;
+import id.xfunction.concurrent.flow.SynchronousPublisher;
 import id.xfunction.concurrent.flow.TransformProcessor;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +33,9 @@ import java.util.stream.IntStream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+/**
+ * @author lambdaprime intid@protonmail.com
+ */
 public class TransformProcessorTest {
 
     /** 1 -> Pub -> T (changes to "1") -> Sub */
@@ -80,19 +84,58 @@ public class TransformProcessorTest {
 
     @Test
     public void test_same_thread() throws Exception {
-        var publisher = new SubmissionPublisher<Integer>(new SameThreadExecutorService(), 1);
-        var proc =
-                new TransformProcessor<Integer, String>(
-                        a -> Optional.of(a.toString()), new SameThreadExecutorService(), 1);
-        var subscriber = new FixedCollectorSubscriber<>(new ArrayList<String>(), 500);
-        proc.subscribe(subscriber);
-        publisher.subscribe(proc);
-        IntStream.range(0, 500).boxed().forEach(publisher::submit);
-        Assertions.assertEquals(
-                IntStream.range(0, 500)
-                        .boxed()
-                        .map(Object::toString)
-                        .collect(Collectors.joining(", ")),
-                subscriber.getFuture().get().toString().replaceAll("\\[|\\]", ""));
+        try (var publisher = new SubmissionPublisher<Integer>(new SameThreadExecutorService(), 1)) {
+            var proc = new TransformProcessor<Integer, String>(a -> Optional.of(a.toString()));
+            var subscriber = new FixedCollectorSubscriber<>(new ArrayList<String>(), 500);
+            proc.subscribe(subscriber);
+            publisher.subscribe(proc);
+            IntStream.range(0, 500).boxed().forEach(publisher::submit);
+            Assertions.assertEquals(
+                    IntStream.range(0, 500)
+                            .boxed()
+                            .map(Object::toString)
+                            .collect(Collectors.joining(", ")),
+                    subscriber.getFuture().get().toString().replaceAll("\\[|\\]", ""));
+        }
+    }
+
+    @Test
+    public void test_sync_publisher_subscriber() throws Exception {
+        try (var publisher = new SynchronousPublisher<Integer>()) {
+            var proc = new TransformProcessor<Integer, String>(a -> Optional.of(a.toString()));
+            var requestCount = 23;
+            var subscriber = new FixedCollectorSubscriber<>(new ArrayList<String>(), requestCount);
+            proc.subscribe(subscriber);
+            publisher.subscribe(proc);
+            Executors.newSingleThreadExecutor()
+                    .submit(
+                            () -> {
+                                IntStream.range(0, 55).boxed().forEach(publisher::submit);
+                            });
+            Assertions.assertEquals(
+                    IntStream.range(0, requestCount)
+                            .boxed()
+                            .map(Object::toString)
+                            .collect(Collectors.joining(", ")),
+                    subscriber.getFuture().get().toString().replaceAll("\\[|\\]", ""));
+        }
+    }
+
+    @Test
+    public void test_sync_publisher_subscriber_requests_all() throws Exception {
+        try (var publisher = new SynchronousPublisher<Integer>()) {
+            var proc = new TransformProcessor<Integer, String>(a -> Optional.of(a.toString()));
+            var requestCount = 55;
+            var subscriber = new FixedCollectorSubscriber<>(new ArrayList<String>(), requestCount);
+            proc.subscribe(subscriber);
+            publisher.subscribe(proc);
+            IntStream.range(0, requestCount).boxed().forEach(publisher::submit);
+            Assertions.assertEquals(
+                    IntStream.range(0, requestCount)
+                            .boxed()
+                            .map(Object::toString)
+                            .collect(Collectors.joining(", ")),
+                    subscriber.getFuture().get().toString().replaceAll("\\[|\\]", ""));
+        }
     }
 }

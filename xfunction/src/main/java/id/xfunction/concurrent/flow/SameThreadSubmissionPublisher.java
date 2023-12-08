@@ -18,6 +18,7 @@
 package id.xfunction.concurrent.flow;
 
 import id.xfunction.concurrent.SameThreadExecutorService;
+import java.util.concurrent.Flow.Publisher;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.SubmissionPublisher;
 
@@ -25,6 +26,9 @@ import java.util.concurrent.SubmissionPublisher;
  * {@link SubmissionPublisher} which submits all messages sequentially one by one to each
  * subscriber. Queue size of each subscriber is equal to 1 so submitting new messages will block
  * until subscriber`s {@link Subscriber#onNext(Object)} completes.
+ *
+ * @see SynchronousPublisher for {@link Publisher} with no queues
+ * @author lambdaprime intid@protonmail.com
  */
 public class SameThreadSubmissionPublisher<T> extends SubmissionPublisher<T> {
     public SameThreadSubmissionPublisher() {
