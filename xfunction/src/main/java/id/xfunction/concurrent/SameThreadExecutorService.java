@@ -20,15 +20,10 @@ package id.xfunction.concurrent;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.AbstractExecutorService;
-import java.util.concurrent.Flow.Subscriber;
-import java.util.concurrent.SubmissionPublisher;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Executes all tasks on same thread which submits them.
- *
- * <p>Can be used with {@link SubmissionPublisher} to guarantee that all messages sent to all the
- * {@link Subscriber} synchronously and there is no any pending messages in the queue.
  *
  * @author lambdaprime intid@protonmail.com
  */
