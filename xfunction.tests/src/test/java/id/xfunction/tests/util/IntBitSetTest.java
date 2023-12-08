@@ -91,6 +91,12 @@ public class IntBitSetTest {
 
         // ______________30________20________10________0
         assertEquals("10010000000000000000000000000111100", set.toBinaryString());
+
+        set = new IntBitSet(8);
+        assertEquals(1, set.intArray().length);
+
+        set = new IntBitSet(256);
+        assertEquals(8, set.intArray().length);
     }
 
     @Test

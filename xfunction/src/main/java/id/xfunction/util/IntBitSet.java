@@ -43,7 +43,7 @@ public class IntBitSet {
      */
     public IntBitSet(int len) {
         this.len = len;
-        this.array = new int[(len + LEN) / LEN];
+        this.array = new int[(len + LEN - 1) / LEN];
     }
 
     /**
