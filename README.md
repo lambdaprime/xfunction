@@ -1,3 +1,14 @@
+**xfunction** uses some of Java API which is not available on Android.
+This branch contains alternative version of **xfunction** with Android support.
+
+```
+dependencies {
+  implementation "io.github.lambdaprime:id.xfunction:25.0-SNAPSHOT:android@aar"
+}
+```
+
+---
+
 **xfunction** - Java library which provides set of extensions for standard Java APIs:
 
 - ThrowingRunnable, ThrowingSupplier, ThrowingFunction and others

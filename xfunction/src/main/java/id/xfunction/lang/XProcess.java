@@ -294,20 +294,6 @@ public class XProcess {
         return Unchecked.getInt(code()::get);
     }
 
-    /**
-     * Java original method {@link Process#destroyForcibly()} does not destroy child processes. This
-     * method destroys all children processes including parent one.
-     */
-    public void destroyAllForcibly() {
-        process.descendants().forEach(ProcessHandle::destroyForcibly);
-        process.destroyForcibly();
-        try {
-            process.waitFor();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void consumeStdout() {
         if (isStdoutConsumed || !stdoutSemaphore.tryAcquire())
             throw new IllegalStateException("Stdout has a consumer already");

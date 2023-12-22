@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -154,54 +153,6 @@ public class Substitutor {
     /** Substitutes all values and return new string */
     public String substitute(String text, Map<String, String> mapping) {
         return substitute(text, mapping, compile(mapping)).text;
-    }
-
-    /**
-     * Equivalent to {@link #substitute(Path, Map)} except allows to substitute only files which
-     * satisfy given filter.
-     */
-    public List<Path> substitute(
-            Path target, Predicate<Path> fileFilter, Map<String, String> mapping)
-            throws IOException {
-        var compiled = compile(mapping);
-        var out = new ArrayList<Path>();
-        forEachFile(
-                target,
-                fileFilter,
-                file -> {
-                    if (substitute(file, mapping, compiled)) {
-                        out.add(file);
-                    }
-                });
-        return out;
-    }
-
-    /**
-     * Performs inplace substitution in a given file or in case of directory, in all files inside
-     * it. It differs from {@link #substitutePerLine(Path, Map)} that it reads entire file in memory
-     * as a single string and performs substitution on such string. This allows to create multiline
-     * mappings and perform multiline substitutions (of course this requires appropriate Java
-     * pattern which should support multiline matching, this can be done by prepending "(?s)(?m)" to
-     * it).
-     */
-    public List<Path> substitute(Path target, Map<String, String> mapping) throws IOException {
-        return substitute(target, fileFilter -> true, mapping);
-    }
-
-    private boolean substitute(
-            Path file, Map<String, String> mapping, Map<Pattern, String> compiled)
-            throws IOException {
-        if (!file.toFile().isFile()) return false;
-        var text = Files.readString(file);
-        var res = substitute(text, mapping, compiled);
-        if (!res.isUpdated) return false;
-        if (hasBackup) {
-            Files.copy(file, getBackupFile(file), StandardCopyOption.REPLACE_EXISTING);
-            Files.writeString(file, res.text, StandardOpenOption.TRUNCATE_EXISTING);
-        } else {
-            Files.writeString(file, res.text, StandardOpenOption.TRUNCATE_EXISTING);
-        }
-        return true;
     }
 
     private void forEachFile(

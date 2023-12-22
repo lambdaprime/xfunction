@@ -1,48 +1,37 @@
-// include xfunction for updateVersion
-buildscript {
-  repositories {
-    mavenCentral()
-  }
-  dependencies {
-    classpath "io.github.lambdaprime:id.xfunction:25.0"
-  }
-}
-
 plugins {
-  id 'com.diffplug.spotless'
-  id 'java-library'
+  id 'com.android.library' version '8.2.0' apply false
 }
 
-apply plugin : 'eclipse'
+apply plugin: 'com.android.library'
 
-eclipse.classpath.file {
-  // instruct eclipse plugin to put everything to module path
-  whenMerged {
-    entries.findAll { it.kind == 'lib' }.each { it.entryAttributes['module'] = 'true' }
+def androidSdkVersion = 34
+def javaVersion = 17
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(javaVersion)
   }
 }
 
-javadoc {
-  options.noTimestamp = true
-  options.noQualifiers = ["all"]
-  options.noTree = true
-  options.noIndex = true
-  options.noNavBar = true
-  options.overview = "src/overview.html"
-  // ignore missing @return, @param etc
-  options.addBooleanOption('Xdoclint:all,-missing', true)
-}
-
-jar {
-  manifest { 
-    attributes 'Implementation-Version': "${rootProject.version}"
+android {
+  namespace 'id.xfunction'
+  compileSdk androidSdkVersion
+  compileOptions {
+    sourceCompatibility javaVersion
+  }
+  lintOptions {
+    abortOnError false
+  }
+  defaultConfig {
+    targetSdkVersion androidSdkVersion
+    minSdkVersion androidSdkVersion
   }
 }
 
-task createRelease(type: Copy) {
-  def out = 'release'
-  from jar.archiveFile
-  into out
+task createRelease(type: Copy, dependsOn: 'bundleReleaseAar') {
+  from "${buildDir}/outputs/aar/${rootProject.name}-release.aar"
+  into "${projectDir}/release"
+  rename "${rootProject.name}-release.aar", "${rootProject.name}-${version}.aar"
 }
 
 task cleanRelease(type: Delete) {
@@ -52,42 +41,11 @@ task cleanRelease(type: Delete) {
 assemble.dependsOn createRelease
 clean.dependsOn cleanRelease
 
-// run spotless and format code before the build
-classes.dependsOn spotlessApply
-
-task updateVersion() {
-  // update version only when it is specified and non SNAPSHOT version is built
-  // 'unspecified' is the default value for the version in Gradle if it is not set
-  if (!version || version == "unspecified" || version.contains("SNAPSHOT")) return;
-  println "Updating version to " + version
-  new id.xfunction.text.Substitutor()
-    .withRegexpSupport()
-    .substitute(java.nio.file.Paths.get("${project.rootDir}/README.md"), Map.of(
-      "io.github.lambdaprime:id.xfunction:[0-9.]+", "io.github.lambdaprime:id.xfunction:" + version
-    ));
-}
-createRelease.dependsOn updateVersion
-
 if (project.hasProperty('publish')) {
 
   // Initially it was taken from https://central.sonatype.org/publish/publish-gradle/
   // but since Gradle removed this plugin https://docs.gradle.org/7.0/userguide/upgrading_version_6.html#removal_of_the_legacy_maven_plugin
   // it was rewritten for new one
-
-  task javadocJar(type: Jar) {
-    archiveClassifier = 'javadoc'
-    from "README-javadoc.txt"
-  }
-
-  task sourcesJar(type: Jar) {
-    archiveClassifier = 'sources'
-    from "README-sources.txt"
-  }
-
-  java {
-    withJavadocJar()
-    withSourcesJar()
-  }
 
   apply plugin: 'maven-publish'
 
@@ -96,7 +54,7 @@ if (project.hasProperty('publish')) {
       mavenJava(MavenPublication) {
         artifactId = 'id.xfunction'
         groupId = 'io.github.lambdaprime'
-        from components.java
+        artifact source: "${buildDir}/outputs/aar/${rootProject.name}-release.aar", classifier: 'android'
         pom {
           name = 'id.xfunction'
           description = 'Java library which provides set of extensions for standard Java APIs'
@@ -130,14 +88,6 @@ if (project.hasProperty('publish')) {
         }
         url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
       }
-    }
-  }
-
-  if (project.hasProperty('signing.secretKeyRingFile')) {
-    apply plugin: 'signing'
-
-    signing {
-      sign publishing.publications.mavenJava
     }
   }
 }
