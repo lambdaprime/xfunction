@@ -86,7 +86,13 @@ public class FreeUdpPortIterator implements Iterator<DatagramChannel> {
                     socketConfigurator.get().accept(dataChannel.socket());
                 if (address.isPresent())
                     dataChannel.bind(new InetSocketAddress(address.get(), currentPort));
-                else dataChannel.bind(new InetSocketAddress(currentPort));
+                else
+                    // on Android the default wildcard address is IPv6 and so bind return
+                    // UnsupportedAddressTypeException
+                    // since we iterate over IPv4 addresses we explicitly use IPv4 wildcard address
+                    dataChannel.bind(
+                            new InetSocketAddress(
+                                    NetworkConstants.IPv4_WILDCARD_ADDRESS, currentPort));
                 currentPort++;
                 return dataChannel;
             } catch (IOException e) {
