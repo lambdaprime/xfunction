@@ -1,3 +1,25 @@
+# Version 24
+
+- Fixing UnsupportedAddressTypeException in FreeUdpPortIterator when run in Android
+- Fixing bug in IntBitSet::intArray
+- Adding TransformSubscriber and TransformPublisher
+- Adding SynchronousPublisher and switch TransformProcessor to use it
+- Add mask secrets support for XExec
+- Allow to peek for messages received inside FixedCollectorSubscriber
+- Adding tests for TransformProcessor with SameThreadExecutorService
+- Print exception class name if message is empty
+- Moving md5 functions to separate class
+- Adding XByte::copyToByteArray for longs
+- Consistent naming for ProgressMonitorInputStream fields
+- Limit stacktrace warning in HttpClientBuilder
+- Add XStream::of(Iterator)
+- Print warning when insecure connections are used
+- Fixing XByte::toInt for negative byte literals, renaming XByte::copyToByteArray, adding tests
+- Updates for Preconditions: fixing compile error for equals, allow users to include TracingToken, adding more tests
+- Do not collapse stack trace of TransformProcessor source to a string, as it is confusing and creates impression of one suppressed exception nested into another
+
+[xfunction-24.0.jar](https://github.com/lambdaprime/xfunction/raw/master/xfunction/release/xfunction-24.0.jar)
+
 # Version 23
 
 - Update Substitutor and support multiline patterns
