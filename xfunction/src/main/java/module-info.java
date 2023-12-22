@@ -14,11 +14,6 @@
  * limitations under the License.
  */
 module id.xfunction {
-    requires java.net.http;
-    requires java.xml;
-    requires java.logging;
-    requires java.management;
-
     exports id.xfunction;
     exports id.xfunction.cli;
     exports id.xfunction.concurrent;
