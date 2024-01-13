@@ -34,7 +34,6 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.time.Duration;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -163,15 +162,18 @@ public class XFiles {
         var future = new CompletableFuture<String>();
         var buf = new StringBuilder();
         var separator = System.lineSeparator();
-        ForkJoinPool.commonPool()
-                .execute(
+        // do not use common pool since it can be out of threads and then we may stuck
+        new Thread(
                         () -> {
                             while (!future.isDone()) {
                                 try {
                                     Thread.sleep(pollDelay.toMillis());
-                                    if (!file.exists())
+                                    if (!file.exists()) {
                                         future.completeExceptionally(
-                                                new IOException("File " + file + " is deleted"));
+                                                new IOException(
+                                                        "File " + file + " does not exist"));
+                                        return;
+                                    }
                                     if (curPos[0] == file.length()) continue;
                                     try (var raf = new RandomAccessFile(file, "r")) {
                                         raf.seek(curPos[0]);
@@ -205,7 +207,9 @@ public class XFiles {
                                     future.completeExceptionally(e);
                                 }
                             }
-                        });
+                        },
+                        "watchForLineInFile")
+                .start();
         return future;
     }
 
