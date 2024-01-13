@@ -34,15 +34,17 @@ public class CommandOptions {
         private boolean ignoreParsingExceptions;
 
         /**
-         * Options which cannot be parsed are ignored (no exception is thrown).
-         *
-         * <p>This allows to support positional arguments which otherwise would cause exception. For
-         * example given args string "arg1 arg2 -option val", with {@link
-         * #withIgnoreParsingExceptions()} enabled "arg1", "arg2" will be ignored.
+         * Allows to support positional arguments which otherwise would cause exception. For example
+         * given args string "arg1 arg2 -option val", with {@link #withPositionalArguments()}
+         * enabled "arg1", "arg2" will be ignored.
          *
          * <p>Positional arguments validation and processing are not covered by {@link
          * CommandOptions} and needs to be done manually.
          */
+        public Config withPositionalArguments() {
+            return withIgnoreParsingExceptions();
+        }
+
         public Config withIgnoreParsingExceptions() {
             this.ignoreParsingExceptions = true;
             return this;
@@ -136,6 +138,11 @@ public class CommandOptions {
     /** Some options may be optional. Use this method to obtain them. */
     public Optional<Integer> getOptionInt(String optionName) {
         return Optional.ofNullable(options.getProperty(optionName)).map(Integer::parseInt);
+    }
+
+    /** Some options may be optional. Use this method to obtain them. */
+    public Optional<Double> getOptionDouble(String optionName) {
+        return Optional.ofNullable(options.getProperty(optionName)).map(Double::parseDouble);
     }
 
     /** Check if optionName is set to "true": -optionName=true */
