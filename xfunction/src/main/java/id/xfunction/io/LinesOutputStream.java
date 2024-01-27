@@ -35,14 +35,12 @@ import java.util.stream.Stream;
  */
 public class LinesOutputStream extends OutputStream {
     public static final String EOQ = new String();
-    private volatile boolean isClose;
     private StringBuilder buf = new StringBuilder();
     private SynchronousQueue<String> queue = new SynchronousQueue<>();
 
     @Override
     public void close() throws IOException {
         super.close();
-        isClose = true;
         queue.offer(EOQ);
     }
 
@@ -65,7 +63,7 @@ public class LinesOutputStream extends OutputStream {
         var first = Unchecked.get(() -> queue.take());
         return Stream.iterate(
                         first,
-                        l -> !isClose,
+                        l -> l != EOQ,
                         l -> {
                             try {
                                 return queue.take();
