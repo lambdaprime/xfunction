@@ -82,9 +82,14 @@ public class XJsonTests {
         assertEquals(
                 resourceUtils.readResource(getClass(), "json-nested"),
                 XJson.asString(
-                        "obj1", new Obj(),
-                        "obj2", Optional.of(new Obj()),
-                        "k3", List.of("sg", "dfg", "dsfg")));
+                        "obj1",
+                        new Obj(),
+                        "obj2",
+                        Optional.of(new Obj()),
+                        "k3",
+                        List.of("sg", "dfg", "dsfg"),
+                        "k4",
+                        "[1,2,3]"));
     }
 
     @Test

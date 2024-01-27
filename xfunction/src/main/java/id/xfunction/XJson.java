@@ -107,11 +107,21 @@ public class XJson {
 
     private static String jsonToString(Object v) {
         if (v instanceof Number) {
-            String r = format.format(v);
-            if (isNegativeZeroDisabled && Objects.equals(r, "-0")) r = "0";
-            return r;
+            return formatNumber((Number) v);
         }
         return Objects.toString(v);
+    }
+
+    /**
+     * Format number to valid JSON representation.
+     *
+     * <p>Example: 1,234.23 will be converted to 1234.23. Additionally it disables scientific
+     * notation which is also not JSON compliant.
+     */
+    public static String formatNumber(Number n) {
+        String r = format.format(n);
+        if (isNegativeZeroDisabled && Objects.equals(r, "-0")) r = "0";
+        return r;
     }
 
     /**
@@ -232,7 +242,8 @@ public class XJson {
 
     private static String quote(String value) {
         if (value.equals("null")) return value;
-        if (value.isEmpty() || value.charAt(0) != '{') return XUtils.quote(value);
+        if (value.isEmpty() || (value.charAt(0) != '{' && value.charAt(0) != '['))
+            return XUtils.quote(value);
         return value;
     }
 
