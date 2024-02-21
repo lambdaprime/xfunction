@@ -34,7 +34,7 @@ import java.util.StringJoiner;
 import java.util.stream.Stream;
 
 /**
- * Set of functions to work with JSON format
+ * Set of functions to work with JSON format.
  *
  * @author lambdaprime intid@protonmail.com
  */
@@ -71,25 +71,13 @@ public class XJson {
             Object k = pairs[i];
             Object v = pairs[i + 1];
             if (v == null) continue;
-            String vstr = jsonToString(v);
-            if (vstr == null) vstr = "";
-            if (!(v instanceof Number)) vstr = quote(vstr);
+            String vstr = "";
             if (v instanceof Map) {
                 vstr = asString((Map<?, ?>) v);
             } else if (v instanceof Collection) {
                 vstr = "[" + asJsonArray((Collection<?>) v) + "]";
             } else if (v.getClass().isArray()) {
-                Class<?> type = v.getClass().getComponentType();
-                if (type == int.class) vstr = asJsonArray((int[]) v);
-                else if (type == byte.class) vstr = asJsonArray((byte[]) v);
-                else if (type == double.class) vstr = asJsonArray((double[]) v);
-                else if (type == float.class) vstr = asJsonArray((float[]) v);
-                else if (type == boolean.class) vstr = asJsonArray((boolean[]) v);
-                else if (type == long.class) vstr = asJsonArray((long[]) v);
-                else if (type == short.class) vstr = asJsonArray((short[]) v);
-                else if (!type.isPrimitive()) vstr = asJsonArray((Object[]) v);
-                else throw new XRE("Type %s is not supported", type);
-                vstr = "[" + vstr + "]";
+                vstr = asJsonArray(v);
             }
             if (v instanceof Optional) {
                 Optional opt = (Optional) v;
@@ -99,24 +87,26 @@ public class XJson {
                     buf.add("\"" + k + "\": " + "\"Optional.empty\"");
                 }
             } else {
+                if (vstr.isEmpty()) {
+                    vstr = jsonToString(v);
+                    if (vstr == null) vstr = "";
+                    if (!(v instanceof Number)) vstr = quote(vstr);
+                }
                 buf.add("\"" + k + "\": " + vstr);
             }
         }
         return "{ " + buf.toString() + " }";
     }
 
-    private static String jsonToString(Object v) {
-        if (v instanceof Number) {
-            return formatNumber((Number) v);
-        }
-        return Objects.toString(v);
-    }
-
     /**
      * Format number to valid JSON representation.
      *
-     * <p>Example: 1,234.23 will be converted to 1234.23. Additionally it disables scientific
-     * notation which is also not JSON compliant.
+     * <ul>
+     *   <li>disables grouping, example: 1,234.23 will be converted to 1234.23
+     *   <li>disables scientific notation
+     *   <li>converts "-0" to 0 if {@link #isNegativeZeroDisabled}
+     *   <li>limits fraction part to {@link #MAX_FRACTION_LEN}
+     * </ul>
      */
     public static String formatNumber(Number n) {
         String r = format.format(n);
@@ -138,6 +128,31 @@ public class XJson {
      */
     public static void setNegativeZero(boolean isEnabled) {
         isNegativeZeroDisabled = !isEnabled;
+    }
+
+    private static String asJsonArray(Object v) {
+        var vstr = "";
+        Class<?> type = v.getClass().getComponentType();
+        if (type == int.class) vstr = asJsonArray((int[]) v);
+        else if (type == byte.class) vstr = asJsonArray((byte[]) v);
+        else if (type == double.class) vstr = asJsonArray((double[]) v);
+        else if (type == float.class) vstr = asJsonArray((float[]) v);
+        else if (type == boolean.class) vstr = asJsonArray((boolean[]) v);
+        else if (type == long.class) vstr = asJsonArray((long[]) v);
+        else if (type == short.class) vstr = asJsonArray((short[]) v);
+        else if (!type.isPrimitive()) vstr = asJsonArray((Object[]) v);
+        else throw new XRE("Type %s is not supported", type);
+        return "[" + vstr + "]";
+    }
+
+    private static String jsonToString(Object v) {
+        if (v == null) return Objects.toString(v);
+        if (v instanceof Number) {
+            return formatNumber((Number) v);
+        } else if (v.getClass().isArray()) {
+            return asJsonArray(v);
+        }
+        return Objects.toString(v);
     }
 
     private static String asJsonArray(byte[] a) {
@@ -234,7 +249,9 @@ public class XJson {
         StringJoiner buf = new StringJoiner(", ");
         for (Object item : collection) {
             String s = jsonToString(item);
-            if (!(item instanceof Number)) s = quote(s);
+            if (!(item instanceof Number)) {
+                if (item != null && !(item.getClass().isArray())) s = quote(s);
+            }
             buf.add(s);
         }
         return buf.toString();

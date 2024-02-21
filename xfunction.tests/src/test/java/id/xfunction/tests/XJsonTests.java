@@ -138,6 +138,13 @@ public class XJsonTests {
     }
 
     @Test
+    public void test_list_of_arrays() {
+        assertEquals(
+                resourceUtils.readResource(getClass(), "json-list-arrays"),
+                XJson.asString("k3", List.of(new int[] {1, 2, 3}, new int[] {4, 5, 6})));
+    }
+
+    @Test
     public void test_asJson_array() {
         assertEquals(
                 resourceUtils.readResource(getClass(), "json-array"),
