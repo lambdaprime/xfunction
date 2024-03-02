@@ -28,7 +28,6 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -48,7 +47,7 @@ public class XProcess {
     private Stream<String> stderr;
     private Optional<String> stdoutAsString = Optional.empty();
     private Optional<String> stderrAsString = Optional.empty();
-    private Optional<Future<Integer>> code = Optional.empty();
+    private Optional<CompletableFuture<Integer>> code = Optional.empty();
     private ExecutorService executor = Executors.newFixedThreadPool(2);
     private boolean isStderrConsumed;
     private boolean isStdoutConsumed;
@@ -266,7 +265,7 @@ public class XProcess {
     /**
      * @return process return code
      */
-    public Future<Integer> code() {
+    public CompletableFuture<Integer> code() {
         if (!code.isPresent()) {
             code = Optional.of(CompletableFuture.supplyAsync(Unchecked.wrapGet(process::waitFor)));
         }
