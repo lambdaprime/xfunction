@@ -1,3 +1,18 @@
+# Version 25
+
+- Changing Substitutor::substitute to return list of changed files and be consistent with substitutePerLine
+- Adding UriUtils
+- Changing XProcess to return CompletableFuture instead of limited Future
+- Implementing ImmutableMultiMap
+- Fix JSON formatting for arrays inside the Collection
+- Change XJson not to quote nested JSON arrays
+- Fix failed test for LinesOutputStream
+- Adding CommandOptions::withPositionalArguments
+- Fixing bug when watchForLineInFile is stuck due to common pool run out of threads
+- Adding LinesOutputStream
+
+[xfunction-25.0.jar](https://github.com/lambdaprime/xfunction/raw/master/xfunction/release/xfunction-25.0.jar)
+
 # Version 24
 
 - Fixing UnsupportedAddressTypeException in FreeUdpPortIterator when run in Android

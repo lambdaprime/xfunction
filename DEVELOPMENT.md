@@ -14,6 +14,7 @@ gradle eclipse
 
 # Release steps
 
+- Build `android` branch
 - Close version in gradle.properties
 - Run `gradle clean build javadoc`
 - Publish
