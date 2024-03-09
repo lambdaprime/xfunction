@@ -94,7 +94,7 @@ public class Substitutor {
     /** Performs inplace line by line substitution in a given directory or file. */
     public List<Path> substitutePerLine(Path target, Map<String, String> mapping)
             throws IOException {
-        return substitutePerLine(target, p -> p.toFile().isFile(), mapping);
+        return substitutePerLine(target, p -> true, mapping);
     }
 
     /**
@@ -184,9 +184,8 @@ public class Substitutor {
      * pattern which should support multiline matching, this can be done by prepending "(?s)(?m)" to
      * it).
      */
-    public boolean substitute(Path target, Map<String, String> mapping) throws IOException {
-        var compiled = compile(mapping);
-        return substitute(target, mapping, compiled);
+    public List<Path> substitute(Path target, Map<String, String> mapping) throws IOException {
+        return substitute(target, fileFilter -> true, mapping);
     }
 
     private boolean substitute(
@@ -208,7 +207,7 @@ public class Substitutor {
     private void forEachFile(
             Path target, Predicate<Path> fileFilter, ThrowingConsumer<Path, IOException> proc)
             throws IOException {
-        XFiles.findFilesRecursively(target, fileFilter)
+        XFiles.findFilesRecursively(target, p -> p.toFile().isFile() && fileFilter.test(p))
                 .forEach(
                         file -> {
                             try {

@@ -20,10 +20,12 @@ package id.xfunction.tests.text;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import id.xfunction.ResourceUtils;
+import id.xfunction.nio.file.XFiles;
 import id.xfunction.text.Substitutor;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -95,14 +97,9 @@ public class SubstitutorTests {
     @Test
     public void test_substitutePerLine_file() throws IOException {
         Path path = Files.createTempDirectory("tmp");
-        Path file1 = path.resolve("test");
-        String text = "a{A}a{A}" + System.lineSeparator() + "b{B}b";
-        Files.writeString(file1, text);
-        var dir1 = path.resolve("dir1");
-        Path file2 = Files.createDirectory(dir1).resolve("test0");
-        Files.writeString(file2, text);
-        Path file3 = dir1.resolve("test1");
-        Files.write(file3, List.of("fff", "hhhh"));
+        XFiles.copyRecursively(Paths.get("samples"), path);
+        Path file1 = path.resolve("f1");
+        Path file2 = path.resolve("b/g/test");
         Substitutor substitutor = new Substitutor();
         var updatedFiles =
                 substitutor.substitutePerLine(
@@ -111,10 +108,25 @@ public class SubstitutorTests {
                                 "{A}", "a",
                                 "{B}", "b"));
         assertEquals(List.of(file1, file2).toString(), updatedFiles.toString());
-        List<String> lines = Files.readAllLines(file1);
-        String expected = "[aaaa, bbb]";
-        assertEquals(expected, lines.toString());
-        lines = Files.readAllLines(file2);
-        assertEquals(expected, lines.toString());
+        assertEquals("[hello, aaaa]", Files.readAllLines(file1).toString());
+        assertEquals("[test, aaaabbb]", Files.readAllLines(file2).toString());
+    }
+
+    @Test
+    public void test_substitute_file() throws IOException {
+        Path path = Files.createTempDirectory("tmp");
+        XFiles.copyRecursively(Paths.get("samples"), path);
+        Path file1 = path.resolve("f1");
+        Path file2 = path.resolve("b/g/test");
+        Substitutor substitutor = new Substitutor();
+        var updatedFiles =
+                substitutor.substitute(
+                        path,
+                        Map.of(
+                                "{A}", "a\n",
+                                "test\na", "b"));
+        assertEquals(List.of(file1, file2).toString(), updatedFiles.toString());
+        assertEquals("[hello, aa, aa, ]", Files.readAllLines(file1).toString());
+        assertEquals("[ba, aa, b{B}b]", Files.readAllLines(file2).toString());
     }
 }
