@@ -43,6 +43,6 @@ dependencies {
 
 [Documentation](http://portal2.atwebpages.com/xfunction)
 
-# Contributors
+# Contacts
 
 lambdaprime <intid@protonmail.com>
