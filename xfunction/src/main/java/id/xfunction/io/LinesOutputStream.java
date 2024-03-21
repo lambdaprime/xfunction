@@ -17,6 +17,7 @@
  */
 package id.xfunction.io;
 
+import id.xfunction.Preconditions;
 import id.xfunction.function.Unchecked;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -37,11 +38,16 @@ public class LinesOutputStream extends OutputStream {
     public static final String EOQ = new String();
     private StringBuilder buf = new StringBuilder();
     private SynchronousQueue<String> queue = new SynchronousQueue<>();
+    private Stream<String> stream;
+    private boolean isClosed;
 
     @Override
     public void close() throws IOException {
         super.close();
-        queue.offer(EOQ);
+        if (isClosed) return;
+        isClosed = true;
+        queue.add(EOQ);
+        stream.close();
     }
 
     @Override
@@ -60,18 +66,22 @@ public class LinesOutputStream extends OutputStream {
     }
 
     public Stream<String> lines() {
+        Preconditions.isTrue(!isClosed, "Already closed");
+        Preconditions.isTrue(stream == null, "Stream is already consumed");
         var first = Unchecked.get(() -> queue.take());
-        return Stream.iterate(
-                        first,
-                        l -> l != EOQ,
-                        l -> {
-                            try {
-                                return queue.take();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                throw new RuntimeException(e);
-                            }
-                        })
-                .filter(l -> l != EOQ);
+        stream =
+                Stream.iterate(
+                                first,
+                                l -> l != EOQ,
+                                l -> {
+                                    try {
+                                        return queue.take();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        throw new RuntimeException(e);
+                                    }
+                                })
+                        .filter(l -> l != EOQ);
+        return stream;
     }
 }

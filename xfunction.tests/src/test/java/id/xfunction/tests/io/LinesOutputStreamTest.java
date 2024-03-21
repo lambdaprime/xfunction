@@ -48,6 +48,8 @@ public class LinesOutputStreamTest {
                                 e.printStackTrace();
                             }
                         });
-        Assertions.assertEquals(data, out.lines().toList());
+        boolean[] isClosed = new boolean[1];
+        Assertions.assertEquals(data, out.lines().onClose(() -> isClosed[0] = true).toList());
+        Assertions.assertEquals(true, isClosed[0]);
     }
 }
