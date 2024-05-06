@@ -18,9 +18,16 @@
 package id.xfunction.logging;
 
 import id.xfunction.function.Unchecked;
+import id.xfunction.lang.XRE;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Properties;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.LogRecord;
@@ -102,14 +109,40 @@ public class XLogger extends Logger {
     /**
      * Initializes {@link java.util.logging} using specified property resource.
      *
-     * <p>Visible for tests only.
-     *
      * @param propertyResource absolute path to resource file
      */
     public static void load(String propertyResource) {
+        load(propertyResource, Map.of());
+    }
+
+    /**
+     * Initializes {@link java.util.logging} using specified property resource combined with
+     * specified property Map (properties from {@link java.util.Map} takes priority)
+     *
+     * <p>Example: set {@link FileHandler} output file at a runtime:
+     *
+     * <pre>{@code
+     * XLogger.load("logging.properties", Map.of("java.util.logging.FileHandler.pattern", "/new/path/log.txt"));
+     * }</pre>
+     *
+     * @param propertyResource absolute path to resource file
+     */
+    public static void load(String propertyResource, Map<String, String> overrideProperties) {
         final InputStream inputStream = ClassLoader.getSystemResourceAsStream(propertyResource);
-        if (inputStream == null) return;
-        Unchecked.run(() -> LogManager.getLogManager().readConfiguration(inputStream));
+        var props = new Properties();
+        if (inputStream != null) Unchecked.run(() -> props.load(inputStream));
+        props.putAll(overrideProperties);
+        if (props.isEmpty()) return;
+        try (var baos = new ByteArrayOutputStream()) {
+            Unchecked.run(() -> props.store(baos, ""));
+            Unchecked.run(
+                    () ->
+                            LogManager.getLogManager()
+                                    .readConfiguration(
+                                            new ByteArrayInputStream(baos.toByteArray())));
+        } catch (IOException e) {
+            throw new XRE(e);
+        }
     }
 
     /**
