@@ -19,6 +19,7 @@ package id.xfunction.tests.io;
 
 import id.xfunction.io.LinesOutputStream;
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ForkJoinPool;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ import org.junit.jupiter.api.Test;
 public class LinesOutputStreamTest {
 
     @Test
-    public void test() {
+    public void test() throws Exception {
         var data =
                 """
                 When the day becomes the night and the sky becomes the sea,
@@ -48,8 +49,8 @@ public class LinesOutputStreamTest {
                                 e.printStackTrace();
                             }
                         });
-        boolean[] isClosed = new boolean[1];
-        Assertions.assertEquals(data, out.lines().onClose(() -> isClosed[0] = true).toList());
-        Assertions.assertEquals(true, isClosed[0]);
+        var future = new CompletableFuture<Void>();
+        Assertions.assertEquals(data, out.lines().onClose(() -> future.complete(null)).toList());
+        future.get();
     }
 }
