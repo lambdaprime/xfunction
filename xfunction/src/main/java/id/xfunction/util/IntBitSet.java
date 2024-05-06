@@ -18,9 +18,11 @@
 package id.xfunction.util;
 
 import id.xfunction.Preconditions;
+import java.util.BitSet;
+import java.util.stream.IntStream;
 
 /**
- * BitSet implementation which uses ints to represent words.
+ * {@link BitSet} implementation which uses ints to represent words.
  *
  * <p>Java standard {@link java.util.BitSet} uses long as a word which means if you need to obtain
  * all words as an array of integers you will need to create a new int array and copy all bits from
@@ -137,5 +139,10 @@ public class IntBitSet {
             i--;
         }
         return buf.toString();
+    }
+
+    /** Return stream of all set bit indices */
+    public IntStream streamOfSetBits() {
+        return IntStream.iterate(nextSetBit(0), i -> i != -1, i -> nextSetBit(i + 1)).sequential();
     }
 }

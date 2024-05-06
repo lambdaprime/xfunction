@@ -17,6 +17,7 @@
  */
 package id.xfunction.tests.util;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import id.xfunction.PreconditionException;
@@ -202,5 +203,26 @@ public class IntBitSetTest {
             actual.add(i);
         }
         assertEquals(Arrays.toString(indexes), actual.toString());
+    }
+
+    @Test
+    public void test_streamOfSetBits() {
+        var set = new IntBitSet(33 + (int) (Math.random() * 100));
+        int[] indexes = {0, 1, 7, 8, 9, 14, 15, 16, 17, 30, 31, 32, 33};
+        for (var pos : indexes) {
+            set.flip(pos);
+        }
+        var actual = set.streamOfSetBits().toArray();
+        System.out.println(Arrays.toString(actual));
+        assertArrayEquals(indexes, actual);
+
+        set = new IntBitSet(0);
+        assertEquals(0, set.streamOfSetBits().count());
+
+        set = new IntBitSet(11);
+        assertEquals(0, set.streamOfSetBits().count());
+
+        set.flip(0);
+        assertEquals("[0]", set.streamOfSetBits().boxed().toList().toString());
     }
 }
