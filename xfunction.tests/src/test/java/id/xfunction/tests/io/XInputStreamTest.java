@@ -26,7 +26,7 @@ public class XInputStreamTest {
 
     @Test
     public void test() throws Exception {
-        try (XInputStream out = new XInputStream("68,   65 6c\n, 6c\n6f")) {
+        try (XInputStream out = XInputStream.ofHexString("68,   65 6c\n, 6c\n6f")) {
             byte[] buf = new byte[5];
             out.read(buf);
             assertEquals("hello", new String(buf));

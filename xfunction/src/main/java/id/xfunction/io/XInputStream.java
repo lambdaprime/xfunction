@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * Creates an InputStream from different types of inputs.
+ * Creates an {@link InputStream} from different types of inputs.
  *
  * @author lambdaprime intid@protonmail.com
  */
@@ -34,13 +34,33 @@ public class XInputStream extends InputStream {
 
     private Iterator<Integer> iterator;
 
-    /** From list of integers. */
-    public XInputStream(List<Integer> output) {
+    private XInputStream(List<Integer> output) {
         this.iterator = output.iterator();
     }
 
+    private XInputStream(String hex) {
+        this(
+                Pattern.compile("\\s|,|\\n")
+                        .splitAsStream(hex)
+                        .map(String::trim)
+                        .filter(s -> !s.isEmpty())
+                        .mapToInt(b -> Integer.valueOf(b, 16))
+                        .boxed()
+                        .collect(toList()));
+    }
+
+    /** {@link InputStream} of list of integers. */
+    public static XInputStream of(List<Integer> output) {
+        return new XInputStream(output);
+    }
+
+    /** {@link InputStream} of string. */
+    public static XInputStream of(String str) {
+        return new XInputStream(str.chars().boxed().collect(toList()));
+    }
+
     /**
-     * From HEX string.
+     * {@link InputStream} of HEX string.
      *
      * <p>Each byte needs to be encoded with 2 symbols (padded with 0) and separated with comma.
      *
@@ -50,15 +70,8 @@ public class XInputStream extends InputStream {
      * new XInputStream("68, 65, 6c, 6c, 6f")
      * }</pre>
      */
-    public XInputStream(String hex) {
-        this(
-                Pattern.compile("\\s|,|\\n")
-                        .splitAsStream(hex)
-                        .map(String::trim)
-                        .filter(s -> !s.isEmpty())
-                        .mapToInt(b -> Integer.valueOf(b, 16))
-                        .boxed()
-                        .collect(toList()));
+    public static XInputStream ofHexString(String hex) {
+        return new XInputStream(hex);
     }
 
     @Override
