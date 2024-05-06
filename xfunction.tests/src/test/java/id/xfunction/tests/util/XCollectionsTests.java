@@ -20,6 +20,8 @@ package id.xfunction.tests.util;
 import static java.util.stream.Collectors.toSet;
 
 import id.xfunction.util.XCollections;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
@@ -35,5 +37,15 @@ public class XCollectionsTests {
 
         s2 = Stream.of(4, 5).collect(toSet());
         Assertions.assertEquals(false, XCollections.hasIntersection(s1, s2));
+    }
+
+    @Test
+    public void test() {
+        var out = new ArrayList<String>();
+        XCollections.findAllEqualItems(
+                List.of(4, 5, 6, 7, 8, 9),
+                List.of(45, 5, 67, 8),
+                (p1, p2) -> out.add("<%d,%d>".formatted(p1, p2)));
+        Assertions.assertEquals("[<1,1>, <4,3>]", out.toString());
     }
 }
