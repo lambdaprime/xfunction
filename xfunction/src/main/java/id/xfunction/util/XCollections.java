@@ -36,10 +36,10 @@ public class XCollections {
     }
 
     /**
-     * Find all equal items between two {@link List} "a" and "b" and consume them as pair of
-     * [indexA, indexB] for which Objects.equals(a[indexA], b[indexB]) is true.
+     * Find equal pairs between two {@link List} "a" and "b" and consume them as pair of [indexA,
+     * indexB] for which Objects.equals(a[indexA], b[indexB]) is true.
      */
-    public static <T> void findAllEqualItems(
+    public static <T> void findEqualPairs(
             List<T> a, List<T> b, BiConsumer<Integer, Integer> pairConsumer) {
         var map =
                 IntStream.range(0, a.size())

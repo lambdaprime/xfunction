@@ -42,7 +42,7 @@ public class XCollectionsTests {
     @Test
     public void test() {
         var out = new ArrayList<String>();
-        XCollections.findAllEqualItems(
+        XCollections.findEqualPairs(
                 List.of(4, 5, 6, 7, 8, 9),
                 List.of(45, 5, 67, 8),
                 (p1, p2) -> out.add("<%d,%d>".formatted(p1, p2)));
