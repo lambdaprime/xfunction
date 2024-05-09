@@ -19,7 +19,11 @@ package id.xfunction.util;
 
 import id.xfunction.Preconditions;
 import java.util.BitSet;
+import java.util.Iterator;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.stream.IntStream;
+import java.util.stream.StreamSupport;
 
 /**
  * {@link BitSet} implementation which uses ints to represent words.
@@ -56,7 +60,7 @@ public class IntBitSet {
         this.array = array;
     }
 
-    /** Flips all bits between [fromIndex, toIndex) */
+    /** Flip all bits between [fromIndex, toIndex) */
     public void flip(int fromIndex, int toIndex) {
         Preconditions.isLess(fromIndex, len, "Out of range");
         Preconditions.isLessOrEqual(toIndex, len, "Out of range");
@@ -110,8 +114,8 @@ public class IntBitSet {
     }
 
     /**
-     * Returns the index of the first bit that is set to true that occurs on or after the specified
-     * starting index. If no such bit exists then return -1
+     * Return the index of the first bit which is set to true and which occurs on or after the
+     * specified starting index. If no such bit exists then return -1
      */
     public int nextSetBit(int fromIndex) {
         int idx = index(fromIndex);
@@ -143,6 +147,29 @@ public class IntBitSet {
 
     /** Return stream of all set bit indices */
     public IntStream streamOfSetBits() {
-        return IntStream.iterate(nextSetBit(0), i -> i != -1, i -> nextSetBit(i + 1)).sequential();
+        // TODO IntStream::iterate is not available in Android yet, so the following line is
+        // commented for now and we implement it through Spliterator
+        // return IntStream.iterate(nextSetBit(0), i -> i != -1, i -> nextSetBit(i +
+        // 1)).sequential();
+        return StreamSupport.stream(
+                        Spliterators.spliteratorUnknownSize(
+                                new Iterator<Integer>() {
+                                    int i = nextSetBit(0);
+
+                                    @Override
+                                    public boolean hasNext() {
+                                        return i != -1;
+                                    }
+
+                                    @Override
+                                    public Integer next() {
+                                        var r = i;
+                                        i = nextSetBit(i + 1);
+                                        return r;
+                                    }
+                                },
+                                Spliterator.ORDERED),
+                        false)
+                .mapToInt(Integer::intValue);
     }
 }
