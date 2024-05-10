@@ -14,7 +14,10 @@ gradle eclipse
 
 # Release steps
 
-- Build `android` branch
+- Checkout `android` branch:
+  - `git rebase main`
+  - run `gradle clean build`
+- Checkout `main` branch
 - Close version in gradle.properties
 - Run `gradle clean build javadoc`
 - Publish
@@ -23,3 +26,6 @@ gradle eclipse
 - Commit changes
 - Push
 - Upload documentation to website
+- Checkout `android` branch:
+  - `git rebase main`
+  - publish to local Maven repo

@@ -1,3 +1,18 @@
+# Version 26
+
+- Reimplementing IntBitSet::streamOfSetBits to support Android
+- Renaming findAllEqualItems
+- Allow users to override XLogger parameters at a runtime
+- Adding XCollections::findAllEqualItems
+- Replacing XInputStream ctors with factory methods
+- Adding test for closed LinesOutputStream
+- Removing DevNullOutputStream in favor of OutputStream::nullOutputStream
+- Adding IntBitSet::streamOfSetBits
+- Close the Stream of LinesOutputStream when OutputStream is closed
+- Updating README
+
+[xfunction-26.0.jar](https://github.com/lambdaprime/xfunction/raw/master/xfunction/release/xfunction-26.0.jar)
+
 # Version 25
 
 - Changing Substitutor::substitute to return list of changed files and be consistent with substitutePerLine
