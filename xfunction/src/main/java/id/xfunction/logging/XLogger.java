@@ -179,6 +179,38 @@ public class XLogger extends Logger {
         super.entering(className, sourceMethod, params);
     }
 
+    /**
+     * Standard entering method requires user in case of multiple params to pass them inside
+     * Object[]: entering(..., new Object[]{"a", "b"}) This method allows to pass multiple params
+     * directly: entering(..., "a", "b")
+     *
+     * <p>Unfortunately we cannot overload existing entering methods ({@link Logger#entering(String,
+     * String)}, {@link Logger#entering(String, String, Object)}) because their 2nd argument is a
+     * sourceMethod. This will cause an issue that calling:
+     *
+     * <pre>{@code
+     * entering("method1", "value")
+     * }</pre>
+     *
+     * <p>Will result in calling {@link Logger#entering(String, String)} and mixup of the arguments
+     * (className will be "method1" and sourceMethod will be "value")
+     *
+     * <p>With a new separate method such problem does not exist:
+     *
+     * <pre>{@code
+     * enter("method1", "value")
+     * }</pre>
+     *
+     * <p>With result in sourceMethod be "method1" and params be "value".
+     */
+    public void enter(String sourceMethod, Object... params) {
+        super.entering(className, sourceMethod, params);
+    }
+
+    public void exit(String sourceMethod, Object result) {
+        super.exiting(className, sourceMethod, Objects.toString(result));
+    }
+
     public void exiting(String sourceMethod) {
         super.exiting(className, sourceMethod);
     }
