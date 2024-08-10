@@ -38,7 +38,8 @@ import java.util.concurrent.atomic.AtomicLong;
  * </ul>
  *
  * <p>This publisher will never loose any item as it will block indefinitely until at least one
- * subscriber requests and receives it.
+ * subscriber requests and receives it. Delivery of item to other subscribers which did not request
+ * next item during the publish call is not guaranteed (may be considered lost).
  *
  * @author lambdaprime intid@protonmail.com
  */

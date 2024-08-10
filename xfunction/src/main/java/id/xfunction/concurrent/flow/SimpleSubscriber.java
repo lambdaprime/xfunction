@@ -65,7 +65,8 @@ public class SimpleSubscriber<T> implements ReplayableSubscriber<T> {
     @Override
     public void onSubscribe(Subscription subscription) throws PreconditionException {
         Preconditions.isNull(
-                this.subscription, "Already subscribed. Created from " + ctorStackTrace);
+                this.subscription,
+                "Already subscribed. Subscriber was created from " + ctorStackTrace);
         this.subscription = subscription;
         this.subscription.request(initNumOfMessages);
     }
