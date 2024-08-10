@@ -19,6 +19,7 @@ package id.xfunction.lang;
 
 import static java.util.stream.Collectors.joining;
 
+import id.xfunction.Preconditions;
 import id.xfunction.function.Unchecked;
 import id.xfunction.text.Substitutor;
 import java.io.BufferedReader;
@@ -169,12 +170,16 @@ public class XProcess {
 
     /**
      * Block until process finishes and then check its return code. If it is non 0 then throw an
-     * exception with data from stderr.
+     * exception with data from {@link #stderr()}.
      */
     public XProcess stderrThrow() {
+        Preconditions.isTrue(
+                isStdoutConsumed,
+                "stdout needs to be consumed first, otherwise method may block forever");
+        var err = stderr();
         var code = await();
         if (code == 0) return this;
-        throw new RuntimeException(stderr());
+        throw new RuntimeException(err);
     }
 
     /**

@@ -89,4 +89,10 @@ public class XProcessTests {
         proc.outputAsync(false);
         Assertions.assertThrows(IllegalStateException.class, () -> proc.forwardOutputAsync(true));
     }
+
+    @Test
+    public void test_stderrThrow_no_hang_big_output() {
+        XProcess proc = new XExec("seq -w 999999").start().stdoutAsync(false).stderrThrow();
+        Assertions.assertEquals(999999, proc.stdout().lines().count());
+    }
 }
