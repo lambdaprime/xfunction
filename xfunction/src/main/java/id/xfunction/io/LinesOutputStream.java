@@ -83,7 +83,7 @@ public class LinesOutputStream extends OutputStream {
                             var l = "";
                             while ((l = queue.poll(10, TimeUnit.SECONDS)) == null && !isClosed)
                                 ;
-                            return isClosed ? EOQ : l;
+                            return l != null ? l : EOQ;
                         });
         stream =
                 Stream.iterate(
