@@ -45,7 +45,11 @@ public class CommandOptionsTest {
                 CommandOptions.collectOptions(new String[] {"-k1", "value", "--k2", "arg2", "-k3"});
         assertEquals("{k1=value, k2=arg2, k3=}", props.toString());
 
-        props = CommandOptions.collectOptions(new String[] {"-k1=value", "--k2==arg2", "-k3="});
-        assertEquals("{k1=value, k2==arg2, k3=}", props.toString());
+        props =
+                CommandOptions.collectOptions(
+                        new String[] {"-k1=value", "--k2==arg2", "-k3=", "-b1", "true", "-b2"});
+        assertEquals("{b2=, k1=value, k2==arg2, k3=, b1=true}", props.toString());
+        assertEquals(true, props.isOptionTrue("b1"));
+        assertEquals(true, props.isOptionTrue("b2"));
     }
 }

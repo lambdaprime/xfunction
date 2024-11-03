@@ -145,11 +145,20 @@ public class CommandOptions {
         return Optional.ofNullable(options.getProperty(optionName)).map(Double::parseDouble);
     }
 
-    /** Check if optionName is set to "true": -optionName=true */
+    /**
+     * Check if optionName is set to "true"
+     *
+     * <p>Two forms are allowed:
+     *
+     * <ol>
+     *   <li>-optionName
+     *   <li>-optionName=true
+     * </ol>
+     */
     public boolean isOptionTrue(String optionName) {
         return getOption(optionName)
                 .map(String::toLowerCase)
-                .filter(Predicate.isEqual("true"))
+                .filter(Predicate.isEqual("true").or(Predicate.isEqual("")))
                 .isPresent();
     }
 
