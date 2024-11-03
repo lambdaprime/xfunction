@@ -67,7 +67,7 @@ public class LinesOutputStreamTest {
                         () -> {
                             try {
                                 out.close();
-                            } catch (IOException e) {
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         });

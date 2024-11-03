@@ -22,6 +22,7 @@ import id.xfunction.function.Unchecked;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 /**
@@ -42,16 +43,24 @@ public class LinesOutputStream extends OutputStream {
     private boolean isClosed;
 
     @Override
-    public void close() throws IOException {
-        super.close();
+    public synchronized void close() throws IOException {
         if (isClosed) return;
+        super.close();
         isClosed = true;
-        queue.add(EOQ);
-        stream.close();
+        if (stream == null) return;
+        try {
+            queue.put(EOQ);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        if (stream != null) stream.close();
+        isClosed = true;
     }
 
     @Override
     public void write(int b) throws IOException {
+        Preconditions.isTrue(!isClosed, "Already closed");
         if (b != '\n') {
             buf.append((char) b);
             return;
@@ -65,17 +74,24 @@ public class LinesOutputStream extends OutputStream {
         buf.setLength(0);
     }
 
-    public Stream<String> lines() {
+    public synchronized Stream<String> lines() {
         Preconditions.isTrue(!isClosed, "Already closed");
-        Preconditions.isTrue(stream == null, "Stream is already consumed");
-        var first = Unchecked.get(() -> queue.take());
+        if (stream != null) return stream;
+        var nextLine =
+                Unchecked.wrapGet(
+                        () -> {
+                            var l = "";
+                            while ((l = queue.poll(10, TimeUnit.SECONDS)) == null && !isClosed)
+                                ;
+                            return isClosed ? EOQ : l;
+                        });
         stream =
                 Stream.iterate(
-                                first,
+                                nextLine.get(),
                                 l -> l != EOQ,
                                 l -> {
                                     try {
-                                        return queue.take();
+                                        return nextLine.get();
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                         throw new RuntimeException(e);
