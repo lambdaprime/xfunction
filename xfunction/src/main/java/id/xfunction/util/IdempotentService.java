@@ -28,9 +28,11 @@ package id.xfunction.util;
  *   <li>stopped
  * </ul>
  *
+ * <p>As it name implies {@link #start()} and {@link #close()} operations are idempotent.
+ *
  * @author lambdaprime intid@protonmail.com
  */
-public abstract class LazyService implements AutoCloseable {
+public abstract class IdempotentService implements AutoCloseable {
 
     private static enum Status {
         NOT_STARTED,
@@ -41,7 +43,7 @@ public abstract class LazyService implements AutoCloseable {
     private Status status = Status.NOT_STARTED;
 
     /** Starts the service if it is not yet started (idempotent operation). */
-    public void startLazy() {
+    public void start() {
         if (status == Status.NOT_STARTED) {
             onStart();
             status = Status.STARTED;
