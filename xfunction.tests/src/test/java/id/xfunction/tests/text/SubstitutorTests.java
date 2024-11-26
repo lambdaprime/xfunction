@@ -28,6 +28,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -107,7 +108,7 @@ public class SubstitutorTests {
                         Map.of(
                                 "{A}", "a",
                                 "{B}", "b"));
-        assertEquals(List.of(file1, file2).toString(), updatedFiles.toString());
+        assertEquals(Set.of(file1, file2), Set.copyOf(updatedFiles));
         assertEquals("[hello, aaaa]", Files.readAllLines(file1).toString());
         assertEquals("[test, aaaabbb]", Files.readAllLines(file2).toString());
     }
@@ -125,7 +126,7 @@ public class SubstitutorTests {
                         Map.of(
                                 "{A}", "a\n",
                                 "test\na", "b"));
-        assertEquals(List.of(file1, file2).toString(), updatedFiles.toString());
+        assertEquals(Set.of(file1, file2), Set.copyOf(updatedFiles));
         assertEquals("[hello, aa, aa, ]", Files.readAllLines(file1).toString());
         assertEquals("[ba, aa, b{B}b]", Files.readAllLines(file2).toString());
     }
