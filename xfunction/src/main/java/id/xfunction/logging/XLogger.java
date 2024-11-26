@@ -283,4 +283,14 @@ public class XLogger extends Logger {
     public void fine(String msg, Object... param) {
         super.log(Level.FINE, msg, param);
     }
+
+    /** Log exception (with entire stacktrace) only when {@link Level#FINE} mode is active */
+    public void fine(Throwable t) {
+        if (isLoggable(Level.FINE)) {
+            super.log(
+                    Level.FINE,
+                    Optional.ofNullable(t.getMessage()).orElse(t.getClass().getSimpleName()),
+                    t);
+        }
+    }
 }
