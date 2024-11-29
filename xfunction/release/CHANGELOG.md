@@ -1,3 +1,18 @@
+# Version 27
+
+- Allow to fine log Throwable
+- Fixing tests after local JDK update
+- Fixing LinesOutputStream when last written line is not present in the final stream of lines
+- Allow implicit "true" value for boolean options in CommandOptions
+- Renaming LazyService
+- Fixing race condition in LinesOutputStream between close/lines
+- Documentation improvements
+- Fixing XProcess::stderrThrow hangs forever
+- Adding test for premature LinesOutputStream::close
+- Adding enter/exit methods for XLogger
+
+[xfunction-27.0.jar](https://github.com/lambdaprime/xfunction/raw/master/xfunction/release/xfunction-27.0.jar)
+
 # Version 26
 
 - Reimplementing IntBitSet::streamOfSetBits to support Android

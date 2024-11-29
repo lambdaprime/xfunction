@@ -7,19 +7,22 @@ First we need publish main project to staging repo.
 
 Run following command in the root folder of the project:
 
+export nexusA=
+export nexusB=
+
 gradle clean build
 gradle publish \
  -Ppublish=true \
  -Psigning.secretKeyRingFile=XXX \
  -Psigning.password=XXX \
  -Psigning.keyId=XXX \
- -PossrhUsername=XXX \
- -PossrhPassword=XXX
+ -PossrhUsername=$nexusA \
+ -PossrhPassword=$nexusB
 
 Once it is done we can promote it to release repo:
 
 cd publish
-gradle closeAndReleaseRepository -PnexusUsername=XXX -PnexusPassword=XXX
+gradle closeAndReleaseRepository -PnexusUsername=$nexusA -PnexusPassword=$nexusB
 
 **************************************************/
 
