@@ -42,7 +42,11 @@ public abstract class IdempotentService implements AutoCloseable {
 
     private Status status = Status.NOT_STARTED;
 
-    /** Starts the service if it is not yet started (idempotent operation). */
+    /**
+     * Starts the service if it is not yet started (idempotent operation), otherwise do nothing.
+     *
+     * @throws IllegalArgumentException when service was already stopped
+     */
     public void start() {
         if (status == Status.NOT_STARTED) {
             onStart();
@@ -65,7 +69,7 @@ public abstract class IdempotentService implements AutoCloseable {
      */
     protected abstract void onClose();
 
-    /** Stops the service if it is not yet stopped (idempotent operation). */
+    /** Stops the service if it is not yet stopped (idempotent operation), otherwise do nothing. */
     @Override
     public void close() {
         if (status != Status.STARTED) return;

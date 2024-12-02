@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import id.xfunction.cli.CommandLineInterface;
+import id.xfunction.lang.XExec;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -37,7 +38,7 @@ public class CommandLineInterfaceTest {
     public void test_askConfirm() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ByteArrayInputStream bais = new ByteArrayInputStream("yes".getBytes());
-        CommandLineInterface cli = new CommandLineInterface(bais, baos, baos);
+        CommandLineInterface cli = new CommandLineInterface(bais, baos, baos, XExec::new);
         String msg = "test?";
         boolean actual = cli.askConfirm(msg);
         assertTrue(actual);
@@ -48,7 +49,7 @@ public class CommandLineInterfaceTest {
     public void test_askConfirm_wrong_answer() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ByteArrayInputStream bais = new ByteArrayInputStream("ye\nnoo\nno".getBytes());
-        CommandLineInterface cli = new CommandLineInterface(bais, baos, baos);
+        CommandLineInterface cli = new CommandLineInterface(bais, baos, baos, XExec::new);
         String msg = "test?";
         boolean actual = cli.askConfirm(msg);
         assertFalse(actual);
@@ -63,7 +64,7 @@ public class CommandLineInterfaceTest {
     @Test
     public void test_print() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        CommandLineInterface cli = new CommandLineInterface(System.in, baos, baos);
+        CommandLineInterface cli = new CommandLineInterface(System.in, baos, baos, XExec::new);
         cli.print(12);
         assertEquals("12" + NL, baos.toString());
     }
@@ -71,7 +72,7 @@ public class CommandLineInterfaceTest {
     @Test
     public void test_print_string() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        CommandLineInterface cli = new CommandLineInterface(System.in, baos, baos);
+        CommandLineInterface cli = new CommandLineInterface(System.in, baos, baos, XExec::new);
         cli.print("12");
         assertEquals("12" + NL, baos.toString());
     }
@@ -79,7 +80,7 @@ public class CommandLineInterfaceTest {
     @Test
     public void test_print_string_with_special_char() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        CommandLineInterface cli = new CommandLineInterface(System.in, baos, baos);
+        CommandLineInterface cli = new CommandLineInterface(System.in, baos, baos, XExec::new);
         cli.print("12%d");
         assertEquals("12%d" + NL, baos.toString());
     }
@@ -92,5 +93,21 @@ public class CommandLineInterfaceTest {
         cli.print("Test");
         cli.printerr("Error");
         assertEquals("Test" + NL + "Error" + NL, Files.readString(tempFile));
+    }
+
+    @Test
+    public void test_echo() throws Exception {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ByteArrayInputStream bais = new ByteArrayInputStream("ye\nnoo\nno".getBytes());
+        CommandLineInterface cli =
+                new CommandLineInterface(
+                        bais,
+                        baos,
+                        baos,
+                        cmd -> {
+                            assertEquals("stty -echo", cmd);
+                            return new XExec("ls");
+                        });
+        cli.echo(false);
     }
 }

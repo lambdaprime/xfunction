@@ -28,6 +28,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.file.Path;
 import java.util.Scanner;
+import java.util.function.Function;
 
 /**
  * Set of functions to work with command line interface
@@ -41,14 +42,26 @@ public class CommandLineInterface {
     private PrintStream err;
     private Scanner scanner;
     private Thread keyPressWatchdog;
+    private Function<String, XExec> execFactory;
 
     /** Default ctor which binds new CLI object to System.in, System.out */
     public CommandLineInterface() {
-        this(System.in, System.out, System.err);
+        this(System.in, System.out, System.err, XExec::new);
     }
 
-    public CommandLineInterface(InputStream in, OutputStream out, OutputStream err) {
+    /**
+     * @param execFactory some of {@link CommandLineInterface} methods (example is {@link
+     *     #echo(boolean)}, {@link #nonBlockingSystemInput()}), call standard OS commands (stty etc)
+     *     with {@link XExec}, this factory method allows to control such behavior (useful in unit
+     *     testing)
+     */
+    public CommandLineInterface(
+            InputStream in,
+            OutputStream out,
+            OutputStream err,
+            Function<String, XExec> execFactory) {
         this.in = in;
+        this.execFactory = execFactory;
         this.out = new PrintStream(out);
         this.err = new PrintStream(err);
         this.scanner = new Scanner(in);
@@ -204,10 +217,12 @@ public class CommandLineInterface {
      * <p>This operation works only in systems with "stty" installed. If "stty" is not found or if
      * it returns error code the {@link Exception} will be thrown.
      */
-    public static void echo(boolean enabled) throws Exception {
-        var exec = new XExec("stty " + (enabled ? "" : "-") + "echo");
+    public void echo(boolean enabled) throws Exception {
+        var exec = execFactory.apply("stty " + (enabled ? "" : "-") + "echo");
         exec.getProcessBuilder().redirectInput(ProcessBuilder.Redirect.INHERIT);
-        exec.start().stderrThrow();
+        var proc = exec.start();
+        proc.forwardStdoutAsync(false);
+        proc.stderrThrow();
     }
 
     /**
@@ -218,9 +233,11 @@ public class CommandLineInterface {
      * <p>This operation works only in systems with "stty" installed. If "stty" is not found or if
      * it returns error code the {@link Exception} will be thrown.
      */
-    public static void nonBlockingSystemInput() throws Exception {
-        var exec = new XExec("stty -icanon min 1");
+    public void nonBlockingSystemInput() throws Exception {
+        var exec = execFactory.apply("stty -icanon min 1");
         exec.getProcessBuilder().redirectInput(ProcessBuilder.Redirect.INHERIT);
-        exec.start().stderrThrow();
+        var proc = exec.start();
+        proc.forwardStdoutAsync(false);
+        proc.stderrThrow();
     }
 }
