@@ -60,6 +60,12 @@ public class XByte {
      * }</pre>
      *
      * <p>Will return string "68656c6c6f20776f726c64".
+     *
+     * <p>Java 17 analog is:
+     *
+     * <pre>{@code
+     * HexFormat.of().formatHex("hello world".getBytes())
+     * }</pre>
      */
     public static String toHex(byte... a) {
         StringBuilder buf = new StringBuilder();
@@ -84,6 +90,13 @@ public class XByte {
         return hex;
     }
 
+    /**
+     * Java 17 analog:
+     *
+     * <pre>{@code
+     * HexFormat.of().parseHex("68656c6c6f20776f726c64")
+     * }</pre>
+     */
     public static byte[] fromHex(String hex) {
         var out = new byte[hex.length() / 2];
         for (int i = 0; i < hex.length(); i += 2) {

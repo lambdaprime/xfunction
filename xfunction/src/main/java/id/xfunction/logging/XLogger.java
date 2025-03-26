@@ -21,8 +21,10 @@ import id.xfunction.function.Unchecked;
 import id.xfunction.lang.XRE;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -132,6 +134,20 @@ public class XLogger extends Logger {
         var props = new Properties();
         if (inputStream != null) Unchecked.run(() -> props.load(inputStream));
         props.putAll(overrideProperties);
+        load(props);
+    }
+
+    /**
+     * Initializes {@link java.util.logging} using specified property file in the local file system
+     */
+    public static void load(Path propertyFile, Map<String, String> overrideProperties) {
+        var props = new Properties();
+        Unchecked.run(() -> props.load(new FileReader(propertyFile.toFile())));
+        props.putAll(overrideProperties);
+        load(props);
+    }
+
+    private static void load(Properties props) {
         if (props.isEmpty()) return;
         try (var baos = new ByteArrayOutputStream()) {
             Unchecked.run(() -> props.store(baos, ""));
