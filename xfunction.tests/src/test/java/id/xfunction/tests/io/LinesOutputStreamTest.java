@@ -54,7 +54,12 @@ public class LinesOutputStreamTest {
                             }
                         });
         var future = new CompletableFuture<Void>();
-        Assertions.assertEquals(DATA, out.lines().onClose(() -> future.complete(null)).toList());
+        Assertions.assertEquals(
+                DATA,
+                out.lines()
+                        .peek(System.out::println)
+                        .onClose(() -> future.complete(null))
+                        .toList());
         future.get();
     }
 

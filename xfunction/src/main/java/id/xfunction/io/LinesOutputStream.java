@@ -19,85 +19,55 @@ package id.xfunction.io;
 
 import id.xfunction.Preconditions;
 import id.xfunction.function.Unchecked;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.TimeUnit;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.util.stream.Stream;
 
 /**
- * Concurrent write of data as sequence of bytes and read it back as {@link Stream} of lines.
+ * {@link OutputStream} to write data as sequence of bytes and read it back as {@link Stream} of
+ * lines.
  *
- * <p>Allows one thread to write data into this {@link OutputStream} and another to receive such
- * data back as {@link Stream} of lines.
- *
- * <p>{@link OutputStream#write(int)} call blocks until another thread reads the next line.
+ * <p>This class blocks any write operations until other thread starts reading lines from it.
  *
  * @author lambdaprime intid@protonmail.com
  */
 public class LinesOutputStream extends OutputStream {
-    public static final String EOQ = new String();
-    private StringBuilder buf = new StringBuilder();
-    private SynchronousQueue<String> queue = new SynchronousQueue<>();
-    private Stream<String> stream;
+    private OutputStream out;
+    private BufferedReader in;
+    private Stream<String> lines;
     private boolean isClosed;
+
+    public LinesOutputStream() {
+        var inPipe = new PipedInputStream(1);
+        in = new BufferedReader(new InputStreamReader(inPipe), 1);
+        out = Unchecked.get(() -> new PipedOutputStream(inPipe));
+        lines = in.lines();
+    }
 
     @Override
     public synchronized void close() throws IOException {
         if (isClosed) return;
-        super.close();
         isClosed = true;
-        if (stream == null) return;
-        try {
-            queue.put(EOQ);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-        if (stream != null) stream.close();
-        isClosed = true;
+        lines.close();
+        out.close();
     }
 
     @Override
     public void write(int b) throws IOException {
-        Preconditions.isTrue(!isClosed, "Already closed");
-        if (b != '\n') {
-            buf.append((char) b);
-            return;
-        }
-        try {
-            queue.put(buf.toString());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-        buf.setLength(0);
+        out.write(b);
+    }
+
+    @Override
+    public void flush() throws IOException {
+        out.flush();
     }
 
     public synchronized Stream<String> lines() {
         Preconditions.isTrue(!isClosed, "Already closed");
-        if (stream != null) return stream;
-        var nextLine =
-                Unchecked.wrapGet(
-                        () -> {
-                            var l = "";
-                            while ((l = queue.poll(10, TimeUnit.SECONDS)) == null && !isClosed)
-                                ;
-                            return l != null ? l : EOQ;
-                        });
-        stream =
-                Stream.iterate(
-                                nextLine.get(),
-                                l -> l != EOQ,
-                                l -> {
-                                    try {
-                                        return nextLine.get();
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                        throw new RuntimeException(e);
-                                    }
-                                })
-                        .filter(l -> l != EOQ);
-        return stream;
+        return lines;
     }
 }
