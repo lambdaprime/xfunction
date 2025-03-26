@@ -10,7 +10,7 @@ gradle publishToMavenLocal \
 
 plugins {
   id 'java'
-  id 'com.diffplug.spotless' version '6.25.0'
+  id 'com.diffplug.spotless' version '7.0.2'
 }
 
 allprojects {
@@ -68,6 +68,6 @@ subprojects {
 // gradlew requires execution of gradle-wrapper.jar which trustworthy needs to
 // be checked everytime when it is updated (otherwise it do not seems secure)
 // To avoid using it we rely on manual version check
-def requiredGradleVersion = "8.10.1"
+def requiredGradleVersion = "8.13"
 if ("$gradle.gradleVersion" != "$requiredGradleVersion")
   throw new RuntimeException("Running gradle version $gradle.gradleVersion, required $requiredGradleVersion");
