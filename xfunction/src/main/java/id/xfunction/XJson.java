@@ -21,7 +21,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
 import id.xfunction.lang.XRE;
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -41,12 +41,12 @@ import java.util.stream.Stream;
 public class XJson {
 
     private static final int MAX_FRACTION_LEN = 10;
-    private static NumberFormat format = (NumberFormat) NumberFormat.getInstance().clone();
     private static boolean isNegativeZeroDisabled;
+    private static final DecimalFormat formatter = new DecimalFormat();
 
     static {
-        format.setMaximumFractionDigits(MAX_FRACTION_LEN);
-        format.setGroupingUsed(false);
+        formatter.setMaximumFractionDigits(MAX_FRACTION_LEN);
+        formatter.setGroupingUsed(false);
     }
 
     /**
@@ -109,7 +109,7 @@ public class XJson {
      * </ul>
      */
     public static String formatNumber(Number n) {
-        String r = format.format(n);
+        String r = formatter.format(n);
         if (isNegativeZeroDisabled && Objects.equals(r, "-0")) r = "0";
         return r;
     }
@@ -119,7 +119,7 @@ public class XJson {
      * are not rounded and included into JSON as is.
      */
     public static void setLimitDecimalPlaces(int n) {
-        format.setMaximumFractionDigits(n == -1 ? MAX_FRACTION_LEN : n);
+        formatter.setMaximumFractionDigits(n == -1 ? MAX_FRACTION_LEN : n);
     }
 
     /**
