@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import id.xfunction.lang.XExec;
 import id.xfunction.lang.XProcess;
 import java.util.List;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class XExecTests {
@@ -66,5 +67,29 @@ public class XExecTests {
         assertEquals(0, err.size());
         assertEquals(0, result.code().get().intValue());
         assertEquals("hexxxxxxxo", out.get(0));
+    }
+
+    // test only that it compiles
+    @Disabled
+    public void test_sample() throws Exception {
+        new XExec("kubectl get pods")
+                .start()
+                // consume stderr by printing it to terminal
+                .forwardStderrAsync(false)
+                // consume stdout and process it as a Java lazy Stream
+                // this helps to support very big outputs which does not fit in memory
+                .stdoutAsStream()
+                // grep my-pod-
+                .filter(l -> l.contains("my-pod-"))
+                .filter(l -> l.contains("Complete"))
+                // awk '{print $1}'
+                .map(l -> l.split("\\s")[0])
+                // xargs kubectl delete pod
+                .forEach(
+                        pod ->
+                                new XExec("kubectl delete pod " + pod)
+                                        .start()
+                                        .forwardOutputAsync(true)
+                                        .await());
     }
 }

@@ -27,7 +27,35 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 /**
- * Additions to standard java.lang.ProcessBuilder
+ * Additions to standard {@link java.lang.ProcessBuilder}
+ *
+ * <p>For example following Linux command:
+ *
+ * <pre>{@code
+ * kubectl get pods | grep my-pod- | grep Complete | awk '{print $1}' | xargs kubectl delete pod
+ * }</pre>
+ *
+ * <p>Can be called with {@link XExec} as follows:
+ *
+ * <pre>{@code
+ * new XExec("kubectl get pods")
+ *   .start()
+ *   // consume stderr by printing it to terminal
+ *   .forwardStderrAsync(false)
+ *   // consume stdout and process it as a Java lazy Stream
+ *   // this helps to support very big outputs which does not fit in memory
+ *   .stdoutAsStream()
+ *   // grep my-pod-
+ *   .filter(l -> l.contains("my-pod-"))
+ *   .filter(l -> l.contains("Complete"))
+ *   // awk '{print $1}'
+ *   .map(l -> l.split("\\s")[0])
+ *   // xargs kubectl delete pod
+ *   .forEach(pod -> new XExec("kubectl delete pod " + pod)
+ *     .start()
+ *     .forwardOutputAsync(true)
+ *     .await());
+ * }</pre>
  *
  * @author lambdaprime intid@protonmail.com
  */

@@ -35,10 +35,11 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
- * Wraps standard java.lang.Process class with convenient methods.
+ * Wraps standard {@link java.lang.Process} class with convenient methods.
  *
- * <p>Some commands may block until you start reading their stdout or stderr. This may be problem
- * when you just want to run a command ignoring its output. Use flush methods in that case.
+ * <p>Some commands may block until you start reading their {@link #stdout()} or {@link #stderr()}.
+ * This may be problem when you just want to run a command ignoring its output. Use {@link
+ * #forwardOutputAsync(boolean)} methods in that case.
  *
  * @author lambdaprime intid@protonmail.com
  */
@@ -68,10 +69,10 @@ public class XProcess {
                         .map(maskSecretsFunc);
     }
 
-    /** This ctor supposed to be used in tests when you want to mock results of XExec */
+    /** This ctor supposed to be used in tests when you want to mock results of {@link XExec} */
     public XProcess(Process process, Stream<String> stdout, Stream<String> stderr, int code) {}
 
-    /** This ctor supposed to be used in tests when you want to mock results of XExec */
+    /** This ctor supposed to be used in tests when you want to mock results of {@link XExec} */
     public XProcess(
             Process process,
             Stream<String> stdout,
@@ -278,8 +279,8 @@ public class XProcess {
     }
 
     /**
-     * Waits for process to complete and returns code safely wrapping all checked exceptions to
-     * RuntimeException.
+     * Wait for process to complete and returns code safely wrapping all checked exceptions to
+     * unchecked {@link RuntimeException}
      *
      * <p>Make sure to use {@link XProcess#outputAsync(boolean)} method to ignore both
      * output/stderr.
