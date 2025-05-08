@@ -11,7 +11,7 @@
 - Adding test for premature LinesOutputStream::close
 - Adding enter/exit methods for XLogger
 
-[xfunction-27.0.jar](https://github.com/lambdaprime/xfunction/raw/master/xfunction/release/xfunction-27.0.jar)
+[xfunction-27.0.jar](https://github.com/lambdaprime/xfunction/raw/main/xfunction/release/xfunction-27.0.jar)
 
 # Version 26
 
@@ -26,7 +26,7 @@
 - Close the Stream of LinesOutputStream when OutputStream is closed
 - Updating README
 
-[xfunction-26.0.jar](https://github.com/lambdaprime/xfunction/raw/master/xfunction/release/xfunction-26.0.jar)
+[xfunction-26.0.jar](https://github.com/lambdaprime/xfunction/raw/main/xfunction/release/xfunction-26.0.jar)
 
 # Version 25
 
@@ -41,7 +41,7 @@
 - Fixing bug when watchForLineInFile is stuck due to common pool run out of threads
 - Adding LinesOutputStream
 
-[xfunction-25.0.jar](https://github.com/lambdaprime/xfunction/raw/master/xfunction/release/xfunction-25.0.jar)
+[xfunction-25.0.jar](https://github.com/lambdaprime/xfunction/raw/main/xfunction/release/xfunction-25.0.jar)
 
 # Version 24
 
@@ -63,7 +63,7 @@
 - Updates for Preconditions: fixing compile error for equals, allow users to include TracingToken, adding more tests
 - Do not collapse stack trace of TransformProcessor source to a string, as it is confusing and creates impression of one suppressed exception nested into another
 
-[xfunction-24.0.jar](https://github.com/lambdaprime/xfunction/raw/master/xfunction/release/xfunction-24.0.jar)
+[xfunction-24.0.jar](https://github.com/lambdaprime/xfunction/raw/main/xfunction/release/xfunction-24.0.jar)
 
 # Version 23
 
@@ -76,7 +76,7 @@
 - Adding isWindows
 - Fixing bug in XPaths::appendToFullFileName
 
-[xfunction-23.0.jar](https://github.com/lambdaprime/xfunction/raw/master/xfunction/release/xfunction-23.0.jar)
+[xfunction-23.0.jar](https://github.com/lambdaprime/xfunction/raw/main/xfunction/release/xfunction-23.0.jar)
 
 # Version 22
 
@@ -86,7 +86,7 @@
 - Allow users to consume stderr
 - Fix XJson to use null as literal based on  ECMA-404_2nd_edition_december_2017.pdf
 
-[xfunction-22.0.jar](https://github.com/lambdaprime/xfunction/raw/master/xfunction/release/xfunction-22.0.jar)
+[xfunction-22.0.jar](https://github.com/lambdaprime/xfunction/raw/main/xfunction/release/xfunction-22.0.jar)
 
 # Version 21
 
@@ -94,7 +94,7 @@
 - Extracting retryIndefinitely to RetryableExecutor and adding retry with maxRetries
 - Updating to Gradle 8.0.2
 
-[xfunction-21.0.jar](https://github.com/lambdaprime/xfunction/raw/master/xfunction/release/xfunction-21.0.jar)
+[xfunction-21.0.jar](https://github.com/lambdaprime/xfunction/raw/main/xfunction/release/xfunction-21.0.jar)
 
 # Version 20
 
@@ -113,7 +113,7 @@
 - Implementing retryIndefinitely and retryIndefinitelyAsync
 - Renaming "run" method of ThrowingSupplier to "get", similar to original Supplier class
 
-[xfunction-20.0.jar](https://github.com/lambdaprime/xfunction/raw/master/xfunction/release/xfunction-20.0.jar)
+[xfunction-20.0.jar](https://github.com/lambdaprime/xfunction/raw/main/xfunction/release/xfunction-20.0.jar)
 
 # Previous versions
 
