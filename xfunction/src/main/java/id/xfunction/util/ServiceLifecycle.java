@@ -20,13 +20,7 @@ package id.xfunction.util;
 /**
  * Service lifecycle implementation.
  *
- * <p>Lifecycle phases:
- *
- * <ul>
- *   <li>not started
- *   <li>started
- *   <li>stopped
- * </ul>
+ * <p>Lifecycle phases defined in {@link Status}
  *
  * @see IdempotentService
  * @author lambdaprime intid@protonmail.com
@@ -36,6 +30,7 @@ public abstract class ServiceLifecycle implements AutoCloseable {
     public static enum Status {
         NOT_STARTED,
         STARTED,
+        STOPPING,
         STOPPED
     }
 
@@ -85,6 +80,7 @@ public abstract class ServiceLifecycle implements AutoCloseable {
         if (!isCloseIdempotent && status == Status.STOPPED)
             throw new IllegalStateException("Already stopped");
         else if (status != Status.STARTED) return;
+        status = Status.STOPPING;
         onClose();
         status = Status.STOPPED;
     }
