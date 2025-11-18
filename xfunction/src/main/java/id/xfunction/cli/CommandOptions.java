@@ -167,6 +167,10 @@ public class CommandOptions {
         addOption(name, "" + value);
     }
 
+    public int size() {
+        return options.size();
+    }
+
     /** Adds new option */
     private void addOption(String name, String value) {
         options.put(name, value);
