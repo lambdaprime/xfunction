@@ -17,6 +17,7 @@
  */
 package id.xfunction.tests.nio.file;
 
+import static java.util.stream.Collectors.joining;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -31,6 +32,9 @@ import java.time.Duration;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 public class XFilesTests {
     private static final String NL = System.lineSeparator();
@@ -89,5 +93,74 @@ public class XFilesTests {
         Files.delete(tmpDir.resolve("f1"));
         XFiles.copyRecursively(samples, tmpDir);
         assertEquals(true, XFiles.containsAllRecursively(samples, tmpDir));
+    }
+
+    public static Stream<Arguments> findTestCases() {
+        return Stream.of(
+                Arguments.of("a", "samples/a/12"),
+                Arguments.of("a/*", "samples/a/12"),
+                Arguments.of(
+                        "a/**",
+                        """
+                        samples/a/12
+                        samples/a/b/1
+                        samples/a/b/123
+                        samples/a/b/2
+                        samples/a/b/c/1
+                        samples/a/b/c/2
+                        samples/a/b/d/2
+                        samples/a/b/d/3\
+                        """),
+                Arguments.of("a/*2", "samples/a/12"),
+                Arguments.of(
+                        "a/**/2",
+                        """
+                        samples/a/b/2
+                        samples/a/b/c/2
+                        samples/a/b/d/2\
+                        """),
+                Arguments.of(
+                        "a/**/1*3",
+                        """
+                        samples/a/b/123\
+                        """),
+                Arguments.of(
+                        "*",
+                        """
+                        samples/f1\
+                        """),
+                Arguments.of("a/12", "samples/a/12"),
+                Arguments.of(
+                        "*/*",
+                        """
+                        samples/a/12
+                        samples/b/f\
+                        """),
+                Arguments.of("a/*/c", ""),
+                Arguments.of("a/**/c", ""),
+                Arguments.of(
+                        "a/b/*/2",
+                        """
+                        samples/a/b/c/2
+                        samples/a/b/d/2\
+                        """),
+                Arguments.of(
+                        "a/**/1*",
+                        """
+                        samples/a/b/1
+                        samples/a/b/123
+                        samples/a/b/c/1\
+                        """));
+    }
+
+    @ParameterizedTest
+    @MethodSource("findTestCases")
+    public void test_find(String glob, String expected) throws Exception {
+        assertEquals(
+                expected,
+                XFiles.findFiles(Paths.get("samples").resolve(glob).toString())
+                        .map(Object::toString)
+                        .sorted()
+                        .collect(joining("\n")));
     }
 }

@@ -29,12 +29,12 @@ import java.util.function.BiConsumer;
 /**
  * @author lambdaprime intid@protonmail.com
  */
-class RecursiveFileVisitor implements FileVisitor<Path> {
+class RecursiveCopyFileVisitor implements FileVisitor<Path> {
     private Path srcPath;
     private Path dstPath;
     private BiConsumer<Path, Path> copier;
 
-    public RecursiveFileVisitor(Path srcPath, Path dstPath, BiConsumer<Path, Path> copier) {
+    public RecursiveCopyFileVisitor(Path srcPath, Path dstPath, BiConsumer<Path, Path> copier) {
         this.srcPath = srcPath;
         this.dstPath = dstPath;
         this.copier = copier;

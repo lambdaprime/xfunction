@@ -94,7 +94,7 @@ public class XFiles {
             dst = new File(dst, src.getName());
         }
         var visitor =
-                new RecursiveFileVisitor(
+                new RecursiveCopyFileVisitor(
                         src.toPath(), dst.toPath(), Unchecked.wrapAccept(Files::copy));
         Files.walkFileTree(src.toPath(), visitor);
     }
@@ -236,5 +236,39 @@ public class XFiles {
     public static Stream<Path> findFilesRecursively(Path root, Predicate<Path> fileFilter)
             throws IOException {
         return Files.find(root, Integer.MAX_VALUE, (p, a) -> fileFilter.test(p));
+    }
+
+    /**
+     * Find files which satisfy given glob.
+     *
+     * <p>Glob examples:
+     *
+     * <ul>
+     *   <li>"a" - if "a" is a file then return it, if "a" is a folder then return all files inside
+     *       it
+     *   <li>"a/**" - return all files under folder "a" subtree (it includes folder "a" and
+     *       recursively all its subfolders)
+     *   <li>"a/*.html" - return all HTML files inside folder "a"
+     *   <li>"a/b*.html" - return all HTML files inside folder "a" which names starts with "b"
+     *   <li>"a/&#42;&#42;/*.html" - return all HTML files inside folder "a" subtree
+     *   <li>"a/&#42;/static/*.html" - return all HTML files inside all "static" folders which are 1
+     *       level below folder "a"
+     * </ul>
+     *
+     * <p>This function does not expand the entire subtree and then filter all files under it. Such
+     * algorithm would be slow for very big subtrees. Instead, this function expands only parts of
+     * the subtree which satisfy the glob expression. For example, for input glob "/a/&#42;/c/*",
+     * this function will expand folder "/a/b/c/" and not folder "/a/b/d/" or any other folder which
+     * does not satisfy the expression "/a/&#42;/c".
+     *
+     * @param glob glob expression which covers entire path of searched files, for example
+     *     "a/&#42;/23". It differs from Java standard {@link Files#newDirectoryStream(Path,
+     *     String)}, where glob covers only file name part of the path (passing something like
+     *     "a/&#42;/23" to it will not find anything).
+     * @return
+     * @throws IOException
+     */
+    public static Stream<Path> findFiles(String glob) throws IOException {
+        return new GlobFileSearch().findFiles(glob);
     }
 }
