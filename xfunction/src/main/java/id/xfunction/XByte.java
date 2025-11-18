@@ -67,6 +67,7 @@ public class XByte {
      * HexFormat.of().formatHex("hello world".getBytes())
      * }</pre>
      */
+    @Deprecated
     public static String toHex(byte... a) {
         StringBuilder buf = new StringBuilder();
         for (byte b : a) {
@@ -97,6 +98,7 @@ public class XByte {
      * HexFormat.of().parseHex("68656c6c6f20776f726c64")
      * }</pre>
      */
+    @Deprecated
     public static byte[] fromHex(String hex) {
         var out = new byte[hex.length() / 2];
         for (int i = 0; i < hex.length(); i += 2) {
