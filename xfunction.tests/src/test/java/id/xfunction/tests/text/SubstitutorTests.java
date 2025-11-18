@@ -74,6 +74,13 @@ public class SubstitutorTests {
                                 "{B}", "b"),
                         false),
                 Arguments.of(
+                        "aaab\naaab",
+                        "aAaAbBb\naAaAbBb",
+                        Map.of(
+                                "A.", "a",
+                                "B.", "b"),
+                        true),
+                Arguments.of(
                         "aaaa, bbb",
                         "a{A}a{A}" + System.lineSeparator() + "b{B}b",
                         Map.of("{A}", "a", "{B}", "b", System.lineSeparator(), ", "),
@@ -109,7 +116,7 @@ public class SubstitutorTests {
                                 "{A}", "a",
                                 "{B}", "b"));
         assertEquals(Set.of(file1, file2), Set.copyOf(updatedFiles));
-        assertEquals("[hello, aaaa]", Files.readAllLines(file1).toString());
+        assertEquals("[hello, aaaa, aaaa, aaaa]", Files.readAllLines(file1).toString());
         assertEquals("[test, aaaabbb]", Files.readAllLines(file2).toString());
     }
 
@@ -127,7 +134,7 @@ public class SubstitutorTests {
                                 "{A}", "a\n",
                                 "test\na", "b"));
         assertEquals(Set.of(file1, file2), Set.copyOf(updatedFiles));
-        assertEquals("[hello, aa, aa, ]", Files.readAllLines(file1).toString());
+        assertEquals("[hello, aa, aa, , aa, aa, , aa, aa, ]", Files.readAllLines(file1).toString());
         assertEquals("[ba, aa, b{B}b]", Files.readAllLines(file2).toString());
     }
 }
