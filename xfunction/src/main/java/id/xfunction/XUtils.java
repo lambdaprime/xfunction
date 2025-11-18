@@ -79,6 +79,23 @@ public class XUtils {
         return s;
     }
 
+    /**
+     * Unwrap the string by removing ONLY pair of leading and trailing symbols.
+     *
+     * <p>Example: unwrap Don't confuse with {@link String#strip()} which removes any number of
+     * symbols and not strictly pair of leading/trailing.
+     */
+    public static String unwrap(String s, boolean trim, char[] symbolsToR) {
+        String st = trim ? s.trim() : s;
+        if (st.isEmpty()) return s;
+        if (st.length() < 2) return s;
+        for (var ch : symbolsToR) {
+            if (st.charAt(0) == ch && st.charAt(st.length() - 1) == ch)
+                return st.substring(1, st.length() - 1);
+        }
+        return s;
+    }
+
     public static boolean isWindows() {
         return System.getProperty("os.name", "").toLowerCase().startsWith("win");
     }
