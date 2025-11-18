@@ -16,14 +16,18 @@ dependencies {
   testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
   testImplementation "org.junit.jupiter:junit-jupiter-params:${junitVersion}"
   testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+  testRuntimeOnly "org.junit.platform:junit-platform-launcher"
   testRuntimeOnly "org.junit.platform:junit-platform-commons:1.7.0"
 }
 
-  sourceCompatibility = '17'
-  targetCompatibility = '17'
-  tasks.withType(JavaCompile) {
-    options.release = 17
-  }
+def javaVersion = 17
+java {
+  sourceCompatibility = javaVersion
+  targetCompatibility = javaVersion
+}
+tasks.withType(JavaCompile) {
+  options.release = javaVersion
+}
 
 test {
   useJUnitPlatform()

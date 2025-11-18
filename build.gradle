@@ -10,7 +10,7 @@ gradle publishToMavenLocal \
 
 plugins {
   id 'java'
-  id 'com.diffplug.spotless' version '7.0.2'
+  id 'com.diffplug.spotless' version '8.0.0'
 }
 
 allprojects {
@@ -24,10 +24,13 @@ subprojects {
   apply plugin: 'java'
   apply plugin: 'eclipse'
 
-  sourceCompatibility = '11'
-  targetCompatibility = '11'
+  def javaVersion = 11
+  java {
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+  }
   tasks.withType(JavaCompile) {
-    options.release = 11
+    options.release = javaVersion
   }
 
   // setup spotless config for all subprojects
@@ -68,6 +71,6 @@ subprojects {
 // gradlew requires execution of gradle-wrapper.jar which trustworthy needs to
 // be checked everytime when it is updated (otherwise it do not seems secure)
 // To avoid using it we rely on manual version check
-def requiredGradleVersion = "8.13"
+def requiredGradleVersion = "9.1.0"
 if ("$gradle.gradleVersion" != "$requiredGradleVersion")
   throw new RuntimeException("Running gradle version $gradle.gradleVersion, required $requiredGradleVersion");
