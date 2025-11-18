@@ -24,8 +24,11 @@ import java.util.concurrent.ThreadFactory;
  * Java default thread factory does not allow you to specify the name for threads it creates. This
  * thread factory does.
  *
+ * <p>Java 21 analog is Thread.Builder.
+ *
  * @author lambdaprime intid@protonmail.com
  */
+@Deprecated
 public class NamedThreadFactory implements ThreadFactory {
 
     private final String name;
