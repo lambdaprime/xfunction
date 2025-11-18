@@ -43,9 +43,9 @@ public class ByteBufferUtils {
     }
 
     /**
-     * If input {@link ByteBuffer} is direct (keeps data in native memory) it will copy all data to
-     * byte array (inside Java Heap) and return it. Otherwise it will return {@link
-     * ByteBuffer#array()}
+     * If input {@link ByteBuffer} is direct (keeps data in native memory) it will copy all data
+     * from it into byte array (inside Java Heap) and then return the array. Otherwise it will
+     * return {@link ByteBuffer#array()}
      */
     public byte[] asBytes(ByteBuffer data) {
         byte[] b = null;

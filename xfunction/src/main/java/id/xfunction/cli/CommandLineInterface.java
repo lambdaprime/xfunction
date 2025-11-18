@@ -33,6 +33,9 @@ import java.util.function.Function;
 /**
  * Set of functions to work with command line interface
  *
+ * <p>Difference from Java standard {@link System#out}, {@link System#in}, IO is that this class has
+ * no static methods and so it is easy to mock.
+ *
  * @author lambdaprime intid@protonmail.com
  */
 public class CommandLineInterface {
