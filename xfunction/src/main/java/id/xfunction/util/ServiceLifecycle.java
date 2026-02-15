@@ -40,7 +40,7 @@ public abstract class ServiceLifecycle implements AutoCloseable {
     /**
      * @param isStartIdempotent when false calling {@link #start()} more than once will result in
      *     exception
-     * @param isCloseIdempotent when false calling {@link #stop()} more than once will result in
+     * @param isCloseIdempotent when false calling {@link #close()} more than once will result in
      *     exception
      */
     public ServiceLifecycle(boolean isStartIdempotent, boolean isCloseIdempotent) {

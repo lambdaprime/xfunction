@@ -74,11 +74,6 @@ if (project.hasProperty('publish')) {
   // but since Gradle removed this plugin https://docs.gradle.org/7.0/userguide/upgrading_version_6.html#removal_of_the_legacy_maven_plugin
   // it was rewritten for new one
 
-  task javadocJar(type: Jar) {
-    archiveClassifier = 'javadoc'
-    from "README-javadoc.txt"
-  }
-
   task sourcesJar(type: Jar) {
     archiveClassifier = 'sources'
     from "README-sources.txt"
