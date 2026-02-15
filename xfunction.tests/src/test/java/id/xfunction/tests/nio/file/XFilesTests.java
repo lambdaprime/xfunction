@@ -21,6 +21,7 @@ import static java.util.stream.Collectors.joining;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import id.xfunction.XUtils;
 import id.xfunction.lang.XThread;
 import id.xfunction.nio.file.XFiles;
 import java.io.IOException;
@@ -29,9 +30,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.Duration;
+import java.util.function.Function;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -96,11 +100,12 @@ public class XFilesTests {
     }
 
     public static Stream<Arguments> findTestCases() {
+        var absolutePath = Path.of("").toAbsolutePath().toString();
         return Stream.of(
-                Arguments.of("a", "samples/a/12"),
-                Arguments.of("a/*", "samples/a/12"),
+                Arguments.of("samples/a", "samples/a/12"),
+                Arguments.of("samples/a/*", "samples/a/12"),
                 Arguments.of(
-                        "a/**",
+                        "samples/a/**",
                         """
                         samples/a/12
                         samples/a/b/1
@@ -111,56 +116,71 @@ public class XFilesTests {
                         samples/a/b/d/2
                         samples/a/b/d/3\
                         """),
-                Arguments.of("a/*2", "samples/a/12"),
+                Arguments.of("samples/a/*2", "samples/a/12"),
                 Arguments.of(
-                        "a/**/2",
+                        "samples/a/**/2",
                         """
                         samples/a/b/2
                         samples/a/b/c/2
                         samples/a/b/d/2\
                         """),
                 Arguments.of(
-                        "a/**/1*3",
+                        "samples/a/**/1*3",
                         """
                         samples/a/b/123\
                         """),
                 Arguments.of(
-                        "*",
+                        "samples/*",
                         """
                         samples/f1\
                         """),
-                Arguments.of("a/12", "samples/a/12"),
+                Arguments.of("samples/a/12", "samples/a/12"),
                 Arguments.of(
-                        "*/*",
+                        "samples/*/*",
                         """
                         samples/a/12
                         samples/b/f\
                         """),
-                Arguments.of("a/*/c", ""),
-                Arguments.of("a/**/c", ""),
+                Arguments.of("samples/a/*/c", ""),
+                Arguments.of("samples/a/**/c", ""),
                 Arguments.of(
-                        "a/b/*/2",
+                        "samples/a/b/*/2",
                         """
                         samples/a/b/c/2
                         samples/a/b/d/2\
                         """),
                 Arguments.of(
-                        "a/**/1*",
+                        "samples/a/**/1*",
                         """
                         samples/a/b/1
                         samples/a/b/123
                         samples/a/b/c/1\
-                        """));
+                        """),
+                Arguments.of(
+                        absolutePath + "/samples/a/**/1*",
+                        """
+                        %1$s/samples/a/b/1
+                        %1$s/samples/a/b/123
+                        %1$s/samples/a/b/c/1\
+                        """
+                                .formatted(absolutePath)));
     }
 
     @ParameterizedTest
     @MethodSource("findTestCases")
     public void test_find(String glob, String expected) throws Exception {
+        Function<String, String> pathTransformer =
+                path -> XUtils.isWindows() ? path.replace('/', '\\') : path;
+        expected = pathTransformer.apply(expected);
+        glob = pathTransformer.apply(glob);
         assertEquals(
                 expected,
-                XFiles.findFiles(Paths.get("samples").resolve(glob).toString())
-                        .map(Object::toString)
-                        .sorted()
-                        .collect(joining("\n")));
+                XFiles.findFiles(glob).map(Object::toString).sorted().collect(joining("\n")));
+    }
+
+    @DisabledOnOs({OS.WINDOWS})
+    @Test
+    public void test_find_extra() throws Exception {
+        assertEquals(true, XFiles.findFiles("/tmp/*").count() > 0);
     }
 }

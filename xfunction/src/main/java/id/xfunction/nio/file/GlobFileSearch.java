@@ -17,7 +17,9 @@
  */
 package id.xfunction.nio.file;
 
+import id.xfunction.Preconditions;
 import id.xfunction.function.Unchecked;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
@@ -28,6 +30,7 @@ import java.nio.file.PathMatcher;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Stack;
 import java.util.concurrent.SynchronousQueue;
+import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -40,72 +43,138 @@ class GlobFileSearch {
     private static final Path EOQ = Path.of("/");
     private SynchronousQueue<Path> queue = new SynchronousQueue<>();
     private Path startFrom;
-    private Path path;
+    private GlobPath globPath;
 
-    public Stream<Path> findFiles(String glob) throws IOException {
-        path = Path.of(glob);
-        if (path.toFile().isFile()) return Stream.of(path);
+    /**
+     * Provides basic functionality similar to {@link Path} with glob expressions
+     *
+     * <p>{@link Path} in Windows does not support glob expressions, for example:
+     *
+     * {@snippet :
+     * jshell> Path.of("c:\\gg*")
+     * Exception java.nio.file.InvalidPathException: Illegal char <*> at index 5: c:\gg*
+     * }
+     *
+     * @author lambdaprime intid@protonmail.com
+     */
+    private static class GlobPath {
+        private String[] pathElements;
+        private Path root;
+
+        public GlobPath(String globPath) {
+            if (globPath.startsWith(File.separator)) root = Path.of(File.separator);
+            globPath = globPath.replaceAll("^/+", "");
+            this.pathElements = globPath.split(Pattern.quote(File.separator));
+            Preconditions.isTrue(pathElements.length > 0);
+        }
+
+        public int getNameCount() {
+            return pathElements.length;
+        }
+
+        public Object getName(int i) {
+            if (i < 0 || i >= pathElements.length) {
+                throw new IndexOutOfBoundsException(
+                        "Index: " + i + ", Size: " + pathElements.length);
+            }
+            return pathElements[i];
+        }
+
+        public Path subpath(int i, int pos) {
+            if (i < 0 || pos > pathElements.length || i > pos) {
+                throw new IndexOutOfBoundsException("Invalid range: [" + i + ", " + pos + "]");
+            }
+
+            // Create a new array for the subpath
+            String[] subElements = new String[pos - i];
+            System.arraycopy(pathElements, i, subElements, 0, pos - i);
+
+            // Join the elements back into a path string
+            StringBuilder sb = new StringBuilder();
+            for (int j = 0; j < subElements.length; j++) {
+                if (j > 0) sb.append("/");
+                sb.append(subElements[j]);
+            }
+
+            return Path.of(sb.toString());
+        }
+
+        public Path getRoot() {
+            return root;
+        }
+    }
+
+    public Stream<Path> findFiles(String globExpression) throws IOException {
+        globPath = new GlobPath(globExpression);
         var pos =
-                IntStream.range(0, path.getNameCount())
-                        .filter(i -> path.getName(i).toString().contains("*"))
+                IntStream.range(0, globPath.getNameCount())
+                        .filter(i -> globPath.getName(i).toString().contains("*"))
                         .findFirst()
                         .orElse(-1);
         if (pos == -1) {
-            return Files.list(path).filter(p -> p.toFile().isFile());
+            var filePath = Path.of(globExpression);
+            if (filePath.toFile().isFile()) return Stream.of(filePath);
+            return Files.list(filePath).filter(p -> p.toFile().isFile());
         }
-        if (pos == 0) startFrom = path;
+        if (pos == 0) startFrom = Path.of("");
         else {
-            startFrom = path.subpath(0, pos);
-            if (path.getRoot() != null) startFrom = path.getRoot().resolve(startFrom);
+            startFrom = globPath.subpath(0, pos);
+            if (globPath.getRoot() != null) startFrom = globPath.getRoot().resolve(startFrom);
         }
-        if (glob.contains("**")) {
+        if (globExpression.contains("**")) {
+            globExpression = globExpression.replace('\\', '/');
             // in case of recursive match we visit all the directories
-            var matcher = FileSystems.getDefault().getPathMatcher("glob:" + glob);
+            var matcher = FileSystems.getDefault().getPathMatcher("glob:" + globExpression);
+            var isAbsolute = startFrom.isAbsolute();
             return Files.walk(startFrom, Integer.MAX_VALUE)
-                    .filter(p -> matcher.matches(p))
+                    .filter(p -> matcher.matches(isAbsolute ? p.toAbsolutePath() : p))
                     .filter(p -> p.toFile().isFile());
+        } else {
+            // in case of non recursive match we visit only directories which satisfy glob
+            // expression
+            // this optimization helps to do search efficiently on big file trees by pruning
+            // unnecessary subtrees
+            var stream =
+                    Stream.iterate(
+                                    Path.of(""),
+                                    p -> p != EOQ,
+                                    p -> {
+                                        var l = Unchecked.get(queue::take);
+                                        return l;
+                                    })
+                            .skip(1);
+
+            // do not use common pool since it can be out of threads and then we may stuck
+            new Thread(this::run, "GlobFileSearch").start();
+            return stream;
         }
-
-        var stream =
-                Stream.iterate(
-                                path,
-                                p -> p != EOQ,
-                                p -> {
-                                    var l = Unchecked.get(queue::take);
-                                    return l;
-                                })
-                        .skip(1);
-
-        // do not use common pool since it can be out of threads and then we may stuck
-        new Thread(this::run, "GlobFileSearch").start();
-        return stream;
     }
 
     private void run() {
         try {
             var fs = FileSystems.getDefault();
             var matchers = new Stack<PathMatcher>();
-            matchers.push(fs.getPathMatcher("glob:" + startFrom.getFileName().toString()));
+            matchers.push(fs.getPathMatcher("glob:" + getFileName(startFrom)));
             Files.walkFileTree(
                     startFrom,
                     new FileVisitor<Path>() {
-                        int depth = startFrom.getNameCount() - 1;
+                        int depth = Math.max(1, startFrom.getNameCount()) - 1;
 
                         @Override
                         public FileVisitResult preVisitDirectory(
                                 Path dir, BasicFileAttributes attrs) throws IOException {
-                            var isMatch = matchers.peek().matches(dir.getFileName());
+                            var isMatch = matchers.peek().matches(getFileName(dir));
                             if (isMatch) {
-                                if (depth + 1 < path.getNameCount()) {
+                                if (depth + 1 < globPath.getNameCount()) {
                                     depth++;
                                     matchers.push(
                                             fs.getPathMatcher(
-                                                    "glob:" + path.getName(depth).toString()));
+                                                    "glob:" + globPath.getName(depth).toString()));
                                 } else {
                                     return FileVisitResult.SKIP_SUBTREE;
                                 }
                                 return FileVisitResult.CONTINUE;
-                            } else if (dir.equals(path)) return FileVisitResult.CONTINUE;
+                            } else if (dir.equals(globPath)) return FileVisitResult.CONTINUE;
                             else return FileVisitResult.SKIP_SUBTREE;
                         }
 
@@ -115,7 +184,7 @@ class GlobFileSearch {
                             var isMatch =
                                     matchers.peek().matches(file.getFileName())
                                             || matchers.peek().matches(file.getParent());
-                            if (isMatch && depth >= path.getNameCount() - 1) {
+                            if (isMatch && depth >= globPath.getNameCount() - 1) {
                                 Unchecked.run(() -> queue.put(file));
                             }
                             return FileVisitResult.CONTINUE;
@@ -124,13 +193,14 @@ class GlobFileSearch {
                         @Override
                         public FileVisitResult visitFileFailed(Path file, IOException exc)
                                 throws IOException {
-                            throw new RuntimeException(exc);
+                            exc.printStackTrace();
+                            return FileVisitResult.CONTINUE;
                         }
 
                         @Override
                         public FileVisitResult postVisitDirectory(Path dir, IOException exc)
                                 throws IOException {
-                            if (exc != null) throw new RuntimeException(exc);
+                            if (exc != null) exc.printStackTrace();
                             depth--;
                             matchers.pop();
                             return FileVisitResult.CONTINUE;
@@ -145,5 +215,10 @@ class GlobFileSearch {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    private Path getFileName(Path path) {
+        var name = path.getFileName();
+        return name == null ? path : name;
     }
 }
