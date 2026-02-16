@@ -126,103 +126,139 @@ class GlobFileSearch {
             startFrom = globPath.subpath(0, pos);
             if (globPath.getRoot() != null) startFrom = globPath.getRoot().resolve(startFrom);
         }
+        var stream =
+                Stream.iterate(
+                                Path.of(""),
+                                p -> p != EOQ,
+                                p -> {
+                                    var l = Unchecked.get(queue::take);
+                                    return l;
+                                })
+                        .skip(1);
+        FileVisitor<Path> visitor = createVisitor(globExpression);
+        // do not use common pool since it can be out of threads and then we may stuck
+        new Thread(
+                        () -> {
+                            try {
+                                Files.walkFileTree(startFrom, visitor);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            } finally {
+                                try {
+                                    queue.put(EOQ);
+                                } catch (InterruptedException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+                        },
+                        "GlobFileSearch")
+                .start();
+        return stream;
+    }
+
+    private FileVisitor<Path> createVisitor(String globExpression) {
         if (globExpression.contains("**")) {
-            globExpression = globExpression.replace('\\', '/');
-            // in case of recursive match we visit all the directories
-            var matcher = FileSystems.getDefault().getPathMatcher("glob:" + globExpression);
-            var isAbsolute = startFrom.isAbsolute();
-            return Files.walk(startFrom, Integer.MAX_VALUE)
-                    .filter(p -> matcher.matches(isAbsolute ? p.toAbsolutePath() : p))
-                    .filter(p -> p.toFile().isFile());
+            return visitorWithRecursiveMatch(globExpression);
         } else {
             // in case of non recursive match we visit only directories which satisfy glob
             // expression
             // this optimization helps to do search efficiently on big file trees by pruning
             // unnecessary subtrees
-            var stream =
-                    Stream.iterate(
-                                    Path.of(""),
-                                    p -> p != EOQ,
-                                    p -> {
-                                        var l = Unchecked.get(queue::take);
-                                        return l;
-                                    })
-                            .skip(1);
-
-            // do not use common pool since it can be out of threads and then we may stuck
-            new Thread(this::run, "GlobFileSearch").start();
-            return stream;
+            return visitor();
         }
     }
 
-    private void run() {
-        try {
-            var fs = FileSystems.getDefault();
-            var matchers = new Stack<PathMatcher>();
-            var globExpression = "glob:" + getFileName(startFrom);
-            matchers.push(fs.getPathMatcher(globExpression));
-            // System.out.println(globExpression);
-            Files.walkFileTree(
-                    startFrom,
-                    new FileVisitor<Path>() {
-                        int depth = Math.max(1, startFrom.getNameCount()) - 1;
+    private FileVisitor<Path> visitor() {
+        var fs = FileSystems.getDefault();
+        var matchers = new Stack<PathMatcher>();
+        var globExpression = "glob:" + getFileName(startFrom);
+        matchers.push(fs.getPathMatcher(globExpression));
+        // System.out.println(globExpression);
+        return new FileVisitor<Path>() {
+            int depth = Math.max(1, startFrom.getNameCount()) - 1;
 
-                        @Override
-                        public FileVisitResult preVisitDirectory(
-                                Path dir, BasicFileAttributes attrs) throws IOException {
-                            var isMatch = matchers.peek().matches(getFileName(dir));
-                            if (isMatch) {
-                                if (depth + 1 < globPath.getNameCount()) {
-                                    depth++;
-                                    var globExpression =
-                                            "glob:" + globPath.getName(depth).toString();
-                                    matchers.push(fs.getPathMatcher(globExpression));
-                                    // System.out.println(globExpression);
-                                } else {
-                                    return FileVisitResult.SKIP_SUBTREE;
-                                }
-                                return FileVisitResult.CONTINUE;
-                            } else if (dir.equals(globPath)) return FileVisitResult.CONTINUE;
-                            else return FileVisitResult.SKIP_SUBTREE;
-                        }
-
-                        @Override
-                        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-                                throws IOException {
-                            var isMatch =
-                                    matchers.peek().matches(file.getFileName())
-                                            || matchers.peek().matches(file.getParent());
-                            if (isMatch && depth >= globPath.getNameCount() - 1) {
-                                Unchecked.run(() -> queue.put(file));
-                            }
-                            return FileVisitResult.CONTINUE;
-                        }
-
-                        @Override
-                        public FileVisitResult visitFileFailed(Path file, IOException exc)
-                                throws IOException {
-                            exc.printStackTrace();
-                            return FileVisitResult.CONTINUE;
-                        }
-
-                        @Override
-                        public FileVisitResult postVisitDirectory(Path dir, IOException exc)
-                                throws IOException {
-                            if (exc != null) exc.printStackTrace();
-                            depth--;
-                            matchers.pop();
-                            return FileVisitResult.CONTINUE;
-                        }
-                    });
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                queue.put(EOQ);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
+                    throws IOException {
+                var isMatch = matchers.peek().matches(getFileName(dir));
+                if (isMatch) {
+                    if (depth + 1 < globPath.getNameCount()) {
+                        depth++;
+                        var globExpression = "glob:" + globPath.getName(depth).toString();
+                        matchers.push(fs.getPathMatcher(globExpression));
+                        // System.out.println(globExpression);
+                    } else {
+                        return FileVisitResult.SKIP_SUBTREE;
+                    }
+                    return FileVisitResult.CONTINUE;
+                } else if (dir.equals(globPath)) return FileVisitResult.CONTINUE;
+                else return FileVisitResult.SKIP_SUBTREE;
             }
-        }
+
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+                    throws IOException {
+                var isMatch =
+                        matchers.peek().matches(file.getFileName())
+                                || matchers.peek().matches(file.getParent());
+                if (isMatch && depth >= globPath.getNameCount() - 1) {
+                    Unchecked.run(() -> queue.put(file));
+                }
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                exc.printStackTrace();
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException exc)
+                    throws IOException {
+                if (exc != null) exc.printStackTrace();
+                depth--;
+                matchers.pop();
+                return FileVisitResult.CONTINUE;
+            }
+        };
+    }
+
+    private FileVisitor<Path> visitorWithRecursiveMatch(String globExpression) {
+        globExpression = globExpression.replace('\\', '/');
+        // in case of recursive match we visit all the directories
+        var matcher = FileSystems.getDefault().getPathMatcher("glob:" + globExpression);
+        var isAbsolute = startFrom.isAbsolute();
+        return new FileVisitor<Path>() {
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
+                    throws IOException {
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+                    throws IOException {
+                var isMatch = matcher.matches(isAbsolute ? file.toAbsolutePath() : file);
+                if (isMatch) {
+                    Unchecked.run(() -> queue.put(file));
+                }
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                exc.printStackTrace();
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException exc)
+                    throws IOException {
+                if (exc != null) exc.printStackTrace();
+                return FileVisitResult.CONTINUE;
+            }
+        };
     }
 
     private Path getFileName(Path path) {

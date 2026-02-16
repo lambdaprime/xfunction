@@ -188,6 +188,7 @@ public class XFilesTests {
     @EnabledOnOs({OS.WINDOWS})
     @Test
     public void test_find_extra_win() throws Exception {
+        assertEquals(true, XFiles.findFiles("c:\\users\\*\\AppData\\Local\\Temp\\**").count() > 0);
         assertEquals(true, XFiles.findFiles("c:\\users\\*\\*").count() > 0);
         assertEquals(
                 true,
