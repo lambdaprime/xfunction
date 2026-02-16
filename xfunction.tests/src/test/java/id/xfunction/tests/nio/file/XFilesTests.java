@@ -30,11 +30,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.Duration;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -178,9 +179,24 @@ public class XFilesTests {
                 XFiles.findFiles(glob).map(Object::toString).sorted().collect(joining("\n")));
     }
 
-    @DisabledOnOs({OS.WINDOWS})
+    @EnabledOnOs({OS.LINUX})
     @Test
-    public void test_find_extra() throws Exception {
+    public void test_find_extra_lin() throws Exception {
         assertEquals(true, XFiles.findFiles("/tmp/*").count() > 0);
+    }
+
+    @EnabledOnOs({OS.WINDOWS})
+    @Test
+    public void test_find_extra_win() throws Exception {
+        assertEquals(true, XFiles.findFiles("c:\\users\\*\\*").count() > 0);
+        assertEquals(
+                true,
+                XFiles.findFiles("C:\\Users\\*\\*\\*.ini")
+                                .filter(
+                                        p ->
+                                                Objects.equals(
+                                                        p.getFileName().toString(), "desktop.ini"))
+                                .count()
+                        > 0);
     }
 }

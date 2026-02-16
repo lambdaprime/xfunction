@@ -28,6 +28,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Optional;
 import java.util.Stack;
 import java.util.concurrent.SynchronousQueue;
 import java.util.regex.Pattern;
@@ -59,13 +60,17 @@ class GlobFileSearch {
      */
     private static class GlobPath {
         private String[] pathElements;
-        private Path root;
+        private Optional<Path> root;
 
         public GlobPath(String globPath) {
-            if (globPath.startsWith(File.separator)) root = Path.of(File.separator);
-            globPath = globPath.replaceAll("^/+", "");
+            this.root = extractRoot(globPath);
+            if (root.isPresent()) globPath = globPath.substring(root.get().toString().length());
             this.pathElements = globPath.split(Pattern.quote(File.separator));
             Preconditions.isTrue(pathElements.length > 0);
+        }
+
+        private Optional<Path> extractRoot(String globPath) {
+            return Optional.ofNullable(Path.of(globPath.replace("*", "X")).getRoot());
         }
 
         public int getNameCount() {
@@ -100,7 +105,7 @@ class GlobFileSearch {
         }
 
         public Path getRoot() {
-            return root;
+            return root.orElse(null);
         }
     }
 
@@ -154,7 +159,9 @@ class GlobFileSearch {
         try {
             var fs = FileSystems.getDefault();
             var matchers = new Stack<PathMatcher>();
-            matchers.push(fs.getPathMatcher("glob:" + getFileName(startFrom)));
+            var globExpression = "glob:" + getFileName(startFrom);
+            matchers.push(fs.getPathMatcher(globExpression));
+            // System.out.println(globExpression);
             Files.walkFileTree(
                     startFrom,
                     new FileVisitor<Path>() {
@@ -167,9 +174,10 @@ class GlobFileSearch {
                             if (isMatch) {
                                 if (depth + 1 < globPath.getNameCount()) {
                                     depth++;
-                                    matchers.push(
-                                            fs.getPathMatcher(
-                                                    "glob:" + globPath.getName(depth).toString()));
+                                    var globExpression =
+                                            "glob:" + globPath.getName(depth).toString();
+                                    matchers.push(fs.getPathMatcher(globExpression));
+                                    // System.out.println(globExpression);
                                 } else {
                                     return FileVisitResult.SKIP_SUBTREE;
                                 }
