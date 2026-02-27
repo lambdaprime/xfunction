@@ -36,7 +36,6 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -271,10 +270,5 @@ public class XFiles {
      */
     public static Stream<Path> findFiles(String glob) throws IOException {
         return new GlobFileSearch().findFiles(glob);
-    }
-
-    public static void main(String[] args) throws IOException {
-        var l = XFiles.findFiles("C:\\Users\\*\\*\\*.ini").collect(Collectors.toList());
-        l.stream().forEach(System.out::println);
     }
 }
