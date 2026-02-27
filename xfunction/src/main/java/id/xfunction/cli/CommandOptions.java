@@ -17,6 +17,8 @@
  */
 package id.xfunction.cli;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.function.Predicate;
@@ -179,5 +181,38 @@ public class CommandOptions {
     @Override
     public String toString() {
         return options.toString();
+    }
+
+    /**
+     * Load additional properties from a file whose name is supplied by the {@code
+     * propertyFileOption} option and merges them into the current {@link CommandOptions} instance.
+     *
+     * <p>The option named {@code propertyFileOption} must be present in the command‑line arguments
+     * and its value should be a path to a Java {@code .properties} file. If the option is missing
+     * or the file cannot be read, a {@link RuntimeException} is thrown.
+     *
+     * <p>When the file is successfully loaded, every key/value pair found in it is added to the
+     * internal {@code Properties} object of this {@code CommandOptions}. Existing properties are
+     * overwritten by the new values.
+     *
+     * @param propertyFileOption the name of the option whose value is the path to a {@code
+     *     .properties} file to be loaded
+     * @throws IllegalArgumentException if {@code propertyFileOption} is {@code null} or empty
+     * @throws RuntimeException if the specified file cannot be opened or an I/O error occurs while
+     *     loading it
+     */
+    public void populateFromFile(String propertyFileOption) {
+        getOption(propertyFileOption)
+                .ifPresent(
+                        propertyFile -> {
+                            var props = new Properties();
+                            try (var in = new FileInputStream(propertyFile)) {
+                                props.load(in);
+                            } catch (IOException e) {
+                                throw new RuntimeException(
+                                        "Failed to load property file: " + propertyFile, e);
+                            }
+                            options.putAll(props);
+                        });
     }
 }
