@@ -58,7 +58,12 @@ public class TransformSubscriber<T, R> implements Subscriber<T> {
     @Override
     public void onNext(T item) {
         try {
-            transformer.apply(item).ifPresent(targetSubscriber::onNext);
+            var transItem = transformer.apply(item);
+            if (transItem.isPresent()) {
+                targetSubscriber.onNext(transItem.get());
+            } else {
+                subscription.request(1);
+            }
         } catch (Exception e) {
             onError(e);
             subscription.cancel();
