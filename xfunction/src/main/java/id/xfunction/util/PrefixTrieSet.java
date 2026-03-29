@@ -69,7 +69,7 @@ public class PrefixTrieSet extends AbstractSet<String> {
 
     private Node root = new Node();
     private int size;
-    private boolean isAdded, isMatched;
+    private boolean isAdded;
 
     /** Adding empty string throws an exception */
     @Override
@@ -117,23 +117,25 @@ public class PrefixTrieSet extends AbstractSet<String> {
 
     /**
      * Returns length of the longest item from the current trie which is a prefix of a given string.
-     * If no such item exist returns 0
+     * If no such item exist returns 0.
+     *
+     * <p>This operation is thread-safe as long as no write operations (eg. {@link #add(String)})
+     * are taking place.
      */
     public int prefixMatches(String str) {
-        isMatched = false;
-        return prefixMatches(root, str.toCharArray(), 0);
+        return prefixMatches(root, str.toCharArray(), new boolean[1], 0);
     }
 
-    private int prefixMatches(Node n, char[] a, int i) {
+    private int prefixMatches(Node n, char[] a, boolean[] isMatched, int i) {
         if (n.childs.containsKey('\0')) {
-            isMatched = true;
+            isMatched[0] = true;
             return 0;
         }
         if (i == a.length) return 0;
         Node next = n.childs.get(a[i]);
         if (next == null) return 0;
-        int ret = prefixMatches(next, a, i + 1);
-        return isMatched ? ret + 1 : 0;
+        int ret = prefixMatches(next, a, isMatched, i + 1);
+        return isMatched[0] ? ret + 1 : 0;
     }
 
     // based on DFS

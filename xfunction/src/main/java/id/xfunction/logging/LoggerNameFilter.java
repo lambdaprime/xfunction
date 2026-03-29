@@ -54,6 +54,8 @@ import java.util.stream.Collectors;
  *
  * <p>It excludes only logs with {@link Level} below {@link Level#WARNING}.
  *
+ * <p>Thread-safe.
+ *
  * @author lambdaprime intid@protonmail.com
  */
 public class LoggerNameFilter implements Filter {
