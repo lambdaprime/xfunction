@@ -30,25 +30,20 @@ import java.util.function.Function;
  * <p>Example of transforming integer to String:
  *
  * <pre>
- * 1 -&gt; Publisher -&gt; Transformer (changes to "1") -&gt; Subscriber
+ * 1 -&gt; Publisher -&gt; TransformProcessor.from&lt;Integer, String>(i -&gt; Optional.of(i.toString()) -&gt; Subscriber
  * </pre>
  *
  * @param <T> input type
  * @param <R> output type
  * @author lambdaprime intid@protonmail.com
  */
-public class TransformProcessor<T, R> extends SynchronousPublisher<R> implements Processor<T, R> {
+public abstract class TransformProcessor<T, R> extends SynchronousPublisher<R>
+        implements Processor<T, R> {
 
     private Subscription subscription;
-    private Function<T, Optional<R>> transformer;
     private Exception ctorStackTrace;
 
-    /**
-     * @param transformer Transforms input message and publishes it to subscribers. If transformer
-     *     returns empty message it will be ignored.
-     */
-    public TransformProcessor(Function<T, Optional<R>> transformer) {
-        this.transformer = transformer;
+    protected TransformProcessor() {
         // debugging subscriber issues may be difficult since they operate
         // usually on different threads so stacktrace for them not very useful
         // here we store stacktrace from where it was created initially and
@@ -70,7 +65,7 @@ public class TransformProcessor<T, R> extends SynchronousPublisher<R> implements
     @Override
     public void onNext(T item) {
         try {
-            transformer.apply(item).ifPresent(this::submit);
+            transform(item).ifPresent(this::submit);
         } catch (Exception e) {
             includeSource(e);
             throw e;
@@ -90,8 +85,25 @@ public class TransformProcessor<T, R> extends SynchronousPublisher<R> implements
         close();
     }
 
+    protected abstract Optional<R> transform(T item);
+
     private void includeSource(Throwable throwable) {
         if (Arrays.stream(throwable.getSuppressed()).noneMatch(e -> e == ctorStackTrace))
             throwable.addSuppressed(ctorStackTrace);
+    }
+
+    /**
+     * Create {@link TransformProcessor} from given functional interface.
+     *
+     * @param transformer Transforms input message and publishes it to subscribers. If transformer
+     *     returns empty message it will be ignored.
+     */
+    public static <T, R> TransformProcessor<T, R> from(Function<T, Optional<R>> transformer) {
+        return new TransformProcessor<T, R>() {
+            @Override
+            protected Optional<R> transform(T item) {
+                return transformer.apply(item);
+            }
+        };
     }
 }

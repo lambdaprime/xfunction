@@ -41,7 +41,7 @@ public class TransformProcessorTest {
     /** 1 -> Pub -> T (changes to "1") -> Sub */
     @Test
     public void test_transform_subscriber() throws Exception {
-        var proc = new TransformProcessor<Integer, String>(i -> Optional.of(i.toString()));
+        var proc = createProc();
         var pub = new SubmissionPublisher<Integer>(Executors.newSingleThreadExecutor(), 10);
         var subscriber = new FixedCollectorSubscriber<>(new ArrayList<String>(), 5);
         proc.subscribe(subscriber);
@@ -53,7 +53,7 @@ public class TransformProcessorTest {
     @Test
     public void test_onError() throws Exception {
         var proc =
-                new TransformProcessor<Integer, String>(
+                TransformProcessor.<Integer, String>from(
                         i -> {
                             throw new RuntimeException("test");
                         });
@@ -85,8 +85,8 @@ public class TransformProcessorTest {
     @Test
     public void test_same_thread() throws Exception {
         try (var publisher = new SubmissionPublisher<Integer>(new SameThreadExecutorService(), 1)) {
-            var proc = new TransformProcessor<Integer, String>(a -> Optional.of(a.toString()));
             var subscriber = new FixedCollectorSubscriber<>(new ArrayList<String>(), 500);
+            var proc = createProc();
             proc.subscribe(subscriber);
             publisher.subscribe(proc);
             IntStream.range(0, 500).boxed().forEach(publisher::submit);
@@ -102,9 +102,9 @@ public class TransformProcessorTest {
     @Test
     public void test_sync_publisher_subscriber() throws Exception {
         try (var publisher = new SynchronousPublisher<Integer>()) {
-            var proc = new TransformProcessor<Integer, String>(a -> Optional.of(a.toString()));
             var requestCount = 23;
             var subscriber = new FixedCollectorSubscriber<>(new ArrayList<String>(), requestCount);
+            var proc = createProc();
             proc.subscribe(subscriber);
             publisher.subscribe(proc);
             Executors.newSingleThreadExecutor()
@@ -124,9 +124,9 @@ public class TransformProcessorTest {
     @Test
     public void test_sync_publisher_subscriber_requests_all() throws Exception {
         try (var publisher = new SynchronousPublisher<Integer>()) {
-            var proc = new TransformProcessor<Integer, String>(a -> Optional.of(a.toString()));
             var requestCount = 55;
             var subscriber = new FixedCollectorSubscriber<>(new ArrayList<String>(), requestCount);
+            var proc = createProc();
             proc.subscribe(subscriber);
             publisher.subscribe(proc);
             IntStream.range(0, requestCount).boxed().forEach(publisher::submit);
@@ -137,5 +137,9 @@ public class TransformProcessorTest {
                             .collect(Collectors.joining(", ")),
                     subscriber.getFuture().get().toString().replaceAll("\\[|\\]", ""));
         }
+    }
+
+    private TransformProcessor<Integer, String> createProc() {
+        return TransformProcessor.from((Integer i) -> Optional.of(i.toString()));
     }
 }

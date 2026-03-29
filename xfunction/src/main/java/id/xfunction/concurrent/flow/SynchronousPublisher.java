@@ -71,16 +71,16 @@ public class SynchronousPublisher<T> implements Flow.Publisher<T>, AutoCloseable
     }
 
     private List<MySubscription<? super T>> subscriptions = new CopyOnWriteArrayList<>();
-    private Semaphore wakeupSubmit = new Semaphore(1);
+    private Semaphore submitSemaphore = new Semaphore(1);
     private boolean isClosed;
 
     @Override
     public void subscribe(Subscriber<? super T> subscriber) {
         Preconditions.isTrue(!isClosed, "Already closed");
-        var subscription = new MySubscription<>(subscriber, wakeupSubmit);
+        var subscription = new MySubscription<>(subscriber, submitSemaphore);
         subscriber.onSubscribe(subscription);
         subscriptions.add(subscription);
-        wakeupSubmit.release();
+        submitSemaphore.release();
     }
 
     /**
@@ -101,7 +101,7 @@ public class SynchronousPublisher<T> implements Flow.Publisher<T>, AutoCloseable
         var wasSubmittedAtLeastOnce = false;
         while (!wasSubmittedAtLeastOnce && !isClosed) {
             try {
-                wakeupSubmit.acquire();
+                submitSemaphore.acquire();
                 var iter = subscriptions.iterator();
                 while (iter.hasNext()) {
                     var subscription = iter.next();
@@ -120,12 +120,12 @@ public class SynchronousPublisher<T> implements Flow.Publisher<T>, AutoCloseable
                 }
                 subscriptions.removeIf(s -> s.isCancelled);
                 if (!wasSubmittedAtLeastOnce) {
-                    wakeupSubmit.acquire();
+                    submitSemaphore.acquire();
                 }
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             } finally {
-                wakeupSubmit.release();
+                submitSemaphore.release();
             }
         }
     }
@@ -141,7 +141,7 @@ public class SynchronousPublisher<T> implements Flow.Publisher<T>, AutoCloseable
         subscriptions.forEach(
                 subscription -> XUtils.runSafe(() -> subscription.subscriber.onError(error)));
         subscriptions.clear();
-        wakeupSubmit.release();
+        submitSemaphore.release();
     }
 
     @Override
@@ -151,6 +151,6 @@ public class SynchronousPublisher<T> implements Flow.Publisher<T>, AutoCloseable
         subscriptions.forEach(
                 subscription -> XUtils.runSafe(() -> subscription.subscriber.onComplete()));
         subscriptions.clear();
-        wakeupSubmit.release();
+        submitSemaphore.release();
     }
 }
