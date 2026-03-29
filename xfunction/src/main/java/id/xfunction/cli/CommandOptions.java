@@ -19,9 +19,14 @@ package id.xfunction.cli;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Provides access to command line options. Options have key-value structure.
@@ -145,6 +150,27 @@ public class CommandOptions {
     /** Some options may be optional. Use this method to obtain them. */
     public Optional<Double> getOptionDouble(String optionName) {
         return Optional.ofNullable(options.getProperty(optionName)).map(Double::parseDouble);
+    }
+
+    /** List can be stored inside the file. In such case the option should contain */
+    public List<String> getOptionList(String optionName, boolean isRequired) {
+        var option = getOption(optionName).orElse(null);
+        if (isRequired && option == null) {
+            throw new ArgumentParsingException(
+                    "Command-line option \"-" + optionName + "\" is missing");
+        }
+        if (option == null) return List.of();
+        if (option.startsWith("@")) {
+            var documentFileListPath = Path.of(option.substring(1));
+            try {
+                return Files.readAllLines(documentFileListPath).stream()
+                        .collect(Collectors.toList());
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to read " + documentFileListPath, e);
+            }
+        } else {
+            return Arrays.stream(option.split(",")).collect(Collectors.toList());
+        }
     }
 
     /**
