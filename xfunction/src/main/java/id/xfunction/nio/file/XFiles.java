@@ -175,6 +175,11 @@ public class XFiles {
                                         return;
                                     }
                                     if (curPos[0] == file.length()) continue;
+                                    if (curPos[0] > file.length()) {
+                                        // file was overwritten so we reset to the beginning of it
+                                        curPos[0] = 0;
+                                        buf.setLength(0);
+                                    }
                                     try (var raf = new RandomAccessFile(file, "r")) {
                                         raf.seek(curPos[0]);
                                         int separatorLenSoFar = 0;

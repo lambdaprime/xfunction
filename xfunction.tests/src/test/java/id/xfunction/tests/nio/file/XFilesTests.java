@@ -34,6 +34,7 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
@@ -58,30 +59,6 @@ public class XFilesTests {
         System.out.println(tmpDir);
         XFiles.deleteRecursively(tmpDir);
         Assertions.assertEquals(false, tmpDir.toFile().exists());
-    }
-
-    @Test
-    public void test_watchForStringInFile() throws Exception {
-        Path tmpFile = Files.createTempFile("test", "");
-        var future =
-                XFiles.watchForLineInFile(tmpFile, s -> s.contains("hello"), Duration.ofMillis(3));
-        assertEquals(false, future.isDone());
-        Files.write(tmpFile, ("asdsa" + NL + "d").getBytes(), StandardOpenOption.APPEND);
-        XThread.sleep(200);
-        assertEquals(false, future.isDone());
-
-        Files.write(tmpFile, "hell".getBytes(), StandardOpenOption.APPEND);
-        XThread.sleep(200);
-        assertEquals(false, future.isDone());
-
-        Files.write(tmpFile, ("o" + NL).getBytes(), StandardOpenOption.APPEND);
-        XThread.sleep(200);
-        assertEquals("dhello", future.get());
-
-        future = XFiles.watchForLineInFile(tmpFile, s -> s.contains("hel"), Duration.ofMillis(13));
-        assertEquals(false, future.isDone());
-
-        future.cancel(false);
     }
 
     @Test
@@ -199,5 +176,52 @@ public class XFilesTests {
                                                         p.getFileName().toString(), "desktop.ini"))
                                 .count()
                         > 0);
+    }
+
+    @Nested
+    class WatchForStringInFileTests {
+        @Test
+        public void happy() throws Exception {
+            Path tmpFile = Files.createTempFile("test", "");
+            var future =
+                    XFiles.watchForLineInFile(
+                            tmpFile, s -> s.contains("hello"), Duration.ofMillis(3));
+            assertEquals(false, future.isDone());
+            Files.write(tmpFile, ("asdsa" + NL + "d").getBytes(), StandardOpenOption.APPEND);
+            XThread.sleep(200);
+            assertEquals(false, future.isDone());
+
+            Files.write(tmpFile, "hell".getBytes(), StandardOpenOption.APPEND);
+            XThread.sleep(200);
+            assertEquals(false, future.isDone());
+
+            Files.write(tmpFile, ("o" + NL).getBytes(), StandardOpenOption.APPEND);
+            XThread.sleep(200);
+            assertEquals("dhello", future.get());
+
+            future =
+                    XFiles.watchForLineInFile(
+                            tmpFile, s -> s.contains("hel"), Duration.ofMillis(13));
+            assertEquals(false, future.isDone());
+
+            future.cancel(false);
+        }
+
+        @Test
+        public void file_overwritten() throws Exception {
+            Path tmpFile = Files.createTempFile("test", "");
+            Files.write(tmpFile, "x\n".repeat(300).getBytes(), StandardOpenOption.APPEND);
+            var future =
+                    XFiles.watchForLineInFile(
+                            tmpFile, s -> s.contains("hello"), Duration.ofMillis(3));
+            assertEquals(false, future.isDone());
+            XThread.sleep(200);
+            Files.write(
+                    tmpFile,
+                    ("helloxxx" + NL).getBytes(),
+                    StandardOpenOption.WRITE,
+                    StandardOpenOption.TRUNCATE_EXISTING);
+            assertEquals("helloxxx", future.get());
+        }
     }
 }
