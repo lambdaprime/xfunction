@@ -19,19 +19,25 @@ package id.xfunction.cli;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
  * Provides access to command line options. Options have key-value structure.
  *
- * <p>This class is only relying on {@link Properties} and so it is thread-safe.
+ * <p>This class is only relying on thread-safe {@link Properties} and so it is also thread-safe.
  *
  * @author lambdaprime intid@protonmail.com
  */
@@ -137,22 +143,38 @@ public class CommandOptions {
         return val;
     }
 
-    /** Some options may be optional. Use this method to obtain them. */
+    /** Command line options may be optional, use this method to obtain them. */
     public Optional<String> getOption(String optionName) {
         return Optional.ofNullable(options.getProperty(optionName));
     }
 
-    /** Some options may be optional. Use this method to obtain them. */
+    /** Command line options options may be optional, use this method to obtain them. */
     public Optional<Integer> getOptionInt(String optionName) {
         return Optional.ofNullable(options.getProperty(optionName)).map(Integer::parseInt);
     }
 
-    /** Some options may be optional. Use this method to obtain them. */
+    /** Command line options options may be optional, use this method to obtain them. */
     public Optional<Double> getOptionDouble(String optionName) {
         return Optional.ofNullable(options.getProperty(optionName)).map(Double::parseDouble);
     }
 
-    /** List can be stored inside the file. In such case the option should contain */
+    /** Command line options options may be optional, use this method to obtain them. */
+    public Optional<Duration> getOptionMillis(String optionName) {
+        return Optional.ofNullable(options.getProperty(optionName))
+                .map(Integer::parseInt)
+                .map(Duration::ofMillis);
+    }
+
+    /**
+     * Return list value.
+     *
+     * <p>List can be provided in any of the following forms:
+     *
+     * <ol>
+     *   <li>separated by commas: val1,val2,...,valN
+     *   <li>from the file: in such case the option value format is "@/path/to/file/list"
+     * </ol>
+     */
     public List<String> getOptionList(String optionName, boolean isRequired) {
         var option = getOption(optionName).orElse(null);
         if (isRequired && option == null) {
@@ -174,6 +196,29 @@ public class CommandOptions {
     }
 
     /**
+     * Return map value.
+     *
+     * <p>Map can be provided in any of the following forms:
+     *
+     * <ol>
+     *   <li>through options which share common {optionName} prefix: -my.map.key1=val1
+     *       -my.map.key2=val2 &lt;...> -my.map.keyN=valN
+     * </ol>
+     *
+     * @param optionName defines common prefix
+     */
+    public Map<String, String> getOptionMap(String optionName, boolean isRequired) {
+        var map = new LinkedHashMap<String, String>();
+        for (Entry<Object, Object> pair : options.entrySet()) {
+            String key = (String) pair.getKey();
+            if (!key.startsWith(optionName)) continue;
+            String value = (String) pair.getValue();
+            map.put(key.substring(optionName.length()), value);
+        }
+        return map;
+    }
+
+    /**
      * Check if optionName is set to "true"
      *
      * <p>Two forms are allowed:
@@ -190,7 +235,7 @@ public class CommandOptions {
                 .isPresent();
     }
 
-    /** Adds new option */
+    /** Add new option or replace existing */
     public void addOption(String name, boolean value) {
         addOption(name, "" + value);
     }
@@ -199,9 +244,20 @@ public class CommandOptions {
         return options.size();
     }
 
-    /** Adds new option */
-    private void addOption(String name, String value) {
+    /** Add new option or replace existing */
+    public void addOption(String name, String value) {
         options.put(name, value);
+    }
+
+    /**
+     * Add new options or replace existing.
+     *
+     * @throws IOException
+     */
+    public void addOptions(String properties) throws IOException {
+        Properties props = new Properties();
+        props.load(new StringReader(properties));
+        options.putAll(props);
     }
 
     @Override
@@ -240,5 +296,24 @@ public class CommandOptions {
                             }
                             options.putAll(props);
                         });
+    }
+
+    /**
+     * Iterates over the command line options and applies the given action to each key-value pair.
+     *
+     * <p>This method provides a way to process all command line options in a functional style. The
+     * action is applied to each entry in the internal {@link Properties} object, where:
+     *
+     * <ul>
+     *   <li>the key is the option name (without the leading "-")
+     *   <li>the value is the option value
+     * </ul>
+     *
+     * @param action the action to be performed for each key-value pair. The action's {@code accept}
+     *     method must not throw a checked exception.
+     * @throws NullPointerException if the specified action is null
+     */
+    public void forEach(BiConsumer<String, String> action) {
+        options.forEach((k, v) -> action.accept((String) k, (String) v));
     }
 }
