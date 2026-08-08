@@ -27,9 +27,9 @@ import java.util.function.Supplier;
  */
 public class LazyInitializer<T> implements Supplier<T> {
     private T value;
-    private Supplier<T> ctor;
+    private ThrowingSupplier<T, ? extends Exception> ctor;
 
-    public LazyInitializer(Supplier<T> ctor) {
+    public LazyInitializer(ThrowingSupplier<T, ? extends Exception> ctor) {
         this.ctor = ctor;
     }
 
@@ -38,7 +38,11 @@ public class LazyInitializer<T> implements Supplier<T> {
         if (value == null) {
             synchronized (this) {
                 if (value == null) {
-                    value = ctor.get();
+                    try {
+                        value = ctor.get();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         }
