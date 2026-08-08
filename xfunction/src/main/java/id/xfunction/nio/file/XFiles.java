@@ -60,6 +60,10 @@ public class XFiles {
         return Optional.empty();
     }
 
+    public static Path findTempFolderOrThrow() {
+        return TEMP_FOLDER.orElseThrow(() -> new RuntimeException("System temp folder not found"));
+    }
+
     /** Deletes directory recursively with all files and sub-directories */
     public static void deleteRecursively(Path dir) throws IOException {
         if (!dir.toFile().exists()) return;
