@@ -79,4 +79,12 @@ public class XPaths {
         var file = Paths.get(path.getFileName() + postfix);
         return (folder == null) ? file : folder.resolve(file);
     }
+
+    public static Path resolveHome(String path) {
+        return Path.of(path.replaceFirst("^~", System.getProperty("user.home").replace("\\", "/")));
+    }
+
+    public static Path resolveHome(Path path) {
+        return resolveHome(path.toString());
+    }
 }
