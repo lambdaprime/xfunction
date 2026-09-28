@@ -45,6 +45,8 @@ public class CommandOptions {
 
     public static class Config {
         private boolean ignoreParsingExceptions;
+        private boolean fileOptionEnabled;
+        private String fileOptionPrefix = "@";
 
         /**
          * Allows to support positional arguments which otherwise would cause exception. For example
@@ -62,15 +64,40 @@ public class CommandOptions {
             this.ignoreParsingExceptions = true;
             return this;
         }
+
+        /**
+         * Enables reading option values from files. When enabled, if an option value starts with
+         * the configured file option prefix (e.g., "@/path/to/file"), the actual value is read from
+         * the file whose path follows the prefix.
+         */
+        public Config withFileOptionReading() {
+            this.fileOptionEnabled = true;
+            return this;
+        }
+
+        /**
+         * Sets the prefix used to indicate that an option value should be read from a file. Default
+         * is "@".
+         */
+        public Config withFileOptionPrefix(String prefix) {
+            this.fileOptionPrefix = prefix;
+            return this;
+        }
     }
 
     private Properties options;
+    private Config config;
 
     /**
      * @see #collectOptions(String[]) for creating {@link CommandOptions} from main(String[] args)
      */
     public CommandOptions(Properties options) {
+        this(options, new Config());
+    }
+
+    public CommandOptions(Properties options, Config config) {
         this.options = options;
+        this.config = config;
     }
 
     /**
@@ -120,7 +147,7 @@ public class CommandOptions {
         if (curOption != null) {
             props.put(curOption, "");
         }
-        return new CommandOptions(props);
+        return new CommandOptions(props, config);
     }
 
     /** Similar to {@link #collectOptions(String[])} except uses default {@link Config} settings */
@@ -143,9 +170,30 @@ public class CommandOptions {
         return val;
     }
 
-    /** Command line options may be optional, use this method to obtain them. */
+    /**
+     * Returns the value of the specified option.
+     *
+     * <p>If file option reading is enabled via {@link Config#withFileOptionReading()} and the
+     * option value starts with the configured prefix (default "@"), the actual value is read from
+     * the file specified by the remaining part of the string (e.g., "@/path/to/file").
+     *
+     * @param optionName the name of the option to retrieve
+     * @return an {@link Optional} containing the option value, or empty if the option is not
+     *     present
+     */
     public Optional<String> getOption(String optionName) {
-        return Optional.ofNullable(options.getProperty(optionName));
+        return Optional.ofNullable(options.getProperty(optionName))
+                .map(
+                        value -> {
+                            if (!isFileReference(value)) return value;
+                            var filePath = extractFilePath(value);
+                            try {
+                                return Files.readString(filePath);
+                            } catch (IOException e) {
+                                throw new RuntimeException(
+                                        "Failed to read option value from file: " + filePath, e);
+                            }
+                        });
     }
 
     /** Command line options options may be optional, use this method to obtain them. */
@@ -176,19 +224,18 @@ public class CommandOptions {
      * </ol>
      */
     public List<String> getOptionList(String optionName, boolean isRequired) {
-        var option = getOption(optionName).orElse(null);
+        var option = options.getProperty(optionName);
         if (isRequired && option == null) {
             throw new ArgumentParsingException(
                     "Command-line option \"-" + optionName + "\" is missing");
         }
         if (option == null) return List.of();
-        if (option.startsWith("@")) {
-            var documentFileListPath = Path.of(option.substring(1));
+        if (isFileReference(option)) {
+            var filePath = extractFilePath(option);
             try {
-                return Files.readAllLines(documentFileListPath).stream()
-                        .collect(Collectors.toList());
+                return Files.readAllLines(filePath).stream().collect(Collectors.toList());
             } catch (IOException e) {
-                throw new RuntimeException("Failed to read " + documentFileListPath, e);
+                throw new RuntimeException("Failed to read " + filePath, e);
             }
         } else {
             return Arrays.stream(option.split(",")).collect(Collectors.toList());
@@ -315,5 +362,15 @@ public class CommandOptions {
      */
     public void forEach(BiConsumer<String, String> action) {
         options.forEach((k, v) -> action.accept((String) k, (String) v));
+    }
+
+    private boolean isFileReference(String value) {
+        return config.fileOptionEnabled
+                && value != null
+                && value.startsWith(config.fileOptionPrefix);
+    }
+
+    private Path extractFilePath(String value) {
+        return Path.of(value.substring(config.fileOptionPrefix.length()));
     }
 }
