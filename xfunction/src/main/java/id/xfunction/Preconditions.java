@@ -115,6 +115,35 @@ public class Preconditions {
     }
 
     /**
+     * Preconditional check.
+     *
+     * @throws PreconditionException if b is true
+     */
+    public static void isFalse(boolean b) throws PreconditionException {
+        isFalse(b, "");
+    }
+
+    /**
+     * Preconditional check.
+     *
+     * @throws PreconditionException with a message if b is true
+     */
+    public static void isFalse(boolean b, String message, Object... param)
+            throws PreconditionException {
+        isFalse(b, null, message, param);
+    }
+
+    /**
+     * @param token helps to establish not only stack trace but the object for which precondition
+     *     failed
+     * @see #isFalse(boolean, String, Object...)
+     */
+    public static void isFalse(boolean b, TracingToken token, String message, Object... param)
+            throws PreconditionException {
+        if (b) throw new PreconditionException(format(token, message), param);
+    }
+
+    /**
      * Preconditional check for equality.
      *
      * @throws PreconditionException if two values are not equal

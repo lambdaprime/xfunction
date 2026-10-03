@@ -97,4 +97,27 @@ public class PreconditionsTests {
                 "token1: message test val: expected value <5.0>, actual value <6.0>",
                 e.getMessage());
     }
+
+    @Test
+    public void test_assertFalse() {
+        Assertions.assertThrows(PreconditionException.class, () -> Preconditions.isFalse(true));
+        var e =
+                Assertions.assertThrows(
+                        PreconditionException.class,
+                        () -> Preconditions.isFalse(true, "message test"));
+        Assertions.assertEquals("message test", e.getMessage());
+
+        e =
+                Assertions.assertThrows(
+                        PreconditionException.class,
+                        () -> Preconditions.isFalse(true, "message test %s", "value"));
+        Assertions.assertEquals("message test value", e.getMessage());
+    }
+
+    @Test
+    public void test_assertFalse_happy() {
+        Preconditions.isFalse(false);
+
+        Preconditions.isFalse(false, "Not subscribed yet");
+    }
 }
