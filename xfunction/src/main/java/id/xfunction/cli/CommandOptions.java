@@ -54,7 +54,8 @@ public class CommandOptions {
          * enabled "arg1", "arg2" will be ignored.
          *
          * <p>Positional arguments validation and processing are not covered by {@link
-         * CommandOptions} and needs to be done manually.
+         * CommandOptions} and needs to be done manually. Positional arguments are considered as not
+         * "options".
          */
         public Config withPositionalArguments() {
             return withIgnoreParsingExceptions();
@@ -223,12 +224,8 @@ public class CommandOptions {
      *   <li>from the file: in such case the option value format is "@/path/to/file/list"
      * </ol>
      */
-    public List<String> getOptionList(String optionName, boolean isRequired) {
+    public List<String> getOptionList(String optionName) {
         var option = options.getProperty(optionName);
-        if (isRequired && option == null) {
-            throw new ArgumentParsingException(
-                    "Command-line option \"-" + optionName + "\" is missing");
-        }
         if (option == null) return List.of();
         if (isFileReference(option)) {
             var filePath = extractFilePath(option);
