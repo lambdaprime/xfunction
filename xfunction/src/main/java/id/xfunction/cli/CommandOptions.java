@@ -17,6 +17,7 @@
  */
 package id.xfunction.cli;
 
+import id.xfunction.nio.file.XPaths;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringReader;
@@ -213,6 +214,10 @@ public class CommandOptions {
                 .map(Integer::parseInt)
                 .map(Duration::ofMillis);
     }
+    /** Command line options options may be optional, use this method to obtain them. */
+    public Optional<Path> getOptionPath(String optionName) {
+        return Optional.ofNullable(options.getProperty(optionName)).map(XPaths::resolveHome);
+    }
 
     /**
      * Return list value.
@@ -368,6 +373,6 @@ public class CommandOptions {
     }
 
     private Path extractFilePath(String value) {
-        return Path.of(value.substring(config.fileOptionPrefix.length()));
+        return XPaths.resolveHome(value.substring(config.fileOptionPrefix.length()));
     }
 }
