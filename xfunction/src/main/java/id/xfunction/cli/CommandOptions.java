@@ -33,6 +33,7 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -48,6 +49,7 @@ public class CommandOptions {
         private boolean ignoreParsingExceptions;
         private boolean fileOptionEnabled;
         private String fileOptionPrefix = "@";
+        private Supplier<Path> fileOptionRoot = () -> Path.of("");
 
         /**
          * Allows to support positional arguments which otherwise would cause exception. For example
@@ -83,6 +85,16 @@ public class CommandOptions {
          */
         public Config withFileOptionPrefix(String prefix) {
             this.fileOptionPrefix = prefix;
+            return this;
+        }
+
+        /**
+         * Root folder provider against which relative file option paths are resolved. If not set,
+         * relative paths are resolved against the JVM current working directory. Absolute paths are
+         * always used as-is.
+         */
+        public Config withFileOptionRoot(Supplier<Path> fileOptionRoot) {
+            this.fileOptionRoot = fileOptionRoot;
             return this;
         }
     }
@@ -214,6 +226,7 @@ public class CommandOptions {
                 .map(Integer::parseInt)
                 .map(Duration::ofMillis);
     }
+
     /** Command line options options may be optional, use this method to obtain them. */
     public Optional<Path> getOptionPath(String optionName) {
         return Optional.ofNullable(options.getProperty(optionName)).map(XPaths::resolveHome);
@@ -373,6 +386,11 @@ public class CommandOptions {
     }
 
     private Path extractFilePath(String value) {
-        return XPaths.resolveHome(value.substring(config.fileOptionPrefix.length()));
+        String pathStr = value.substring(config.fileOptionPrefix.length());
+        Path path = XPaths.resolveHome(pathStr);
+        if (!path.isAbsolute()) {
+            return config.fileOptionRoot.get().resolve(path);
+        }
+        return path;
     }
 }

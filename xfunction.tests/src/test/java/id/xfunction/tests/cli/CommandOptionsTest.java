@@ -116,4 +116,42 @@ public class CommandOptionsTest {
             assertEquals(expectedValue, actual.get());
         }
     }
+
+    @Test
+    void test_extractFilePath_withRootPath(@TempDir Path tempDir) throws IOException {
+        var subDir = tempDir.resolve("subdir");
+        Files.createDirectories(subDir);
+        var fileInSubDir = subDir.resolve("test.txt");
+        Files.writeString(fileInSubDir, "content from subdir");
+
+        // Test with relative path resolved against root
+        var config = new Config().withFileOptionReading().withFileOptionRoot(() -> tempDir);
+        var options = new Properties();
+        options.setProperty("optionName", "@subdir/test.txt"); // relative path
+        var commandOptions = new CommandOptions(options, config);
+
+        var result = commandOptions.getOption("optionName");
+        assertTrue(result.isPresent());
+        assertEquals("content from subdir", result.get());
+    }
+
+    @Test
+    void test_extractFilePath_withAbsolutePath_ignoresRoot() throws IOException {
+        // Create a temp file with absolute path
+        var tempFile = Files.createTempFile("absolute-test", ".txt");
+        Files.writeString(tempFile, "absolute content");
+
+        var config =
+                new Config()
+                        .withFileOptionReading()
+                        .withFileOptionRoot(() -> Path.of("/nonexistent"));
+        var options = new Properties();
+        options.setProperty("optionName", "@" + tempFile);
+        var commandOptions = new CommandOptions(options, config);
+
+        var result = commandOptions.getOption("optionName");
+        assertTrue(result.isPresent());
+        // Should read from the absolute path, not the root
+        assertEquals("absolute content", result.get());
+    }
 }
